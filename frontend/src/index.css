@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .font1 {
+    font-weight: 400;
+    font-family: "Courier New", Courier, monospace;
+  }
+}
+
+@layer components {
+  .custom-shadow-white {
+    -webkit-box-shadow: 0px 0px 2px 0px rgb(185, 183, 183);
+    -moz-box-shadow: 0px 0px 2px 0px rgb(185, 183, 183);
+    box-shadow: 0px 0px 2px 0px rgb(185, 183, 183);
+  }
+
+  .custom-shadow-darkb {
+    -webkit-box-shadow: 0px 0px 2px -1px rgb(65, 65, 73);
+    -moz-box-shadow: 0px 0px 2px -1px rgb(65, 65, 73);
+    box-shadow: 0px 0px 2px -1px rgb(65, 65, 73);
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Gradients  */
+.blue__gradient {
+  background: linear-gradient(90deg, #151dfa 0%, #8194d5 100%);
+  filter: blur(900px);
+}
+
+.green__gradient {
+  background: linear-gradient(180deg, #0af664 0%, #05f921 100%);
+  filter: blur(900px);
+}
+
+/* carousel */
+
+.slide {
+  box-shadow: 0px ppx 7px #666;
+}
+.indicators {
+  display: flex;
+  gap: 2rem;
+  position: absolute;
+  bottom: 1rem;
+}
+
+.indicator {
+  background-color: rgb(198, 193, 193);
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 100%;
+  border: none;
+  outline: none;
+  box-shadow: 0px 0px 5px #555;
+}
+
+.indicator.active {
+  background-color: #05f053;
+  height: 0.65rem;
+  width: 0.65rem;
+}
