@@ -6,9 +6,9 @@ const Challenges = () => {
       <div
         className={`{flex flex-col flex-1 gap-[75px] ${styles.paddingX} ${styles.paddingY}}`}
       >
-        <h3 className={`${styles.heading5_start}`}>
+        <h3 className={`${styles.heading5_start} text-light`}>
           Practice coding challenges & <br className="sm:block hidden" />
-          <span className="text-green-600">prep for interviews</span>
+          <span className="text-light">prep for interviews</span>
         </h3>
 
         <p className={`${styles.paragraph_start} ${styles.marginY}`}>
@@ -18,16 +18,16 @@ const Challenges = () => {
         <SignUpBTN width="11rem" text="Join the community" />
       </div>
       <div
-        className={`{flex flex-col flex-1 ${styles.paddingX} bg-gray-100 rounded-md ${styles.paddingY}}`}
+        className={`{flex flex-col flex-1 ${styles.paddingX} bg-gray-400 rounded-md ${styles.paddingY}}`}
       >
         <h3 className={`${styles.heading5_start}`}>
           Get started hiring with <br className="sm:block hidden" />
-          <span className="text-green-600">HackerRank</span>
+          <span className="text-light">CodeFusion</span>
         </h3>
 
         <p className={`${styles.paragraph_start} ${styles.marginY}`}>
           More than 3,000 tech teams, representing all industries and from
-          countries around the world, trust HackerRank
+          countries around the world, trust CodeFusion
         </p>
 
         <SignUpBTN width="11rem" text="Request a demo " className="mb-5" />

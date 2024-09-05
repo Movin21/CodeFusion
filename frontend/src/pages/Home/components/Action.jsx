@@ -7,7 +7,7 @@ const Action = () => {
           It’s not a pipeline problem.
         </h2>
         <h2
-          className={`${styles.heading3} sm:text-center text-start text-green-600`}
+          className={`${styles.heading3} sm:text-center text-start text-white`}
         >
           It’s a spotlight problem.
         </h2>
@@ -20,13 +20,13 @@ const Action = () => {
         </p>
       </div>
       <div className="sm:w-[45%] w-[90%] flex flex-row justify-between items-center gap-10 font-bold my-5 sm:px-0 px-3">
-        <a href="#" className="hover:text-green-600">
+        <a href="#" className="text-white hover:text-light">
           Prep
         </a>
-        <a href="#" className="hover:text-green-600">
+        <a href="#" className="text-white hover:text-light">
           Screen
         </a>
-        <a href="#" className="hover:text-green-600">
+        <a href="#" className="text-white hover:text-light">
           Interview
         </a>
       </div>

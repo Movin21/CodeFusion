@@ -4,15 +4,15 @@ import Clients from "./Clients";
 const Company = () => {
   return (
     <section
-      className={`sm:my-[5rem] my-3rem justify-center mt-10 sm:ml-8 ml-5 pt-10 sm:pl-8 pl-0 border-[1px] sm:w-[95%] w-[90%] rounded-md`}
+      className={`sm:my-[5rem] my-3rem justify-center mt-10 sm:ml-8 ml-5 pt-10 sm:pl-8 pl-0 sm:w-[95%] w-[90%] `}
     >
       <div className={`${layout.section} `}>
         <div className="flex flex-col items-start justify-between sm:w-[70%] w-[90%]">
           <h4
-            className={`${styles.heading5_start} ${styles.paddingX} font-medium text-[25px]`}
+            className={`${styles.heading5_start} ${styles.paddingX} font-medium text-light text-[25px]`}
           >
             Every company is a tech company. <br />
-            <span className="text-green-600">We’re here to help ‘em all.</span>
+            <span className="text-light">We’re here to help ‘em all.</span>
           </h4>
           <p
             className={`${styles.paragraph_start} ${styles.paddingX} ${styles.paddingY}`}

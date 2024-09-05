@@ -10,11 +10,11 @@ const Navbar = () => {
     <section className="flex flex-col w-full z-[99]">
       {/* contact and login */}
       <div className="sm:flex flex-row justify-end items-center gap-5 bg-black text-dimWhite w-full h-[43px] hidden">
-        <a href="#" className="hover:text-green-600">
+        <a href="#" className="hover:text-light">
           Contact Us
         </a>
         <div className="border-l-dimWhite border-l-2 h-[20px]" />
-        <a href="#" className="mr-10 hover:text-green-600 ">
+        <a href="#" className="mr-10 hover:text-light ">
           Login
         </a>
       </div>
@@ -25,32 +25,38 @@ const Navbar = () => {
       >
         <div className="sm:flex flex-row justify-around items-center  h-[50px] mt-3">
           {/* image */}
-          <div className="sm:w-[170px] w-[200px] sm:p-0 p-3">
+          <div className="sm:w-[200px] w-[250px] sm:p-0 p-3">
             <img src={logo} alt="Logo" />
           </div>
           {/* Menus */}
-          <div className="sm:flex flex-row justify-between items-center gap-5 hidden">
+          <div className="sm:flex flex-row  justify-between items-center gap-5 hidden">
             <a
               href="#"
-              className="font-poppins font-semibold px-3 text-[14px] hover:text-green-600"
+              className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
-              Products{" "}
+              Features{" "}
             </a>
             <a
               href="#"
-              className="font-poppins font-semibold px-3 text-[14px] hover:text-green-600"
+              className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
+            >
+              Guides{" "}
+            </a>
+            <a
+              href="#"
+              className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Resources{" "}
             </a>
             <a
               href="#"
-              className="font-poppins font-semibold px-3 text-[14px] hover:text-green-600"
+              className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
-              Solutions{" "}
+              Blogs{" "}
             </a>
             <a
               href="#"
-              className="font-poppins font-semibold px-3 text-[14px] hover:text-green-600"
+              className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Pricing{" "}
             </a>
@@ -59,14 +65,7 @@ const Navbar = () => {
           <div className="sm:flex flex-row justify-between items-center gap-5 hidden">
             <a
               href="#"
-              className="font-poppins font-semibold px-3 text-[14px] hover:text-green-600"
-            >
-              For candidates{" "}
-            </a>
-            <div className="border-l-black border-l-2 h-[20px]" />
-            <a
-              href="#"
-              className="font-poppins font-semibold px-3 text-[14px] hover:text-green-600"
+              className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Request Demo{" "}
             </a>

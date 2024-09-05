@@ -11,11 +11,13 @@ const BinaryTree = () => {
         <div
           className={`flex flex-col flex-1 gap-8 mt-10 items-start ${styles.paddingX}`}
         >
-          <h3 className={`${styles.heading4_start} `}>{content.heading}</h3>
+          <h3 className={`${styles.heading4_start} text-light`}>
+            {content.heading}
+          </h3>
           <p className={`${styles.paragraph_start} `}>{content.para}</p>
           <button
             type="button"
-            className="w-12rem h-65px font-bold hover:translate-x-1"
+            className="w-12rem h-65px font-bold hover:translate-x-1  text-light"
           >
             {content.btn}{" "}
             <span className="text-xl hover:translate-x-2">&#8594;</span>
