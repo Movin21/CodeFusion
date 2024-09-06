@@ -66,17 +66,17 @@ export const carouselData = [
   {
     id: 1,
     img: ubs,
-    text: "We are discovering new ways of attracting candidates to the organization. By using the HackerRank, we are improving the tech images of UBS ",
+    text: "We are discovering new ways of attracting candidates to the organization. By using the CodeFusion, we are improving the tech images of UBS ",
   },
   {
     id: 2,
     img: vmware,
-    text: "HackerRank has actually allowed as to look for diamonds in the rough that our didn't give us the time or resource to look for.  ",
+    text: "CodeFusion has actually allowed as to look for diamonds in the rough that our didn't give us the time or resource to look for.  ",
   },
   {
     id: 3,
     img: vanguard,
-    text: "HackerRank is a critical piece of our candidates experience and hitting the right tone is just as important as identifying good candidates.  ",
+    text: "CodeFusion is a critical piece of our candidates experience and hitting the right tone is just as important as identifying good candidates.  ",
   },
 ];
 
@@ -89,7 +89,7 @@ export const FooterLinks = [
       "Interview",
       "Certified Assessments",
       "Plagiarism Detection",
-      "HackerRank AI",
+      "CodeFusion AI",
     ],
   },
   {

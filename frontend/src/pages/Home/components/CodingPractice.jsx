@@ -8,9 +8,7 @@ const CodingPractice = () => {
         className={`${layout.section} justify-center items-center sm:w-[95%] w-[90%] h-[50%] rounded-md bg-slate-900`}
       >
         <div className="flex flex-col items-start gap-8 flex-1 rounded-md p-5 px-10">
-          <p
-            className={`${styles.paragraph} text-slate-500 hover:text-green-600`}
-          >
+          <p className={`${styles.paragraph} text-slate-500 hover:text-light`}>
             : : Coding practice : :
           </p>
           <h4 className="text-[25px] font-semibold text-white ">
@@ -27,7 +25,7 @@ const CodingPractice = () => {
 
           <button
             type="button"
-            className="w-[13rem] border-[1px] border-white font-semibold text-white font-poppins text-[14px]  h-[50px] rounded-md hover:bg-green-600"
+            className="w-[13rem] border-[1px] border-white font-semibold text-white font-poppins text-[14px]  h-[50px] rounded-md hover:bg-light"
           >
             Sign up and practice <span className="text-xl">&#8594;</span>
           </button>

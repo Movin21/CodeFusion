@@ -11,7 +11,7 @@ const SwiperCard = () => {
   };
 
   return (
-    <div className="flex justify-center items-center sm:w-[40%] w-[90%] sm:h-[70%]  bg-slate-100 relative sm:mx-10 mx-5 sm:p-8 p-5 rounded-xl">
+    <div className="flex justify-center items-center sm:w-[40%] w-[90%] sm:h-[70%]  bg-slate-400 relative sm:mx-10 mx-5 sm:p-8 p-5 rounded-xl">
       <SwipeableViews
         index={activeIndex}
         onChangeIndex={handleSwipeChange}

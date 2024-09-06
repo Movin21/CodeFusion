@@ -12,11 +12,11 @@ import {
 } from "./components";
 import styles from "./styles";
 const Home = () => (
-  <section>
+  <section className={`bg-primary `}>
     <Navbar />
     {/* hero section */}
-    <div className={`bg-white ${styles.flexStart}`}>
-      <div className={`${styles.boxWidth} border-b-[1px] border-dimBlack mb-7`}>
+    <div className={` ${styles.flexStart}`}>
+      <div className={`${styles.boxWidth} border-b-[1px] bg-primary mb-7`}>
         <Hero />
       </div>
     </div>
@@ -25,9 +25,7 @@ const Home = () => (
     <div className={`${styles.flexCenter}`}>
       <div className={`${styles.boxWidth}`}>
         <CodingPractice />
-        <CodingTests />
         <BinaryTree />
-        <Interview />
         <Company />
         <Challenges />
         <Footer />

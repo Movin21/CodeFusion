@@ -14,7 +14,7 @@ const Footer = () => {
               className="flex flex-col flex-1 gap-3 ss:my-0 my-4 min-w-[150px] sm:mx-10 mx-5"
             >
               <p
-                className={`font-poppins font-normal text-slate-600 text-[15px]  text-start leading-[30.8px] uppercase tracking-widest`}
+                className={`font-poppins font-normal text-white text-[15px]  text-start leading-[30.8px] uppercase tracking-widest`}
               >
                 {footer.title}
               </p>
@@ -23,7 +23,7 @@ const Footer = () => {
                   return (
                     <li
                       key={index}
-                      className="text-gray-600 font-normal text-[14px] hover:text-green-600"
+                      className="text-white font-normal text-[14px] hover:text-light3"
                     >
                       {link}
                     </li>

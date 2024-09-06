@@ -4,21 +4,21 @@ const styles = {
   boxWidth: "xl:max-w-[1280px] w-full",
 
   heading2:
-    "font-poppins sm:font-bold font-semibold sm:text-[65px] text-[30px] sm:text-center text-start text-primary xs:leading-[76.8px] leading-[40.8px] w-full sm:px-0 px-3",
+    "font-poppins sm:font-bold font-semibold sm:text-[65px] text-[30px] sm:text-center text-start text-white xs:leading-[76.8px] leading-[40.8px] w-full sm:px-0 px-3",
   heading3:
-    "font-poppins sm:font-medium sm:font-normal font-semibold sm:text-[50px] sm:text-center text-start text-[30px] xs:leading-[76.8px] leading-[40.8px] w-full sm:px-0 px-3",
+    "font-poppins sm:font-medium sm:font-normal font-semibold sm:text-[50px] sm:text-center text-white text-start text-[30px] xs:leading-[76.8px] leading-[40.8px] w-full sm:px-0 px-3",
   heading3_start:
     "font-poppins sm:font-medium font-normal sm:text-[50px]  text-start text-[30px] xs:leading-[76.8px] leading-[40.8px] w-full sm:px-0",
   heading4:
-    "font-poppins sm:font-medium font-normal sm:text-[40px] text-center text-[25px] sm:text-center text-start xs:leading-[56.8px] leading-12 w-full",
+    "font-poppins sm:font-medium font-normal text-light sm:text-[40px] text-center text-[25px] sm:text-center text-start xs:leading-[56.8px] leading-12 w-full",
   heading4_start:
     "font-poppins sm:font-medium font-normal sm:text-[40px] text-center text-[25px] text-start xs:leading-[56.8px] leading-12 w-full",
   heading5_start:
     "font-poppins sm:font-medium font-normal sm:text-[30px] text-center text-[20px] text-start xs:leading-[56.8px] leading-2 w-full",
   paragraph:
-    "font-poppins font-normal text-slate-700 text-[18px] sm:text-center text-start leading-[30.8px] sm:px-0 px-3",
+    "font-poppins font-normal text-white text-[18px] sm:text-center text-start leading-[30.8px] sm:px-0 px-3",
   paragraph_start:
-    "font-poppins font-normal text-slate-700 text-[18px]  text-start leading-[30.8px]",
+    "font-poppins font-normal text-white text-[18px]  text-start leading-[30.8px]",
 
   flexCenter: "flex justify-center sm:items-center items-start",
   flexStart: "flex justify-center items-start",
