@@ -6,12 +6,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import IDE from "./pages/IDE/IDE.jsx";
 import RootLayout from "./pages/layouts/RootLayout.jsx";
 import Home from "./pages/Home/Home.jsx";
+import Profile from "./pages/Profile/profile.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
   {
     element: <RootLayout />,
-    children: [{ path: "/IDE", element: <IDE /> }],
+    children: [
+      { path: "/IDE", element: <IDE /> },
+      { path: "/profile", element: <Profile /> },
+    ],
   },
 ]);
 createRoot(document.getElementById("root")).render(
