@@ -23,10 +23,10 @@ const Navbar = () => {
       <nav
         className={`sticky top-5 left-0 w-full bg-white z-50 shadow-md py-3`}
       >
-        <div className="sm:flex flex-row justify-around items-center  h-[50px] mt-3">
+        <div className="sm:flex flex-row justify-around items-center  h-[40px] mt-3">
           {/* image */}
-          <div className="sm:w-[200px] w-[250px] sm:p-0 p-3">
-            <img src={logo} alt="Logo" />
+          <div className="sm:w-[220px] w-[220px] sm:p-0 p-3">
+            <img src={logo} alt="Logo" className="h-[240px]" />{" "}
           </div>
           {/* Menus */}
           <div className="sm:flex flex-row  justify-between items-center gap-5 hidden">
