@@ -43,9 +43,13 @@ export default function Footer({ pageName }) {
         {footerLinks.map((link, id) => {
           return (
             <div className="flex items-center " key={id}>
-              <Link to={link.link} className="text-thirdText text-sm">
+              <Link
+                to={link.link}
+                className="text-white hover:text-light transition duration-300 ease-in-out text-sm"
+              >
                 {link.name}
               </Link>
+
               {id !== footerLinks.length - 1 && (
                 <div className="w-[1px] h-3 mx-2 bg-slate-500"></div>
               )}

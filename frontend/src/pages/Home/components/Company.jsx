@@ -28,7 +28,6 @@ const Company = () => {
 
         <SwiperCard />
       </div>
-      <Clients />
     </section>
   );
 };

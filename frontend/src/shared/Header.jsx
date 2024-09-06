@@ -40,66 +40,78 @@ export default function Header({ pageName, handlePageName }) {
     pageName = keyname;
   };
 
-  // let BtnClass = 'absolute w-full border-b -bottom-5 inset-x-0 border-2 border-buttonBg'
-
   return (
-    <div className="topbar md:mt-0 ">
-      <div className=" topbarWrapper  bg-bg2  ">
-        <div className="mobile-topbar px-5  md:px-10 py-3 md:py-0 flex justify-between md:hidden items-center">
+    <div className="topbar md:mt-0">
+      <div
+        className="topbarWrapper bg-primary flex items-center"
+        style={{ height: "70px" }}
+      >
+        <div
+          className="mobile-topbar px-5 md:px-10 py-3 md:py-0 flex justify-between md:hidden items-center"
+          style={{ height: "100%" }}
+        >
           <div
             className="menu flex flex-col h-5 justify-between mr-6 md:hidden"
             onClick={hanldeSidebarState}
           >
             <div
-              className={`row w-6 h-0.5  duration-300 bg-white  ${
-                !sidebarHidden && "rotate-45 translate-y-[9px] "
+              className={`row w-6 h-0.5 duration-300 bg-white ${
+                !sidebarHidden && "rotate-45 translate-y-[9px]"
               }`}
             ></div>
             <div
-              className={`row w-6 h-0.5  bg-white ${
-                !sidebarHidden && "hidden"
-              }`}
+              className={`row w-6 h-0.5 bg-white ${!sidebarHidden && "hidden"}`}
             ></div>
             <div
-              className={`row w-6 h-0.5  duration-300 bg-white  ${
-                !sidebarHidden && "-rotate-45 -translate-y-[9px] "
+              className={`row w-6 h-0.5 duration-300 bg-white ${
+                !sidebarHidden && "-rotate-45 -translate-y-[9px]"
               }`}
             ></div>
           </div>
           <span className="logo">
-            <img src="assets/logo.png" className="w-[138px] " alt="" />
+            <img src="assets/logo.png" className="w-[138px]" alt="Logo" />
           </span>
           <div className="topbar-icons flex items-center p-1 space-x-3 text-white">
-            <span className="">
+            <span>
               <Search2Icon />
             </span>
-            <span className="">
+            <span>
               <ChatIcon />
             </span>
           </div>
         </div>
 
-        {/* sidebar for mobile screen */}
+        {/* Sidebar for mobile screen */}
         {!sidebarHidden && <SideBar hanldeSidebarState={hanldeSidebarState} />}
 
-        {/* larger screen topbar */}
-        <div className="larger-screen-topbar hidden md:flex justify-between items-center w-full md:px-6 lg:px-12 py-3 ">
-          <div className="leftTopbar flex items-center">
-            <div className="logo">
-              <img src="assets/logo.png" className="w-[128px]" alt="" />
+        {/* Larger screen topbar */}
+        <div
+          className="larger-screen-topbar hidden md:flex justify-between items-center w-full px-6 lg:px-12"
+          style={{ height: "100%" }}
+        >
+          <div className="leftTopbar flex items-center ">
+            <div className="logo mt-1">
+              <Link to="/">
+                <img
+                  src="assets/whitelogo.png"
+                  className="w-[200px]"
+                  alt="Logo"
+                />
+              </Link>
             </div>
-            <ul className="nav-links flex  text-textSecondary  items-center text-sm">
-              <li className="px-4 ">
+
+            <ul className="nav-links flex text-textSecondary items-center text-sm">
+              <li className="px-4">
                 <div className="h-4 w-0.5 bg-borderColor"></div>
               </li>
               <li className="relative">
                 <Link
                   to="/"
                   onClick={() => OnUpdatePageName("dashboard")}
-                  className={`px-[18px]  ${
+                  className={`px-[18px] ${
                     pageName === "dashboard"
-                      ? "text-white font-medium "
-                      : "hover:text-gray-200 "
+                      ? "text-white font-medium"
+                      : "hover:text-gray-200"
                   }`}
                 >
                   Prepare
@@ -112,9 +124,9 @@ export default function Header({ pageName, handlePageName }) {
                 <Link
                   to="/Certify"
                   onClick={() => OnUpdatePageName("Certify")}
-                  className={`px-[18px]  ${
+                  className={`px-[18px] ${
                     pageName === "Certify"
-                      ? "text-white font-medium "
+                      ? "text-white font-medium"
                       : "hover:text-gray-200"
                   }`}
                 >
@@ -128,9 +140,9 @@ export default function Header({ pageName, handlePageName }) {
                 <Link
                   to="/contests"
                   onClick={() => OnUpdatePageName("compete")}
-                  className={`px-[18px]   ${
+                  className={`px-[18px] ${
                     pageName === "compete"
-                      ? "text-white font-medium "
+                      ? "text-white font-medium"
                       : "hover:text-gray-200"
                   }`}
                 >
@@ -144,9 +156,9 @@ export default function Header({ pageName, handlePageName }) {
                 <Link
                   to="/apply"
                   onClick={() => OnUpdatePageName("apply")}
-                  className={`px-[18px]   ${
+                  className={`px-[18px] ${
                     pageName === "apply"
-                      ? "text-white font-medium "
+                      ? "text-white font-medium"
                       : "hover:text-gray-200"
                   }`}
                 >
@@ -160,7 +172,7 @@ export default function Header({ pageName, handlePageName }) {
           </div>
 
           <div className="rightTopbar flex items-center">
-            <div className="topBar-SeachBar bg-gray-700 p-[1px] rounded custom-shadow-white shadow-white mr-4 flex ">
+            <div className="topBar-SearchBar bg-gray-700 p-[1px] rounded custom-shadow-white shadow-white mr-4 flex items-center">
               <button className="text-white px-1">
                 <IoSearch />
               </button>
@@ -171,7 +183,7 @@ export default function Header({ pageName, handlePageName }) {
               />
             </div>
 
-            <ul className="flex items-center space-x-6 ">
+            <ul className="flex items-center space-x-6">
               <li className="relative cursor-pointer">
                 <span
                   className="text-textSecondary p-1 hover:text-white"
@@ -193,7 +205,7 @@ export default function Header({ pageName, handlePageName }) {
               </li>
               <li className="relative cursor-pointer">
                 <span
-                  className=" text-textSecondary p-1 hover:text-white"
+                  className="text-textSecondary p-1 hover:text-white"
                   onClick={() => setNotificationHidden(false)}
                 >
                   <BellIcon />
@@ -218,16 +230,16 @@ export default function Header({ pageName, handlePageName }) {
 
               <li className="topbar-menu p-1 relative">
                 <button
-                  className="profile-btn flex items-center space-x-1 "
+                  className="profile-btn flex items-center space-x-1"
                   onClick={handleMenuState}
                 >
                   <img
                     src="assets/profile.png"
-                    className="profileImg w-7 h-7 rounded-[50%] border object-cover "
+                    className="profileImg w-7 h-7 rounded-[50%] border object-cover"
                     alt=""
                   />
                   <i
-                    className={`text-gray-400  hover:text-white ${
+                    className={`text-gray-400 hover:text-white ${
                       !menuHidden && "text-white"
                     }`}
                   >
@@ -235,7 +247,6 @@ export default function Header({ pageName, handlePageName }) {
                   </i>
                 </button>
 
-                {/* menu dropdown */}
                 {!menuHidden && (
                   <>
                     <span

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import ProfileStatsCard from "../Profile/ProfileStatsCard";
+import { MdOutlineModeEdit } from "react-icons/md";
 
 export default function Profile() {
   const ProfileStats = [
@@ -13,7 +14,6 @@ export default function Profile() {
       content:
         "Add your work experience. Don’t forget to add those internships as well.",
     },
-
     {
       title: "Education",
       content:
@@ -22,119 +22,109 @@ export default function Profile() {
     {
       title: "Links",
       content:
-        "Add all the relevent links that help to knowing you as a hacker.",
+        "Add all the relevant links that help to knowing you as a developer.",
     },
     {
-      title: "My Skils",
-      content: "Add all the skill that speak on your behalf.",
+      title: "My Skills",
+      content: "Add all the skills that speak on your behalf.",
     },
   ];
+
   return (
-    <div className="profile-container bg-page_background2 min-h-[100vh] w-full">
-      <div className="profile-wrapper lg:w-[95%] xl:w-[1240px] w-full  mx-auto  px-5 min-h-[50vh] pb-6 ">
-        \
-        <div className="grid w-full md:grid-cols-3 gap-8">
-          <div className=" flex flex-col space-y-6">
-            <div className="profile-card w-full bg-bg1 custom-shadow-white lg:p-[26px] rounded-xl p-4">
-              <div className="profile-card-header flex items-center justify-between">
+    <div className="profile-container bg-gray-100 min-h-screen py-10">
+      <div className="profile-wrapper container mx-auto px-4 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Left Column */}
+          <div className="space-y-6">
+            {/* Profile Card */}
+            <div className="bg-white shadow-lg rounded-xl p-6">
+              <div className="flex items-center justify-between">
                 <img
                   src="assets/defaultProfile.jpg"
-                  alt=".."
-                  className="profileImg w-12 h-12 rounded-[50%] bg-white"
+                  alt="Profile"
+                  className="w-16 h-16 rounded-full"
                 />
-                <span className="edit-icon cursor-pointer">
-                  {/*<ModeSharp htmlColor="white" fontSize="small" />*/}
+                <span className="text-gray-400 cursor-pointer">
+                  {/* Icon Placeholder */}
+                  {/* <ModeSharp /> */}
                 </span>
               </div>
-              <div className="text-white mt-8">
-                <h1 className="profile-title text-[26px] font-medium">
-                  Aakash Kumar Jha
+              <div className="mt-6">
+                <h1 className="text-2xl font-semibold text-gray-800">
+                  Yasas Lakmina
                 </h1>
-                <p className="profile-username text-sm text-gray-400">
-                  aakash@gmail.com
-                </p>
+                <p className="text-sm text-gray-500">yasaslakmina@gmail.com</p>
               </div>
             </div>
 
-            <div className="personal-info-card bg-bg1 custom-shadow-white lg:p-[26px] rounded-xl p-4">
-              <div className="w-full flex items-center">
-                <h3 className="flex-grow text-xl font-medium text-white">
-                  Personal Informatioin
+            {/* Personal Info Card */}
+            <div className="bg-white shadow-lg rounded-xl p-6 relative">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-gray-800">
+                  Personal Information
                 </h3>
-                <span className="edit-icon cursor-pointer">
-                  {/*<ModeSharp htmlColor="white" fontSize="small" />*/}
-                </span>
+                {/* Edit Icon Button */}
+                <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
+                  {/* Icon Placeholder */}
+                  <MdOutlineModeEdit />
+                </button>
               </div>
-              <ul className="flex flex-col space-y-2 mt-6">
-                <li className="flex items-center space-x-2 ">
-                  {/*<MailOutlineRounded
-                    htmlColor="white"
-                    style={{ fontSize: "14px" }}
-                  />*/}
-                  <p className="  text-white text-[13px]">
-                    aaakash13@gmail.com
+              <ul className="mt-6 space-y-3">
+                <li className="flex items-center">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Name:</span> Yasas Lakmina
                   </p>
                 </li>
-                <li className="flex items-center space-x-2 ">
-                  {/*<CallOutlined
-                    htmlColor="white"
-                    style={{ fontSize: "14px" }}
-                    className="text-gray-500"
-                  />*/}
-                  <p className="  text-gray-500 text-[13px]">
-                    Add your mobile number
+                <li className="flex items-center">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Email:</span>{" "}
+                    yasaslakmina@gmail.com
                   </p>
                 </li>
-                <li className="flex items-center space-x-2 ">
-                  {/* <LocationOnOutlined
-                    htmlColor="white"
-                    style={{ fontSize: "14px" }}
-                  />*/}
-                  <p className="  text-white text-[13px]">India</p>
+                <li className="flex items-center">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Mobile:</span> +94xxxxxx
+                  </p>
+                </li>
+                <li className="flex items-center">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Country:</span> Sri Lanka
+                  </p>
                 </li>
               </ul>
             </div>
 
-            <div className="resume-card custom-shadow-white rounded-xl p-4 lg:p-[26px] bg-bg1">
-              <div className="card-header flex items-center">
-                <h2 className="title text-white text-xl font-medium flex-grow">
+            {/* Resume Card */}
+            <div className="bg-white shadow-lg rounded-xl p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-semibold text-gray-800">
                   My Resume
-                </h2>
-                <span className="text-link text-blue-600 text-sm hover:underline cursor-pointer">
+                </h3>
+                <span className="text-blue-600 text-sm cursor-pointer hover:underline">
                   + Add Resume
                 </span>
               </div>
-              <p className="mt-4 text-gray-500 text-[13px]">
-                Add your resume here{" "}
-              </p>
-            </div>
-            <div className="eeo-settings-card custom-shadow-white rounded-xl p-4 lg:p-[26px] bg-bg1 flex items-center">
-              <h2 className="title text-white text-xl font-medium flex-grow">
-                EEO settings{" "}
-              </h2>
-              <span className="edit-icon cursor-pointer">
-                {/*<ModeSharp htmlColor="white" fontSize="small" />*/}
-              </span>
+              <p className="mt-4 text-gray-500">Add your resume here.</p>
             </div>
           </div>
 
-          <div className="w-full md:col-span-2 flex flex-col space-y-7">
-            <div className="badeges-card w-full bg-bg1 custom-shadow-white lg:p-[26px] rounded-lg p-4">
-              <div className="title text-white flex items-center space-x-4">
-                {/*<MilitaryTechRounded fontSize="medium" />*/}
-                <h2 className="text-xl  font-medium">My Badges</h2>
-              </div>
+          {/* Right Column */}
+          <div className="md:col-span-2 space-y-6">
+            {/* Badges Card */}
+            <div className="bg-white shadow-lg rounded-xl p-6">
+              <h2 className="text-xl font-semibold text-gray-800">My Badges</h2>
+              {/* You can add badge content here */}
             </div>
-            {ProfileStats.map((obj, id) => {
-              return (
-                <ProfileStatsCard
-                  key={id}
-                  title={obj.title}
-                  content={obj.content}
-                  link={obj.link}
-                />
-              );
-            })}
+
+            {/* Profile Stats Cards */}
+            {ProfileStats.map((obj, id) => (
+              <ProfileStatsCard
+                key={id}
+                title={obj.title}
+                content={obj.content}
+                link={obj.link}
+              />
+            ))}
           </div>
         </div>
       </div>
