@@ -14,6 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { executeCode } from "./api";
+import { evaluateTestCases } from "./testCase";
 
 const Output = ({ editorRef, language }) => {
   const toast = useToast();
@@ -21,6 +22,14 @@ const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const question = "Write a function that returns the factorial of a number.";
+  const code = `
+function factorial(n) {
+ 
+  }
+  return n * factorial(n - 1);
+}
+`;
 
   const runCode = async () => {
     const userSourceCode = editorRef.current.getValue();
@@ -32,7 +41,8 @@ const Output = ({ editorRef, language }) => {
       const outputLines = result.output.split("\n");
       setOutput(outputLines);
 
-      const passedAllTestCases = false; // Logic to check if all test cases passed can be added here
+      // Evaluate the test cases using the evaluateTestCases function
+      const passedAllTestCases = await evaluateTestCases(question, code);
 
       if (result.stderr) {
         setIsError(true);
@@ -41,14 +51,14 @@ const Output = ({ editorRef, language }) => {
         setIsError(true);
         onOpen();
         toast({
-          title: "Something is Wrong !",
+          title: "Something is Wrong!",
           description: "Your code failed some test cases!",
           status: "error",
           duration: 6000,
         });
       } else {
         toast({
-          title: "Well Done !",
+          title: "Well Done!",
           description: "Your code passed all test cases!",
           status: "success",
           duration: 6000,
