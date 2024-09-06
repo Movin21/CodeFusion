@@ -22,17 +22,12 @@ const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const question = "Write a function that returns the factorial of a number.";
-  const code = `
-function factorial(n) {
- 
-  }
-  return n * factorial(n - 1);
-}
-`;
+  const question =
+    "Write a function in Python that takes a list of numbers as input and returns the sum of all the even numbers in the list.";
 
   const runCode = async () => {
     const userSourceCode = editorRef.current.getValue();
+    const code = userSourceCode;
     if (!userSourceCode) return;
 
     try {
