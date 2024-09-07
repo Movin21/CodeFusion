@@ -13,6 +13,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { executeCode } from "./api";
 
 const Output = ({ editorRef, language }) => {
@@ -21,10 +22,13 @@ const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
 
   const runCode = async () => {
     const userSourceCode = editorRef.current.getValue();
     if (!userSourceCode) return;
+
+    console.log(userSourceCode);
 
     try {
       setIsLoading(true);
@@ -66,6 +70,11 @@ const Output = ({ editorRef, language }) => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGetHelp = () => {
+    const userSourceCode = editorRef.current.getValue();
+    navigate("/helpform", { state: { codeSnippet: userSourceCode } });
   };
 
   return (
@@ -111,13 +120,7 @@ const Output = ({ editorRef, language }) => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Retry
             </Button>
-            <Button
-              variant="ghost"
-              onClick={() => {
-                // Logic to get help from peers can be added here
-                onClose();
-              }}
-            >
+            <Button variant="ghost" onClick={handleGetHelp}>
               Get Help from Peers
             </Button>
           </ModalFooter>
