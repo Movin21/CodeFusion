@@ -21,6 +21,7 @@
     "@mui/icons-material": "^6.0.2",
     "@mui/material": "^6.0.2",
     "axios": "^1.7.7",
+    "forntend": "file:",
     "framer-motion": "^11.3.31",
     "material-icons": "^1.13.12",
     "monaco-editor": "^0.51.0",
