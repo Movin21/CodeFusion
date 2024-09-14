@@ -47,7 +47,7 @@ const SignupForm = () => {
         maxWidth="900px"
         maxHeight="600px"
         width="100%" 
-        borderRadius="xl" // Set border radius on the outer Flex
+        borderRadius="3xl" // Set border radius on the outer Flex
         overflow="hidden" // Ensure no overflow causes visible gaps
        
       
