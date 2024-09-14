@@ -43,7 +43,7 @@ const SignupForm = () => {
   return (
     <Flex bg="black" minHeight="40vh" alignItems="center" justifyContent="center" >
       <Flex
-        maxWidth="800px"
+        maxWidth="1000px"
         width="100%"
         height="575px"
         bg="black"
@@ -53,16 +53,16 @@ const SignupForm = () => {
         {/* Left Side */}
         <Box flex="1" color="white" p={6} position="relative">
           <VStack align="flex-start" spacing={2} mb={4}>
-            <Heading fontSize="md" className="font-poppins">Design with us</Heading>
+            <Heading fontSize="2xl" className="font-poppins">Design with us</Heading>
             <Text fontSize="xs" className="font-poppins">Access to thousands of design resources and templates</Text>
           </VStack>
-          <Box position="absolute" bottom="0" left="0" width="100%" height="70%">
+          <Box position="absolute" bottom="0" left="0" width="100%" height="70%" >
             <GeometricDesign />
           </Box>
         </Box>
 
         {/* Right Side */}
-        <Box flex="1" bg="white" p={6} borderRadius="2xl" mt={4}  mb={4}>
+        <Box flex="1" bg="white" p={6} borderRadius="2xl" ml={20} mt={4}  mb={4}>
           <VStack spacing={3} align="stretch">
             <Heading size="xs" mb={1} className="font-poppins">Sign up now</Heading>
             <Flex gap={2}>
@@ -99,13 +99,13 @@ const SignupForm = () => {
                 Use 8 or more characters with a mix of letters, numbers & symbols
               </Text>
             </FormControl>
-            <Checkbox size="xs" className="font-poppins">
+            <Checkbox size="sm" className="font-poppins">
               <Text fontSize="2xs">By creating an account, I agree to your Terms of use and Privacy Policy</Text>
             </Checkbox>
-            <Checkbox size="xs" className="font-poppins">
+            <Checkbox size="sm" className="font-poppins">
               <Text fontSize="2xs">By creating an account, I am also consenting to receive xsS messages and emails, including product new feature updates, events, and marketing promotions.</Text>
             </Checkbox>
-            <Button size="xs" colorScheme="gray" width="100%" className="font-poppins">
+            <Button size="xs" colorScheme="gray" width="100%" className="font-poppins" p={4} mt={3}>
               Sign up
             </Button>
             <Text textAlign="center" fontSize="xs" className="font-poppins" p={5}>
