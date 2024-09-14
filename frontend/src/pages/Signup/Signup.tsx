@@ -118,10 +118,10 @@ const SignupForm = () => {
         {/* Right Side */}
         <Box flex="1" bg="white" p={6} borderRadius="2xl" ml={20} mt={4} mb={4}>
           <VStack spacing={3} align="stretch">
-            <Heading size="xs" mb={1} className="font-poppins">
-              Sign up now
+            <Heading size="sm" mb={1} className="font-poppins">
+            Register for Your Account 
             </Heading>
-            <Flex gap={2}>
+            <Flex gap={2} mt={2}>
               <FormControl>
                 <FormLabel fontSize="xs" className="font-poppins">
                   First name
@@ -242,9 +242,7 @@ const SignupForm = () => {
             </Checkbox>
             <Checkbox size="sm" className="font-poppins">
               <Text fontSize="2xs">
-                By creating an account, I am also consenting to receive xsS
-                messages and emails, including product new feature updates,
-                events, and marketing promotions.
+              By creating an account, I agree to receive updates on new coding challenges, platform enhancements, and coding tips
               </Text>
             </Checkbox>
             <Button
