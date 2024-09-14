@@ -76,10 +76,9 @@ const countryCodes = [
   },
 ];
 
-
 const SignupForm = () => {
-    const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);  
-    const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
+  const [phoneNumber, setPhoneNumber] = useState("");
   return (
     <Flex
       bg="black"
@@ -99,10 +98,10 @@ const SignupForm = () => {
         <Box flex="1" color="white" p={6} position="relative">
           <VStack align="flex-start" spacing={2} mb={4}>
             <Heading fontSize="2xl" className="font-poppins">
-              Design with us
+              Elevate Your Coding Skills Together
             </Heading>
             <Text fontSize="xs" className="font-poppins">
-              Access to thousands of design resources and templates
+              Reach Your Coding Goals with 1,000+ Challenges
             </Text>
           </VStack>
           <Box
@@ -160,9 +159,8 @@ const SignupForm = () => {
                 Phone number
               </FormLabel>
               <Flex>
-
-              <Menu>
-              <MenuButton
+                <Menu>
+                  <MenuButton
                     as={Button}
                     size="xs"
                     maxWidth="100px"
@@ -177,15 +175,15 @@ const SignupForm = () => {
                       alt={selectedCountry.name}
                       style={{ width: 20, height: 15, marginRight: 8 }}
                     />
-
                   </MenuButton>
 
                   <MenuList
-                   maxHeight="150px"
-                   overflowY="auto"
-                   minWidth="100px"
-                   padding={1}
-                   fontSize="xs">
+                    maxHeight="150px"
+                    overflowY="auto"
+                    minWidth="100px"
+                    padding={1}
+                    fontSize="xs"
+                  >
                     {countryCodes.map((country) => (
                       <MenuItem
                         key={country.code}
@@ -196,22 +194,23 @@ const SignupForm = () => {
                           alt={country.name}
                           style={{ width: 20, height: 15, marginRight: 8 }}
                         />
-                        {country.name} 
+                        {country.name}
                       </MenuItem>
                     ))}
                   </MenuList>
                 </Menu>
 
-                
-
                 <Input
                   size="xs"
                   type="tel"
                   value={`${selectedCountry.code} ${phoneNumber}`}
-                  onChange={(e) => setPhoneNumber(e.target.value.replace(selectedCountry.code, '').trim())}
+                  onChange={(e) =>
+                    setPhoneNumber(
+                      e.target.value.replace(selectedCountry.code, "").trim()
+                    )
+                  }
                   placeholder="Phone number"
                   className="font-poppins"
-                  
                 />
               </Flex>
             </FormControl>
