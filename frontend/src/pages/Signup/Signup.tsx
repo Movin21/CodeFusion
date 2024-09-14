@@ -31,81 +31,80 @@ const GeometricDesign = () => (
 );
 
 const countryCodes = [
-  { code: '+1', flag: '🇺🇸', name: 'United States' },
-  { code: '+1010', flag: '🇬🇧', name: 'United Kingdom' },
-  { code: '+91', flag: '🇮🇳', name: 'India' },
-  { code: '+106', flag: '🇨🇳', name: 'China' },
-  { code: '+101', flag: '🇯🇵', name: 'Japan' },
+  { code: '+1', flag: 'US', name: 'United States' },
+  { code: '+1010', flag: 'GB', name: 'United Kingdom' },
+  { code: '+91', flag: 'IN', name: 'India' },
+  { code: '+106', flag: 'CN', name: 'China' },
+  { code: '+101', flag: 'JP', name: 'Japan' },
   // Add more countries here
 ];
 
 const SignupForm = () => {
   return (
-    <Flex bg="black" minHeight="100vh" alignItems="center" justifyContent="center" >
+    <Flex  bg="black" minHeight="100vh" alignItems="center" justifyContent="center"  >
       <Flex
         bg="white"
-        borderTopLeftRadius="lg"
-        borderTopRightRadius="md"
-        borderBottomLeftRadius="md"
-        borderBottomRightRadius="lg"
-        overflow="hidden"
         maxWidth="900px"
         maxHeight="600px"
-        width="100%"
+        width="100%" 
+        borderRadius="xl" // Set border radius on the outer Flex
+        overflow="hidden" // Ensure no overflow causes visible gaps
+       
+      
       >
-        <Box flex="1" bg="black" color="white" p={10} display="flex" flexDirection="column">
-          <Heading mb={2} fontSize="lg">Design with us</Heading>
-          <Text mb={10} fontSize="xs">Access to thousands of design resources and templates</Text>
+        <Box flex="1" bg="#0B1518" color="white" p={10} display="flex" flexDirection="column"  >
+          <Heading mb={2} fontSize="lg" className="font-poppins">Design with us</Heading>
+          <Text mb={10} fontSize="xs" className="font-poppins">Access to thousands of design resources and templates</Text>
           <GeometricDesign />
-        </Box>
-        <Box flex="1" p={10}>
-          <VStack spacing={2} align="stretch">
-            <Heading size="xs" mb={3}>Sign up now</Heading>
-            <Flex gap={2}>
+        </Box> 
+        <Box flex="1" p={10}   >
+          <VStack spacing={2} align="stretch" >
+            <Heading size="xs" mb={3} className="font-poppins">Sign up now</Heading>
+            <Flex gap={2} >
               <FormControl>
-                <FormLabel fontSize="xs">First name</FormLabel>
-                <Input size="xs" placeholder="First name" />
+                <FormLabel fontSize="xs" className="font-poppins">First name</FormLabel>
+                <Input size="xs" placeholder="First name" className="font-poppins" />
               </FormControl>
               <FormControl>
-                <FormLabel fontSize="xs">Last name</FormLabel>
-                <Input size="xs" placeholder="Last name" />
+                <FormLabel fontSize="xs" className="font-poppins">Last name</FormLabel>
+                <Input size="xs" placeholder="Last name" className="font-poppins" />
               </FormControl>
             </Flex>
             <FormControl>
-              <FormLabel fontSize="xs">Email address</FormLabel>
-              <Input size="xs" type="email" placeholder="Email address" />
+              <FormLabel fontSize="xs" className="font-poppins">Email address</FormLabel>
+              <Input size="xs" type="email" placeholder="Email address" className="font-poppins" />
             </FormControl>
             <FormControl>
-              <FormLabel fontSize="xs">Phone number</FormLabel>
+              <FormLabel fontSize="xs" className="font-poppins">Phone number</FormLabel>
               <Flex>
-                <Select size="xs" maxWidth="90px" mr={2}>
+                <Select size="xs" maxWidth="90px" mr={2} className="font-poppins">
                   {countryCodes.map((country) => (
-                    <option key={country.code} value={country.code}>
+                    <option key={country.code} value={country.code} >
                       {country.flag} {country.code}
                     </option>
                   ))}
                 </Select>
-                <Input size="xs" type="tel" placeholder="Phone number" />
+                <Input size="xs" type="tel" placeholder="Phone number" className="font-poppins" />
               </Flex>
             </FormControl>
             <FormControl>
-              <FormLabel fontSize="xs">Password</FormLabel>
-              <Input size="xs" type="password" placeholder="Password" />
-              <Text fontSize="xs" color="gray.500" mt={1}>
+              <FormLabel fontSize="xs" className="font-poppins">Password</FormLabel>
+              <Input size="xs" type="password" placeholder="Password"  className="font-poppins"/>
+              <Text fontSize="xs" color="gray.500" mt={1} className="font-poppins">
                 Use 10 or more characters with a mix of letters, numbers & symbols
               </Text>
             </FormControl>
-            <Checkbox size="xs" fontSize="xs">
+            <Checkbox size="xs" fontSize="xs" className="font-poppins">
               By creating an account, I agree to your Terms of use and Privacy Policy
             </Checkbox>
-            <Checkbox size="xs" fontSize="xs">
+            <Checkbox size="xs" fontSize="xs" className="font-poppins">
               By creating an account, I am also consenting to receive xsS messages and emails, including product new feature updates, events, and marketing promotions.
             </Checkbox>
-            <Button colorScheme="gray" size="xs" width="100%">
+            <Button colorScheme="gray" size="xs" width="100%" className="font-poppins">
               Sign up
             </Button>
-            <Text textAlign="center" fontSize="xs">
-              Already have an account? <Link color="blue.500">Log in</Link>
+            <Text textAlign="center" fontSize="xs" className="font-poppins">
+              Already have an account? <Link color="blue.500" className="font-poppins">Log in</Link>
             </Text>
           </VStack>
         </Box>
