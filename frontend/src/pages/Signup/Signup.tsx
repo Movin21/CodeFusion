@@ -1,5 +1,7 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
   Button,
@@ -10,17 +12,22 @@ import {
   Heading,
   Input,
   Link,
-  Select,
   Text,
   VStack,
   MenuItem,
   Menu,
   MenuButton,
   MenuList,
+  FormErrorMessage,
+  InputGroup,
+  InputRightElement,
+  IconButton
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 
+// ... (keep the GeometricDesign and countryCodes as they were)
 const GeometricDesign = () => (
   <Box as="svg" width="100%" height="100%" viewBox="0 0 300 300">
     <circle cx="30" cy="30" r="20" stroke="white" strokeWidth="2" fill="none" />
@@ -76,11 +83,54 @@ const countryCodes = [
     name: "Australia",
   },
 ];
+const signupSchema = z.object({
+  firstName: z.string().min(1, { message: "First name is required" }),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
+  phoneNumber: z.string().min(1, { message: "Phone number is required" }),
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters long" })
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+      message: "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character",
+    }),
+  confirmPassword: z.string(),
+  agreeTerms: z.boolean().refine((val) => val === true, {
+    message: "You must agree to the terms and conditions",
+  }),
+  agreeUpdates: z.boolean(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+type SignupFormData = z.infer<typeof signupSchema>;
 
 const SignupForm = () => {
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
+  const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
-  const navigate = useNavigate();// Initialize the useNavigate hook
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
+  });
+
+  const onSubmit = (data: SignupFormData) => {
+    console.log(data);
+    // Handle form submission here
+  };
+   
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(selectedCountry.code, "").trim();
+    setPhoneNumber(value);
+    setValue("phoneNumber", `${selectedCountry.code} ${value}`, { shouldValidate: true });
+  };
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
   return (
     <Flex
       bg="black"
@@ -91,13 +141,14 @@ const SignupForm = () => {
       <Flex
         maxWidth="1000px"
         width="100%"
-        height="600px"
+        height="660px"
         bg="black"
         borderRadius="xl"
         overflow="hidden"
       >
         {/* Left Side */}
-        <Box flex="1" color="white" p={6} position="relative">
+        {/* ... (keep the left side as it was) */}
+        <Box flex="1" color="white" p={6} position="relative" mb={88}>
           <VStack align="flex-start" spacing={2} mb={4}>
             <Heading fontSize="2xl" className="font-poppins">
               Elevate Your Coding Skills Together
@@ -119,23 +170,25 @@ const SignupForm = () => {
 
         {/* Right Side */}
         <Box flex="1" bg="white" p={6} borderRadius="2xl" ml={20} mt={4} mb={4}>
-          <VStack spacing={3} align="stretch">
+          <VStack spacing={3} align="stretch" as="form" onSubmit={handleSubmit(onSubmit)}>
             <Heading size="sm" mb={1} className="font-poppins">
-            Register for Your Account 
+              Register for Your Account 
             </Heading>
             <Flex gap={2} mt={2}>
-              <FormControl>
-                <FormLabel fontSize="xs" className="font-poppins" >
+              <FormControl isInvalid={!!errors.firstName}>
+                <FormLabel fontSize="xs" className="font-poppins">
                   First name
                 </FormLabel>
                 <Input
                   size="xs"
-                  placeholder="Jhon"
+                  placeholder="John"
                   className="font-poppins"
                   borderRadius={5}
+                  {...register("firstName")}
                 />
+                <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl>
+              <FormControl isInvalid={!!errors.lastName}>
                 <FormLabel fontSize="xs" className="font-poppins">
                   Last name
                 </FormLabel>
@@ -144,124 +197,164 @@ const SignupForm = () => {
                   placeholder="Doe"
                   className="font-poppins"
                   borderRadius={5}
+                  {...register("lastName")}
                 />
+                <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
               </FormControl>
             </Flex>
-            <FormControl>
+            <FormControl isInvalid={!!errors.email}>
               <FormLabel fontSize="xs" className="font-poppins">
                 Email address
               </FormLabel>
               <Input
                 size="xs"
                 type="email"
-                placeholder="JhonDoe@email.com"
+                placeholder="JohnDoe@email.com"
                 className="font-poppins"
                 borderRadius={5}
+                {...register("email")}
               />
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
-            <FormControl>
-              <FormLabel fontSize="xs" className="font-poppins">
-                Phone number
-              </FormLabel>
-              <Flex>
-                <Menu>
-                  <MenuButton
-                    as={Button}
-                    size="xs"
-                    maxWidth="100px"
-                    mr={2}
-                    rightIcon={<ChevronDownIcon />}
-                    className="font-poppins"
-                    display="flex"
-                    alignItems="center"
-                  >
-                    <img
-                      src={selectedCountry.flag}
-                      alt={selectedCountry.name}
-                      style={{ width: 20, height: 15, marginRight: 8 }}
-                    />
-                  </MenuButton>
-
-                  <MenuList
-                    maxHeight="150px"
-                    overflowY="auto"
-                    minWidth="100px"
-                    padding={1}
-                    fontSize="xs"
-                  >
-                    {countryCodes.map((country) => (
-                      <MenuItem
-                        key={country.code}
-                        onClick={() => setSelectedCountry(country)}
-                      >
-                        <img
-                          src={country.flag}
-                          alt={country.name}
-                          style={{ width: 20, height: 15, marginRight: 8 }}
-                        />
-                        {country.name}
-                      </MenuItem>
-                    ))}
-                  </MenuList>
-                </Menu>
-
-                <Input
-                  size="xs"
-                  type="tel"
-                  value={`${selectedCountry.code} ${phoneNumber}`}
-                  onChange={(e) =>
-                    setPhoneNumber(
-                      e.target.value.replace(selectedCountry.code, "").trim()
-                    )
-                  }
-                  placeholder="Phone number"
-                  className="font-poppins"
-                  borderRadius={5}
+            <FormControl isInvalid={!!errors.phoneNumber}>
+      <FormLabel fontSize="xs" className="font-poppins">
+        Phone number
+      </FormLabel>
+      <Flex>
+        <Menu>
+          <MenuButton
+            as={Button}
+            size="xs"
+            maxWidth="100px"
+            mr={2}
+            rightIcon={<ChevronDownIcon />}
+            className="font-poppins"
+            display="flex"
+            alignItems="center"
+          >
+            <img
+              src={selectedCountry.flag}
+              alt={selectedCountry.name}
+              style={{ width: 20, height: 15, marginRight: 8 }}
+            />
+          </MenuButton>
+          <MenuList
+            maxHeight="150px"
+            overflowY="auto"
+            minWidth="100px"
+            padding={1}
+            fontSize="xs"
+          >
+            {countryCodes.map((country) => (
+              <MenuItem
+                key={country.code}
+                onClick={() => {
+                  setSelectedCountry(country);
+                  setValue("phoneNumber", `${country.code} ${phoneNumber}`, { shouldValidate: true });
+                }}
+              >
+                <img
+                  src={country.flag}
+                  alt={country.name}
+                  style={{ width: 20, height: 15, marginRight: 8 }}
                 />
-              </Flex>
-            </FormControl>
-            <FormControl>
+                {country.name}
+              </MenuItem>
+            ))}
+          </MenuList>
+        </Menu>
+        <Input
+          size="xs"
+          type="tel"
+          value={`${selectedCountry.code} ${phoneNumber}`}
+          onChange={handlePhoneChange}
+          placeholder="Phone number"
+          className="font-poppins"
+          borderRadius={5}
+        />
+      </Flex>
+      <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
+    </FormControl>
+
+            <FormControl isInvalid={!!errors.password}>
               <FormLabel fontSize="xs" className="font-poppins">
                 Password
               </FormLabel>
+              <InputGroup>
               <Input
                 size="xs"
-                type="password"
+                type={show ? 'text' : 'password'}
                 placeholder="Password"
                 className="font-poppins"
                 borderRadius={5}
+                {...register("password")}
+               
               />
+               <InputRightElement width="4rem"> {/* Smaller width */}
+                  <IconButton
+                    h="1.0rem" // Smaller button height
+                    size="xs"
+                    onClick={handleClick}
+                    aria-label={show ? 'Hide password' : 'Show password'}
+                    icon={show ? <ViewOffIcon /> : <ViewIcon />}
+                    mb={4}
+                  />
+                </InputRightElement>
+                </InputGroup>
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={!!errors.confirmPassword}>
               <FormLabel fontSize="xs" className="font-poppins" mt={3}>
                 Confirm Password
               </FormLabel>
+              <InputGroup>
               <Input
+                type={show ? 'text' : 'password'}
                 size="xs"
-                type="password"
-                placeholder="Password"
+                placeholder="Confirm Password"
                 className="font-poppins"
                 borderRadius={5}
+                {...register("confirmPassword")}
               />
-              <Text
-                fontSize="2xs"
-                color="gray.500"
-                mt={1}
-                className="font-poppins"
-              >
-                Use 8 or more characters with a mix of letters, numbers &
-                symbols
-              </Text>
+                  <InputRightElement width="4rem"> {/* Smaller width */}
+                  <IconButton
+                    h="1.0rem" // Smaller button height
+                    size="xs"
+                    onClick={handleClick}
+                    aria-label={show ? 'Hide password' : 'Show password'}
+                    icon={show ? <ViewOffIcon /> : <ViewIcon />}
+                    mb={4}
+                  />
+                </InputRightElement>
+
+              </InputGroup>
+              <FormErrorMessage>{errors.confirmPassword?.message}</FormErrorMessage>
             </FormControl>
-            <Checkbox size="sm" className="font-poppins">
-              <Text fontSize="2xs">
-                By creating an account, I agree to your Terms of use and Privacy
-                Policy
-              </Text>
-            </Checkbox>
-            <Checkbox size="sm" className="font-poppins">
-              <Text fontSize="2xs">
-              By creating an account, I agree to receive updates on new coding challenges, platform enhancements, and coding tips
-              </Text>
-            </Checkbox>
+            <Text
+              fontSize="2xs"
+              color="gray.500"
+              mt={1}
+              className="font-poppins"
+            >
+              Use 8 or more characters with a mix of letters, numbers &
+              symbols
+            </Text>
+            <FormControl isInvalid={!!errors.agreeTerms}>
+              <Checkbox size="sm" className="font-poppins" {...register("agreeTerms")}>
+                <Text fontSize="2xs">
+                  By creating an account, I agree to your Terms of use and Privacy
+                  Policy
+                </Text>
+              </Checkbox>
+              <FormErrorMessage>{errors.agreeTerms?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl>
+              <Checkbox size="sm" className="font-poppins" {...register("agreeUpdates")}>
+                <Text fontSize="2xs">
+                  By creating an account, I agree to receive updates on new coding challenges, platform enhancements, and coding tips
+                </Text>
+              </Checkbox>
+            </FormControl>
             <Button
               size="xs"
               colorScheme="gray"
@@ -269,6 +362,7 @@ const SignupForm = () => {
               className="font-poppins"
               p={4}
               mt={3}
+              type="submit"
             >
               Sign up
             </Button>
@@ -280,7 +374,7 @@ const SignupForm = () => {
               mb={2}
             >
               Already have an account?{" "}
-              <Link color="blue.500" className="font-poppins" onClick={() => navigate('/login')}  >
+              <Link color="blue.500" className="font-poppins" onClick={() => navigate('/login')}>
                 Log in
               </Link>
             </Text>
