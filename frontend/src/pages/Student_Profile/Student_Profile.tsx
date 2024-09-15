@@ -38,6 +38,8 @@ import {
   FormLabel,
   Textarea,
   Checkbox,
+  Grid,
+  Flex
 } from "@chakra-ui/react";
 interface Education {
   school: string;
@@ -214,43 +216,35 @@ const ProfileDashboard = () => {
   return (
     <>
       
-      <Box className="bg-black p-6 min-h-screen">
-        <header className="mb-6">
-          <h1 className="text-2xl font-bold text-white">Student Profile</h1>
-          <Text className="text-sm text-gray-400">
+      <Box className="bg-black p-4 min-h-screen">
+        <header className="mb-4">
+          <Text className="text-xl font-bold text-white font-poppins">Student Profile</Text>
+          <Text className="text-xs text-gray-400 font-poppins">
             12:15 PM at 19th November 2020
           </Text>
         </header>
 
-        <Box className="grid grid-cols-3 gap-6">
+         <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+
           {/* Profile Info Card */}
-          <Card className="col-span-1" bg="#1f202a">
+          <Card  bg="#1f202a">
             <CardBody>
               <Image
                 src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt="Profile"
-                className="rounded-full mx-auto mb-4 h-40"
+                className="rounded-full mx-auto mb-2 h-20"
               />
-              <h2 className="text-center text-xl font-bold text-white">
-                Julien Magnifice
-              </h2>
-              <Text className="text-center text-sm text-gray-400 mb-4">
-                Design Student
-              </Text>
-              <Box className="space-y-2">
-                <Text className="text-sm  text-gray-400 mb-4">
-                  <strong>EMAIL:</strong> customer@email.com
-                </Text>
-                <Text className="text-sm  text-gray-400 mb-4">
-                  <strong>PHONE:</strong> +01 923 456 78
-                </Text>
-                <Text className="text-sm  text-gray-400 mb-4">
-                  <strong>LOCATION:</strong> 7839 Williams Dr. Columbus, GA
-                  31904
-                </Text>
-              </Box>
+              <Text className="text-center text-lg font-bold text-white font-poppins">Julien Magnifice</Text>
+              <Text className="text-center text-xs text-gray-400 mb-2 font-poppins">Design Student</Text>
+              
+              <VStack align="start" spacing={1} fontSize="xs" color="gray.400">
+              <Text className="font-poppins"><strong>EMAIL:</strong> customer@email.com</Text>
+              <Text className="font-poppins"><strong>PHONE:</strong> +01 923 456 78</Text>
+              <Text className="font-poppins"><strong>LOCATION:</strong> 7839 Williams Dr. Columbus, GA 31904</Text>
+              </VStack>
+        
 
-              <Box>
+              <Box mt={2}>
                 <ProgressBar
                   setImageUrlBronze={setImageUrlBronze}
                   setImageUrlSilver={setImageUrlSilver}
@@ -261,7 +255,7 @@ const ProfileDashboard = () => {
                 />
               </Box>
               <Box className="mt-4  text-gray-400 mb-4">
-                <Text className="text-sm font-bold mb-2">ACHIEVEMENTS</Text>
+                <Text className="text-sm font-bold mb-2 font-poppins">ACHIEVEMENTS</Text>
                 <Box className="relative">
                   <Box className="absolute top-0 left-0 flex space-x-1">
                     {/* <Image
@@ -373,82 +367,62 @@ const ProfileDashboard = () => {
               </Box>
               <br></br>
               <Box className="mt-4">
-                <Text className="text-sm font-bold mb-2">ACTIVITY</Text>
-                <Tag colorScheme="cyan">Active</Tag>
-                <Text className="text-sm mt-1 text-white">
+                <Text className="text-sm font-bold mb-2 font-poppins">ACTIVITY</Text>
+                <Tag colorScheme="cyan" className="font-poppins">Active</Tag>
+                <Text className="text-sm mt-1 text-white font-poppins">
                   2 hours response time
                 </Text>
               </Box>
               <Box className="mt-4 flex justify-between">
                 <Box className="text-white">
-                  <Text className="text-sm font-bold">Total Views</Text>
-                  <Text className="text-xl font-bold">95,202</Text>
+                  <Text className="text-sm font-bold font-poppins">Total Views</Text>
+                  <Text className="text-xl font-bold font-poppins">95,202</Text>
                 </Box>
                 <Box className="text-white">
-                  <Text className="text-sm font-bold">Messages</Text>
-                  <Text className="text-xl font-bold">324</Text>
+                  <Text className="text-sm font-bold font-poppins">Messages</Text>
+                  <Text className="text-xl font-bold font-poppins">324</Text>
                 </Box>
               </Box>
             </CardBody>
           </Card>
 
+
           {/* Challenge Report Card */}
-          <Card className="col-span-2" bg="#1f202a">
-            <CardHeader className="text-white">Challenges Report</CardHeader>
-            <CardBody>
-              <ResponsiveContainer width="100%" height={600}>
-                <BarChart data={salesData} barSize={20}>
-                  //adjusted size
-                  <XAxis dataKey="day" stroke="#ffffff" />
-                  <YAxis stroke="#ffffff" />
-                  <Bar
-                    dataKey="earnings"
-                    fill="#3a36db"
-                    radius={[10, 10, 0, 0]}
-                  />
-                  <Bar
-                    dataKey="payments"
-                    fill="#db5aee"
-                    radius={[10, 10, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardBody>
-          </Card>
+          <Card className="col-span-3" bg="#1f202a">
+          <CardHeader className="text-white text-sm font-poppins" mt={5} ml={450}>Challenges Report</CardHeader>
+          <CardBody mt={20}>
+            <ResponsiveContainer width="100%" height={350} >
+              <BarChart data={salesData} barSize={10}>
+                <XAxis dataKey="day" stroke="#ffffff" fontSize={10} />
+                <YAxis stroke="#ffffff" fontSize={10} />
+                <Bar dataKey="earnings" fill="#3a36db" radius={[5, 5, 0, 0]} />
+                <Bar dataKey="payments" fill="#db5aee" radius={[5, 5, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardBody>
+        </Card>
           {/* //resume stat */}
           <Card bg="#1f202a">
-            <CardHeader className="text-white">My Resume</CardHeader>
-            <CardBody className="flex flex-col justify-center items-center">
-              {savedResume ? (
-                <HStack>
-                  <Button
-                    leftIcon={<Download size={20} />}
-                    onClick={handleDownload}
-                    colorScheme="blue"
-                    size="sm"
-                  >
-                    {resumeName || "Download CV"}
-                  </Button>
-                  <Button
-                    onClick={onResumeModalOpen}
-                    size="sm"
-                    bgColor="#00af0e"
-                  >
-                    Update Resume
-                  </Button>
-                </HStack>
-              ) : (
-                <Button onClick={onResumeModalOpen} size="sm" bgColor="#00af0e">
-                  Add your Resume
+          <CardHeader className="text-white text-sm font-poppins">My Resume</CardHeader>
+          <CardBody>
+            {savedResume ? (
+              <HStack>
+                <Button leftIcon={<Download size={16} />} onClick={handleDownload} colorScheme="blue" size="xs">
+                  {resumeName || "Download CV"}
                 </Button>
-              )}
-            </CardBody>
-          </Card>
+                <Button onClick={onResumeModalOpen} size="xs" bgColor="#00af0e" className="font-poppins">Update Resume</Button>
+              </HStack>
+            ) : (
+              <Button onClick={onResumeModalOpen} size="xs" bgColor="#00af0e"className="font-poppins">Add your Resume</Button>
+            )}
+          </CardBody>
+        </Card>
+
 
           <Modal isOpen={isResumeModalOpen} onClose={onResumeModalClose}>
             <ModalOverlay />
             <ModalContent bg="#1f202a" color="white">
-              <ModalHeader>Add your Resume</ModalHeader>
+              <ModalHeader className="font-poppins">Add your Resume</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
                 <VStack spacing={4} align="stretch">
@@ -461,14 +435,14 @@ const ProfileDashboard = () => {
                     borderRadius="md"
                   >
                     <Icon as={Upload} boxSize={8} />
-                    <Text>Drag and drop your resume here</Text>
-                    <Text fontSize="sm" color="blue.500">
+                    <Text className="font-poppins">Drag and drop your resume here</Text>
+                    <Text fontSize="sm" color="blue.500" className="font-poppins">
                       Supported formats : PDF
                     </Text>
-                    <Text fontSize="sm" color="gray.500">
+                    <Text fontSize="sm" color="gray.500" className="font-poppins">
                       Max size : 5 MB
                     </Text>
-                    <Text fontSize="sm">OR</Text>
+                    <Text fontSize="sm" className="font-poppins">OR</Text>
                     <Input
                       type="file"
                       accept=".pdf"
@@ -477,7 +451,7 @@ const ProfileDashboard = () => {
                       id="file-upload"
                     />
                     <label htmlFor="file-upload">
-                      <Button as="span" colorScheme="green">
+                      <Button as="span" colorScheme="green" className="font-poppins">
                         Choose file
                       </Button>
                     </label>
@@ -487,104 +461,76 @@ const ProfileDashboard = () => {
                     value={visibility}
                     onChange={(e) => setVisibility(e.target.value)}
                   >
-                    <option value="onlyMe">Only Me</option>
-                    <option value="public">Public</option>
+                    <option value="onlyMe" className="font-poppins">Only Me</option>
+                    <option value="public" className="font-poppins">Public</option>
                   </Select>
                 </VStack>
               </ModalBody>
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onResumeModalClose}>
+                <Button colorScheme="blue" mr={3} onClick={onResumeModalClose} className="font-poppins">
                   Close
                 </Button>
-                <Button colorScheme="green" onClick={handleSaveResume}>
+                <Button colorScheme="green" onClick={handleSaveResume} className="font-poppins">
                   Save
                 </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
+
           {/* Certificate Stats Card */}
-          <Card className="col-span-2" bg="#1f202a">
-            <CardHeader className="text-white">My Certificates</CardHeader>
-            <CardBody className="space-y-4">
-              <Box className="flex justify-between items-start space-x-3">
-                <Box>
-                  <Text className="text-sm text-gray-400">
-                    Certificate Title
-                  </Text>
-                  <Text className="text-xl font-bold text-white">
-                    React Developer
-                  </Text>
-                  <Text className="text-sm text-green-500">Completed</Text>
-                </Box>
-                <Box>
-                  <Text className="text-sm text-gray-400">Institution</Text>
-                  <Text className="text-xl font-bold text-white">Udemy</Text>
-                </Box>
-                <Box>
-                  <Text className="text-sm text-gray-400">Issue Date</Text>
-                  <Text className="text-xl font-bold text-white">
-                    March 2024
-                  </Text>
-                </Box>
-                <Box>
-                  <Text className="text-sm text-gray-400">Score</Text>
-                  <Text className="text-xl font-bold text-white">95%</Text>
-                  <Text className="text-sm text-green-500">Passed</Text>
-                </Box>
-              </Box>
-              <Button size="sm" bgColor="#00af0e">
-                Add your Certificates
-              </Button>
-            </CardBody>
-          </Card>
+          <Card className="col-span-3" bg="#1f202a">
+          <CardHeader className="text-white text-sm font-poppins">My Certificates</CardHeader>
+          <CardBody>
+            <Flex justify="space-between" align="center">
+              <VStack align="start" spacing={0}>
+                <Text className="text-xs text-gray-400 font-poppins">Certificate Title</Text>
+                <Text className="text-sm font-bold text-white font-poppins">React Developer</Text>
+                <Text className="text-xs text-green-500 font-poppins">Completed</Text>
+              </VStack>
+              <VStack align="start" spacing={0}>
+                <Text className="text-xs text-gray-400 font-poppins">Institution</Text>
+                <Text className="text-sm font-bold text-white font-poppins">Udemy</Text>
+              </VStack>
+              <VStack align="start" spacing={0}>
+                <Text className="text-xs text-gray-400 font-poppins">Issue Date</Text>
+                <Text className="text-sm font-bold text-white font-poppins">March 2024</Text>
+              </VStack>
+              <VStack align="start" spacing={0}>
+                <Text className="text-xs text-gray-400 font-poppins">Score</Text>
+                <Text className="text-sm font-bold text-white font-poppins">95%</Text>
+                <Text className="text-xs text-green-500 font-poppins">Passed</Text>
+              </VStack>
+            </Flex>
+            <Button size="xs" bgColor="#00af0e" mt={2} className="font-poppins">Add your Certificates</Button>
+          </CardBody>
+        </Card>
+
+
           {/* Card to display education */}
           <Card bg="#1f202a">
-            <CardHeader className="text-white">Education</CardHeader>
-            <CardBody className="flex flex-col justify-center items-center">
-              <Button size="sm" bgColor="#00af0e" onClick={onEducationModalOpen}>
-                Add Education
-              </Button>
-
-              {/* Education Entries */}
-              {educationList.length > 0 && (
-                <Box mt={4}>
-                  {educationList.map((education, index) => (
-                    <Box
-                      key={index}
-                      className="flex justify-between items-center mb-4"
-                    >
-                      <FontAwesomeIcon
-                        icon={faUniversity}
-                        className="text-gray-400 mr-2 text-4xl"
-                      />{" "}
-                      {/* University Icon */}
-                      <Box>
-                        <Text className="text-xl font-semibold text-white">
-                          {education.school}
+          <CardHeader className="text-white text-sm font-poppins">Education</CardHeader>
+          <CardBody>
+            <Button size="xs" bgColor="#00af0e" onClick={onEducationModalOpen} className="font-poppins">Add Education</Button>
+            {educationList.length > 0 && (
+              <VStack mt={2} align="start" spacing={2}>
+                {educationList.map((education, index) => (
+                  <Box key={index}>
+                    <HStack>
+                      <FontAwesomeIcon icon={faUniversity} className="text-gray-400 text-lg font-poppins" />
+                      <VStack align="start" spacing={0}>
+                        <Text className="text-sm font-semibold text-white font-poppins" >{education.school}</Text>
+                        <Text className="text-xs text-gray-400 font-poppins">
+                          {education.degree}, {education.department} | {education.startMonth} {education.startYear} - 
+                          {education.currentlyStudying ? "Present" : `${education.endMonth} ${education.endYear}`}
                         </Text>
-                        <HStack spacing={2} className="text-sm text-gray-400">
-                          <Text>
-                            {education.degree}, {education.department}
-                          </Text>
-                          <Text>|</Text> {/* Divider (optional) */}
-                          <Text>
-                            {education.startMonth} {education.startYear} -{" "}
-                            {education.currentlyStudying
-                              ? "Present"
-                              : `${education.endMonth} ${education.endYear}`}
-                          </Text>
-                          <Text>|</Text> {/* Divider (optional) */}
-                          <Text>{education.description}</Text>
-                        </HStack>
-                      </Box>
-                      <Icon className="text-gray-400 cursor-pointer" />{" "}
-                      {/* Edit functionality can be added later */}
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </CardBody>
-          </Card>
+                      </VStack>
+                    </HStack>
+                  </Box>
+                ))}
+              </VStack>
+            )}
+          </CardBody>
+        </Card>
 
           {/* Modal for Adding Education */}
           <Modal isOpen={isEducationModalOpen} onClose={onEducationModalClose}>
@@ -596,12 +542,12 @@ const ProfileDashboard = () => {
               maxWidth="900px"
               borderRadius="10px"
             >
-              <ModalHeader>Add Education</ModalHeader>
+              <ModalHeader className="font-poppins">Add Education</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
                 <VStack spacing={4} align="stretch">
                   <FormControl isRequired>
-                    <FormLabel>School/College</FormLabel>
+                    <FormLabel className="font-poppins">School/College</FormLabel>
                     <Input
                       value={formData.school}
                       onChange={(e) =>
@@ -612,7 +558,7 @@ const ProfileDashboard = () => {
                   </FormControl>
 
                   <FormControl isRequired>
-                    <FormLabel>Degree</FormLabel>
+                    <FormLabel className="font-poppins">Degree</FormLabel>
                     <Input
                       value={formData.degree}
                       onChange={(e) =>
@@ -623,7 +569,7 @@ const ProfileDashboard = () => {
                   </FormControl>
 
                   <FormControl>
-                    <FormLabel>Department</FormLabel>
+                    <FormLabel className="font-poppins">Department</FormLabel>
                     <Input
                       value={formData.department}
                       onChange={(e) =>
@@ -641,21 +587,24 @@ const ProfileDashboard = () => {
                         currentlyStudying: e.target.checked,
                       })
                     }
+                    className="font-poppins"
                   >
                     Currently studying here
                   </Checkbox>
 
                   <HStack>
                     <FormControl isRequired>
-                      <FormLabel>Starting from</FormLabel>
+                      <FormLabel className="font-poppins">Starting from</FormLabel>
                       <HStack>
                         <Select
+                        className="font-poppins"
                           value={formData.startMonth}
                           onChange={(e) =>
                             setFormData({
                               ...formData,
                               startMonth: e.target.value,
                             })
+                            
                           }
                           placeholder="Month"
                           sx={{//sx is chakra ui prop that allows you to apply CSS-in-JS styles directly to the component.
@@ -673,6 +622,7 @@ const ProfileDashboard = () => {
                           <option value="February">February</option>
                         </Select>
                         <Select
+                        className="font-poppins"
                           value={formData.startYear}
                           onChange={(e) =>
                             setFormData({
@@ -700,7 +650,7 @@ const ProfileDashboard = () => {
 
                     {!formData.currentlyStudying && (
                       <FormControl isRequired>
-                        <FormLabel>Ending in</FormLabel>
+                        <FormLabel className="font-poppins">Ending in</FormLabel>
                         <HStack>
                           <Select
                             value={formData.endMonth}
@@ -752,7 +702,7 @@ const ProfileDashboard = () => {
                   </HStack>
 
                   <FormControl>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel className="font-poppins">Description</FormLabel>
                     <Textarea
                       value={formData.description}
                       onChange={(e) =>
@@ -772,10 +722,11 @@ const ProfileDashboard = () => {
                   colorScheme="blue"
                   mr={3}
                   onClick={onEducationModalClose}
+                  className="font-poppins"
                 >
                   Close
                 </Button>
-                <Button colorScheme="green" onClick={handleSaveedu}>
+                <Button colorScheme="green" onClick={handleSaveedu} className="font-poppins">
                   Save
                 </Button>
               </ModalFooter>
@@ -783,26 +734,19 @@ const ProfileDashboard = () => {
           </Modal>
           {/* Card to display skills */}
           <Card bg="#1f202a">
-            <CardHeader className="text-white">My Skills</CardHeader>
-            <CardBody className="flex flex-col justify-center items-center">
-              {/* Display the selected skills as tags */}
-              <Box mt={4} mb={4}>
-                <SimpleGrid columns={3} spacing={4}>
-                  {selectedSkills.map((skill, index) => (
-                    <Tag size="lg" key={index} variant="solid">
-                      <TagLabel>{skill}</TagLabel>
-                      <TagCloseButton onClick={() => removeSkill(skill)} />
-                    </Tag>
-                  ))}
-                </SimpleGrid>
-              </Box>
-
-              {/* Button to open the modal to add/edit skills */}
-              <Button size="sm" bgColor="#00af0e" onClick={onSkillsModalOpen}>
-                Add/Edit Skills
-              </Button>
-            </CardBody>
-          </Card>
+          <CardHeader className="text-white text-sm font-poppins">My Skills</CardHeader>
+          <CardBody>
+            <Flex flexWrap="wrap" gap={1} mb={2}>
+              {selectedSkills.map((skill, index) => (
+                <Tag size="sm" key={index} variant="solid">
+                  <TagLabel fontSize="xs" className="font-poppins">{skill}</TagLabel>
+                  <TagCloseButton onClick={() => removeSkill(skill)} />
+                </Tag>
+              ))}
+            </Flex>
+            <Button size="xs" bgColor="#00af0e" onClick={onSkillsModalOpen} className="font-poppins">Add/Edit Skills</Button>
+          </CardBody>
+        </Card>
 
           {/* Modal to add/edit skills */}
           <Modal
@@ -811,7 +755,7 @@ const ProfileDashboard = () => {
             size="lg"
           >
             <ModalOverlay />
-            <ModalContent bg="#1f202a" color="white">
+            <ModalContent bg="#1f202a" color="white" className="font-poppins">
               <ModalHeader>My Skills</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
@@ -862,40 +806,36 @@ const ProfileDashboard = () => {
               </ModalFooter>
             </ModalContent>
           </Modal>
-          <Card bg="#1f202a">
-            <CardHeader>Work Expereince</CardHeader>
-            <CardBody className="flex justify-center items-center">
-              <Gauge className="w-24 h-24 text-green-500" />
-              <Box className="ml-4">
-                <Text className="text-3xl font-bold text-white">88%</Text>
-                <Text className="text-sm text-gray-400">
-                  Your activity rate is up 88%
-                </Text>
+          <Card bg="#1f202a" className="font-poppins">
+          <CardHeader className="text-white text-sm">Work Experience</CardHeader>
+          <CardBody>
+            <Flex align="center">
+              <Gauge className="w-12 h-12 text-green-500" />
+              <Box ml={2}>
+                <Text className="text-lg font-bold text-white">88%</Text>
+                <Text className="text-xs text-gray-400">Activity rate up</Text>
               </Box>
-            </CardBody>
-          </Card>
-          {/* Customer Analytics Card */}
-          <Card className="col-span-3" bg="#1f202a">
-            <CardHeader className="text-white">Student Analytics</CardHeader>
-            <CardBody>
-              <ResponsiveContainer width="80%" height={400}>
-                <BarChart data={customerData} barSize={10}>
-                  <XAxis dataKey="month" stroke="#ffffff" />
-                  <YAxis stroke="#ffffff" />
-                  <Bar dataKey="current" stackId="a" fill="#99b2c6" />
-                  <Bar dataKey="subscribers" stackId="a" fill="#0090ff" />
-                  <Bar
-                    dataKey="new"
-                    stackId="a"
-                    fill="#3a36db"
-                    radius={[20, 20, 0, 0]}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
-            </CardBody>
-          </Card>
+            </Flex>
+          </CardBody>
+        </Card>
+          {/* Student Analytics Card */}
+        <Card className="col-span-4 font-poppins" bg="#1f202a ">
+          <CardHeader className="text-white text-sm">Student Analytics</CardHeader>
+          <CardBody>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={customerData} barSize={5}>
+                <XAxis dataKey="month" stroke="#ffffff" fontSize={10} />
+                <YAxis stroke="#ffffff" fontSize={10} />
+                <Bar dataKey="current" stackId="a" fill="#99b2c6" />
+                <Bar dataKey="subscribers" stackId="a" fill="#0090ff" />
+                <Bar dataKey="new" stackId="a" fill="#3a36db" radius={[10, 10, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardBody>
+        </Card>
+      </Grid>
         </Box>
-      </Box>
+      
     </>
   );
 };
