@@ -22,17 +22,6 @@ const LoginScreen = () => {
 
   return (
     <Flex minHeight="100vh" width="full" align="center" justifyContent="center" position="relative" bg="black">
-      {/* Background logo */}
-      <Box position="absolute" top="-30px" left="50%" transform="translateX(-50%)" mt={10}>
-        <Image
-          borderRadius="full"
-          boxSize="60px" // Smaller logo size
-          src="/assets/logo.png"
-          alt="Logo"
-          bg="white"
-        />
-      </Box>
-
       <Box 
         borderWidth={1}
         px={3}
@@ -46,19 +35,26 @@ const LoginScreen = () => {
         height="auto" // Adjust height
         p={6}
       >
-        <Box p={3}>
-          <VStack spacing={4} align="stretch"> {/* Reduced spacing */}
-            <Box textAlign="center">
-              <Text fontSize="lg" fontWeight="bold" className='font-poppins'>Sign in</Text> {/* Smaller font size */}
-            </Box>
+        <Box p={2}>
+        <Flex justify="center" align="center" > {/* Reduced margin bottom */}
+              <Image
+                src="/assets/logo.png"
+                alt="Logo"
+                height="110px" // Adjust the size of the logo
+                width="110px"
+              />
+            </Flex>
+          <VStack spacing={3} align="stretch"> {/* Reduced spacing */}
+            {/* Image and Sign In text */}
+            <Text fontSize="sm" fontWeight="bold" className='font-poppins' mb={3}>Sign In to Continue</Text> {/* Smaller font size */}
             
             <FormControl>
-              <FormLabel fontSize="sm" className='font-poppins'>Email or mobile phone number</FormLabel> {/* Smaller font size */}
+              <FormLabel fontSize="xs" className='font-poppins'>Email or mobile phone number</FormLabel> {/* Smaller font size */}
               <Input placeholder="Enter your email or phone" fontSize="xs" className='font-poppins'/>
             </FormControl>
 
             <FormControl>
-              <FormLabel fontSize="sm" className='font-poppins'>Your password</FormLabel> {/* Smaller font size */}
+              <FormLabel fontSize="xs" className='font-poppins'>Your password</FormLabel> {/* Smaller font size */}
               <InputGroup>
                 <Input
                   type={show ? 'text' : 'password'}
@@ -84,7 +80,7 @@ const LoginScreen = () => {
               width="full"
               py={4} // Reduced padding
               className='font-poppins'
-              fontSize="sm"
+              fontSize="xs"
             >
               Log in
             </Button>
