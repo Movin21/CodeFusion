@@ -123,13 +123,14 @@ const SignupForm = () => {
             </Heading>
             <Flex gap={2} mt={2}>
               <FormControl>
-                <FormLabel fontSize="xs" className="font-poppins">
+                <FormLabel fontSize="xs" className="font-poppins" >
                   First name
                 </FormLabel>
                 <Input
                   size="xs"
                   placeholder="First name"
                   className="font-poppins"
+                  borderRadius={5}
                 />
               </FormControl>
               <FormControl>
@@ -140,6 +141,7 @@ const SignupForm = () => {
                   size="xs"
                   placeholder="Last name"
                   className="font-poppins"
+                  borderRadius={5}
                 />
               </FormControl>
             </Flex>
@@ -152,6 +154,7 @@ const SignupForm = () => {
                 type="email"
                 placeholder="Email address"
                 className="font-poppins"
+                borderRadius={5}
               />
             </FormControl>
             <FormControl>
@@ -211,6 +214,7 @@ const SignupForm = () => {
                   }
                   placeholder="Phone number"
                   className="font-poppins"
+                  borderRadius={5}
                 />
               </Flex>
             </FormControl>
@@ -223,6 +227,7 @@ const SignupForm = () => {
                 type="password"
                 placeholder="Password"
                 className="font-poppins"
+                borderRadius={5}
               />
               <Text
                 fontSize="2xs"
