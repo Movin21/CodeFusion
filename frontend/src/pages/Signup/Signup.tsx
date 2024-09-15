@@ -89,7 +89,7 @@ const SignupForm = () => {
       <Flex
         maxWidth="1000px"
         width="100%"
-        height="575px"
+        height="600px"
         bg="black"
         borderRadius="xl"
         overflow="hidden"
@@ -128,7 +128,7 @@ const SignupForm = () => {
                 </FormLabel>
                 <Input
                   size="xs"
-                  placeholder="First name"
+                  placeholder="Jhon"
                   className="font-poppins"
                   borderRadius={5}
                 />
@@ -139,7 +139,7 @@ const SignupForm = () => {
                 </FormLabel>
                 <Input
                   size="xs"
-                  placeholder="Last name"
+                  placeholder="Doe"
                   className="font-poppins"
                   borderRadius={5}
                 />
@@ -152,7 +152,7 @@ const SignupForm = () => {
               <Input
                 size="xs"
                 type="email"
-                placeholder="Email address"
+                placeholder="JhonDoe@email.com"
                 className="font-poppins"
                 borderRadius={5}
               />
@@ -229,6 +229,16 @@ const SignupForm = () => {
                 className="font-poppins"
                 borderRadius={5}
               />
+              <FormLabel fontSize="xs" className="font-poppins" mt={3}>
+                Confirm Password
+              </FormLabel>
+              <Input
+                size="xs"
+                type="password"
+                placeholder="Password"
+                className="font-poppins"
+                borderRadius={5}
+              />
               <Text
                 fontSize="2xs"
                 color="gray.500"
@@ -264,7 +274,8 @@ const SignupForm = () => {
               textAlign="center"
               fontSize="xs"
               className="font-poppins"
-              p={5}
+              p={2}
+              mb={2}
             >
               Already have an account?{" "}
               <Link color="blue.500" className="font-poppins">
