@@ -1,4 +1,7 @@
 import React from 'react';
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
   Button,
@@ -13,61 +16,97 @@ import {
   InputGroup,
   InputRightElement,
   Image,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 
+// Define the login schema using Zod
+const loginSchema = z.object({
+  emailOrPhone: z.string().min(1, { message: "Email or phone number is required" })
+    .refine((value) => {
+      // Simple email regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      // Simple phone regex (assumes a 10-digit number)
+      const phoneRegex = /^\d{10}$/;
+      return emailRegex.test(value) || phoneRegex.test(value);
+    }, { message: "Invalid email or phone number format" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
 const LoginScreen = () => {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
-  const navigate = useNavigate();// Initialize the useNavigate hook
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    console.log(data);
+    // Handle login logic here
+  };
+
   return (
     <Flex minHeight="100vh" width="full" align="center" justifyContent="center" position="relative" bg="black">
       <Box 
         borderWidth={1}
         px={3}
         width="full"
-        maxWidth="400px" // Smaller width
+        maxWidth="400px"
         textAlign="center"
-        boxShadow="md" // Reduced shadow size
+        boxShadow="md"
         bg="white"
-        mt="10px" // Adjusted margin top
-        height="auto" // Adjust height
+        mt="10px"
+        height="auto"
         p={6}
         borderRadius="2xl"
-        
       >
         <Box p={2}>
-        <Flex justify="center" align="center" > {/* Reduced margin bottom */}
-              <Image
-                src="/assets/logo.png"
-                alt="Logo"
-                height="110px" // Adjust the size of the logo
-                width="110px"
-              />
-            </Flex>
-          <VStack spacing={3} align="stretch"> {/* Reduced spacing */}
-            {/* Image and Sign In text */}
-            <Text fontSize="sm" fontWeight="bold" className='font-poppins' mb={3}>Sign In to Continue</Text> {/* Smaller font size */}
+          <Flex justify="center" align="center">
+            <Image
+              src="/assets/logo.png"
+              alt="Logo"
+              height="110px"
+              width="110px"
+            />
+          </Flex>
+          <VStack spacing={3} align="stretch" as="form" onSubmit={handleSubmit(onSubmit)}>
+            <Text fontSize="sm" fontWeight="bold" className='font-poppins' mb={3}>Sign In to Continue</Text>
             
-            <FormControl>
-              <FormLabel fontSize="xs" className='font-poppins'>Email or mobile phone number</FormLabel> {/* Smaller font size */}
-              <Input placeholder="Enter your email or phone" fontSize="xs" className='font-poppins' borderRadius={5}/>
+            <FormControl isInvalid={!!errors.emailOrPhone}>
+              <FormLabel fontSize="xs" className='font-poppins'>Email or mobile phone number</FormLabel>
+              <Input
+                {...register("emailOrPhone")}
+                placeholder="Enter your email or phone"
+                fontSize="xs"
+                className='font-poppins'
+                borderRadius={5}
+              />
+              <FormErrorMessage>{errors.emailOrPhone?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl>
-              <FormLabel fontSize="xs" className='font-poppins'>Your password</FormLabel> {/* Smaller font size */}
+            <FormControl isInvalid={!!errors.password}>
+              <FormLabel fontSize="xs" className='font-poppins'>Your password</FormLabel>
               <InputGroup>
                 <Input
+                  {...register("password")}
                   type={show ? 'text' : 'password'}
                   placeholder="Enter your password"
                   fontSize="xs"
                   className='font-poppins'
                   borderRadius={5}
                 />
-                <InputRightElement width="4rem"> {/* Smaller width */}
+                <InputRightElement width="4rem">
                   <IconButton
-                    h="1.5rem" // Smaller button height
+                    h="1.5rem"
                     size="xs"
                     onClick={handleClick}
                     aria-label={show ? 'Hide password' : 'Show password'}
@@ -75,15 +114,18 @@ const LoginScreen = () => {
                   />
                 </InputRightElement>
               </InputGroup>
+              <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
             </FormControl>
 
             <Button
-              borderRadius="lg" // Smaller border radius
+              type="submit"
+              borderRadius="lg"
               bg="gray.100"
               width="full"
-              py={4} // Reduced padding
+              py={4}
               className='font-poppins'
               fontSize="xs"
+              isLoading={isSubmitting}
             >
               Log in
             </Button>
@@ -101,10 +143,10 @@ const LoginScreen = () => {
           </VStack>
         </Box>
 
-        <Box mt={4} borderTopWidth={1} pt={4} pb={4}> {/* Adjusted margin and padding */}
-          <Text fontSize="xs" className='font-poppins'>New to our community</Text> {/* Smaller font size */}
+        <Box mt={4} borderTopWidth={1} pt={4} pb={4}>
+          <Text fontSize="xs" className='font-poppins'>New to our community</Text>
           <Button
-            mt={3} // Adjusted margin
+            mt={3}
             width="full"
             variant="outline"
             className='font-poppins'
