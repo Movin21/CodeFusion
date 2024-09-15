@@ -19,6 +19,7 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { useNavigate } from 'react-router-dom';
 
 const GeometricDesign = () => (
   <Box as="svg" width="100%" height="100%" viewBox="0 0 300 300">
@@ -79,6 +80,7 @@ const countryCodes = [
 const SignupForm = () => {
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const navigate = useNavigate();// Initialize the useNavigate hook
   return (
     <Flex
       bg="black"
@@ -278,7 +280,7 @@ const SignupForm = () => {
               mb={2}
             >
               Already have an account?{" "}
-              <Link color="blue.500" className="font-poppins">
+              <Link color="blue.500" className="font-poppins" onClick={() => navigate('/login')}  >
                 Log in
               </Link>
             </Text>

@@ -15,11 +15,12 @@ import {
   Image,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
 
 const LoginScreen = () => {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
-
+  const navigate = useNavigate();// Initialize the useNavigate hook
   return (
     <Flex minHeight="100vh" width="full" align="center" justifyContent="center" position="relative" bg="black">
       <Box 
@@ -27,13 +28,14 @@ const LoginScreen = () => {
         px={3}
         width="full"
         maxWidth="400px" // Smaller width
-        borderRadius={10} // Less border radius
         textAlign="center"
         boxShadow="md" // Reduced shadow size
         bg="white"
         mt="10px" // Adjusted margin top
         height="auto" // Adjust height
         p={6}
+        borderRadius="2xl"
+        
       >
         <Box p={2}>
         <Flex justify="center" align="center" > {/* Reduced margin bottom */}
@@ -50,7 +52,7 @@ const LoginScreen = () => {
             
             <FormControl>
               <FormLabel fontSize="xs" className='font-poppins'>Email or mobile phone number</FormLabel> {/* Smaller font size */}
-              <Input placeholder="Enter your email or phone" fontSize="xs" className='font-poppins'/>
+              <Input placeholder="Enter your email or phone" fontSize="xs" className='font-poppins' borderRadius={5}/>
             </FormControl>
 
             <FormControl>
@@ -61,6 +63,7 @@ const LoginScreen = () => {
                   placeholder="Enter your password"
                   fontSize="xs"
                   className='font-poppins'
+                  borderRadius={5}
                 />
                 <InputRightElement width="4rem"> {/* Smaller width */}
                   <IconButton
@@ -106,6 +109,7 @@ const LoginScreen = () => {
             variant="outline"
             className='font-poppins'
             fontSize="2xs"
+            onClick={() => navigate('/signup')}
           >
             Create an account
           </Button>
