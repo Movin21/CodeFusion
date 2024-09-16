@@ -12,10 +12,6 @@ import {
     ModalBody,
     ModalFooter,
     Input,
-    Tag,
-    TagLabel,
-    TagCloseButton,
-    SimpleGrid,
     useDisclosure,
     Box,
     Card,
@@ -28,12 +24,7 @@ import {
     Icon,
     useColorModeValue,
     HStack,
-    FormControl,
-    FormLabel,
-    Textarea,
-    Checkbox,
-    Grid,
-    Flex
+    
   } from "@chakra-ui/react";
 function Student_Resume() {
 
