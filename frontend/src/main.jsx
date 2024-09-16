@@ -9,6 +9,7 @@ import Home from "./pages/Home/Home.jsx";
 import Profile from "./pages/Profile/profile.jsx";
 import HelpForm from "./pages/Blog/HelpForm.jsx";
 import BlogPage from "./pages/Blog/Blog.jsx";
+import { ChallengesListing } from "./pages/ChallengesListing/ChallengesListing.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -19,6 +20,7 @@ const router = createBrowserRouter([
       { path: "/profile", element: <Profile /> },
       { path: "/helpform", element: <HelpForm /> },
       { path: "/blogsupport", element: <BlogPage /> },
+      { path: "/ChallengesListing", element: <ChallengesListing /> },
     ],
   },
 ]);
