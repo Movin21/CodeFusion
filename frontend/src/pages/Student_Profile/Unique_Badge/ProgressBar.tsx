@@ -138,23 +138,25 @@ function ProgressBar({ setImageUrlBronze, setImageUrlSilver, setImageUrlGold,set
         <Box 
           position="relative" 
           borderRadius="md" 
-          height="10px" 
+          height="6px" 
           bg="#e2e8f0" // Light gray for the background of the progress bar
           mb={3}
         >
           <Box
+            
             position="absolute"
             left={0}
             top={0}
             height="100%"
-            width={`${(progress / target) * 100}%`}
+            
+            width={ `${(progress / target) * 100}%`}
             bgColor={getColor()}
             borderRadius="md"
           />
         </Box>
-        <Text fontSize="lg" fontWeight="bold" mb={3}>{`${progress}/${target}`}</Text>
-        <Button onClick={handleButtonClick} size="sm" bgColor="#00af0e" mr={3}>Progress</Button>
-        <Button onClick={handleButtonReset} size="sm" colorScheme="red">Reset</Button>
+        <Text fontSize="sm" fontWeight="bold" mb={3}>{`${progress}/${target}`}</Text>
+        <Button onClick={handleButtonClick} size="xs" bgColor="#00af0e" mr={3} fontSize="2xs">Progress</Button>
+        <Button onClick={handleButtonReset} size="xs" colorScheme="red" fontSize="2xs">Reset</Button>
       </Box>
     </Box>
     );
