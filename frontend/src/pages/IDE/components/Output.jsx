@@ -13,8 +13,8 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import { executeCode } from "./api";
+import { evaluateTestCases } from "./testCase";
 
 const Output = ({ editorRef, language }) => {
   const toast = useToast();
@@ -22,13 +22,13 @@ const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const navigate = useNavigate();
+  const question =
+    "Write a function in Python that takes a list of numbers as input and returns the sum of all the even numbers in the list.";
 
   const runCode = async () => {
     const userSourceCode = editorRef.current.getValue();
+    const code = userSourceCode;
     if (!userSourceCode) return;
-
-    console.log(userSourceCode);
 
     try {
       setIsLoading(true);
@@ -36,7 +36,8 @@ const Output = ({ editorRef, language }) => {
       const outputLines = result.output.split("\n");
       setOutput(outputLines);
 
-      const passedAllTestCases = false; // Logic to check if all test cases passed can be added here
+      // Evaluate the test cases using the evaluateTestCases function
+      const passedAllTestCases = await evaluateTestCases(question, code);
 
       if (result.stderr) {
         setIsError(true);
@@ -45,14 +46,14 @@ const Output = ({ editorRef, language }) => {
         setIsError(true);
         onOpen();
         toast({
-          title: "Something is Wrong !",
+          title: "Something is Wrong!",
           description: "Your code failed some test cases!",
           status: "error",
           duration: 6000,
         });
       } else {
         toast({
-          title: "Well Done !",
+          title: "Well Done!",
           description: "Your code passed all test cases!",
           status: "success",
           duration: 6000,
@@ -70,11 +71,6 @@ const Output = ({ editorRef, language }) => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleGetHelp = () => {
-    const userSourceCode = editorRef.current.getValue();
-    navigate("/helpform", { state: { codeSnippet: userSourceCode } });
   };
 
   return (
@@ -120,7 +116,13 @@ const Output = ({ editorRef, language }) => {
             <Button colorScheme="blue" mr={3} onClick={onClose}>
               Retry
             </Button>
-            <Button variant="ghost" onClick={handleGetHelp}>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                // Logic to get help from peers can be added here
+                onClose();
+              }}
+            >
               Get Help from Peers
             </Button>
           </ModalFooter>

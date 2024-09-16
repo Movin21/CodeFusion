@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-export const testCase = (testCase1, testCase2) => {
-  return true;
-=======
 import axios from "axios";
 
 // Set environment variables (you should use actual environment variables for secure storage)
@@ -61,5 +57,4 @@ export const evaluateTestCases = async (question, code) => {
     console.error("Error evaluating test cases:", err);
     throw err; // Re-throw for handling in the calling function
   }
->>>>>>> Stashed changes
 };
