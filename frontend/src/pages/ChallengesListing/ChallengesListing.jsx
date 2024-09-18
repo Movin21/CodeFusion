@@ -132,13 +132,13 @@ export const ChallengesListing = () => {
         >
           Active Contests
         </Button>
-        <Button
+        {/*<Button
           colorScheme={filter === "upcoming" ? "blue" : "gray"}
           size="sm"
           onClick={() => setFilter("upcoming")}
         >
           Upcoming Contests
-        </Button>
+        </Button>*/}
         <Button
           colorScheme={filter === "archived" ? "blue" : "gray"}
           size="sm"
