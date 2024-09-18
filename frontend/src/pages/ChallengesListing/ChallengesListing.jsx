@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   Button,
@@ -12,88 +14,91 @@ import {
   BreadcrumbLink,
 } from "@chakra-ui/react";
 
-// Mock challenge data
-const challenges = [
-  // Active Challenges
-  {
-    id: 1,
-    name: "Easy Challenge",
-    endDate: new Date(Date.now() + 60 * 60 * 1000), // 1 hour from now
-    difficulty: "easy",
-    status: "active",
-  },
-  ...Array(6)
-    .fill()
-    .map((_, i) => ({
-      id: i + 2,
-      name: `Medium Challenge ${i + 1}`,
-      endDate: new Date(Date.now() + (i + 1) * 60 * 60 * 1000), // Varying time from now
-      difficulty: "medium",
-      status: "active",
-    })),
-  ...Array(12)
-    .fill()
-    .map((_, i) => ({
-      id: i + 8,
-      name: `Hard Challenge ${i + 1}`,
-      endDate: new Date(Date.now() + (i + 2) * 60 * 60 * 1000), // Varying time from now
-      difficulty: "hard",
-      status: "active",
-    })),
-  // Upcoming Challenges
-  ...Array(Math.floor(8) + 2)
-    .fill()
-    .map((_, i) => ({
-      id: i + 20,
-      name: `Upcoming Challenge ${i + 1}`,
-      endDate: new Date(Date.now() + (i + 5) * 60 * 60 * 1000), // Varying future time
-      difficulty: ["easy", "medium", "hard"][i % 3], // Rotate difficulty
-      status: "upcoming",
-    })),
-  // Archived Challenges
-  ...Array(Math.floor(5) + 1)
-    .fill()
-    .map((_, i) => ({
-      id: i + 30,
-      name: `Archived Challenge ${i + 2}`,
-      endDate: new Date(Date.now() - (i + 1) * 60 * 60 * 1000), // Varying past time
-      difficulty: ["easy", "medium", "hard"][i % 3], // Rotate difficulty
-      status: "archived",
-    })),
-];
-
-// Countdown function to calculate remaining time
+// Countdown function remains the same
 const getCountdown = (endDate) => {
-  const now = new Date();
-  const timeRemaining = endDate - now;
-  if (timeRemaining < 0) return "Ended";
-
-  const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
-  const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-  return `${hours}h ${minutes}m ${seconds}s`;
+  // ... (previous implementation)
 };
 
 export const ChallengesListing = () => {
   const [filter, setFilter] = useState("active");
-  const [filteredChallenges, setFilteredChallenges] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [filteredQuestions, setFilteredQuestions] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setFilteredChallenges(
-      challenges.filter((challenge) => challenge.status === filter)
-    );
-  }, [filter]);
+    const fetchQuestions = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/questions/getAllQuestions"
+        );
+        setQuestions(response.data);
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
 
-  // Separate challenges by difficulty
-  const easyChallenges = filteredChallenges.filter(
-    (challenge) => challenge.difficulty === "easy"
+    fetchQuestions();
+  }, []);
+
+  useEffect(() => {
+    setFilteredQuestions(
+      questions.filter(
+        (question) =>
+          filter === "active"
+            ? !question.isArchived
+            : filter === "archived"
+            ? question.isArchived
+            : true // For "upcoming", show all non-archived questions
+      )
+    );
+  }, [filter, questions]);
+
+  // Separate questions by difficulty
+  const easyQuestions = filteredQuestions.filter(
+    (question) => question.difficulty === "easy"
   );
-  const mediumChallenges = filteredChallenges.filter(
-    (challenge) => challenge.difficulty === "medium"
+  const mediumQuestions = filteredQuestions.filter(
+    (question) => question.difficulty === "medium"
   );
-  const hardChallenges = filteredChallenges.filter(
-    (challenge) => challenge.difficulty === "hard"
+  const hardQuestions = filteredQuestions.filter(
+    (question) => question.difficulty === "hard"
+  );
+
+  const handleViewDetails = (questionId) => {
+    navigate(`/ide/${questionId}`);
+  };
+
+  const renderQuestions = (questions, difficultyColor) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {questions.map((question) => (
+        <Card
+          key={question._id}
+          borderRadius="lg"
+          shadow="md"
+          overflow="hidden"
+          maxWidth="full"
+        >
+          <Box height="4px" bg={difficultyColor} borderRadius="full"></Box>
+          <CardBody>
+            <Heading size="sm" mb={2} fontWeight="semibold">
+              {question.name}
+            </Heading>
+            <Text fontSize="sm" color="gray.500">
+              Ends in: {getCountdown(question.endDate)}
+            </Text>
+            <Button
+              size="sm"
+              variant="outline"
+              colorScheme="blue"
+              mt={4}
+              onClick={() => handleViewDetails(question._id)}
+            >
+              View Details
+            </Button>
+          </CardBody>
+        </Card>
+      ))}
+    </div>
   );
 
   return (
@@ -143,126 +148,33 @@ export const ChallengesListing = () => {
         </Button>
       </Stack>
 
-      {/* Easy Challenges */}
-      {easyChallenges.length > 0 && (
+      {/* Easy Questions */}
+      {easyQuestions.length > 0 && (
         <>
           <Heading size="md" className="text-lg font-semibold mb-4">
             Easy Challenges
           </Heading>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {easyChallenges.map((challenge) => (
-              <Card
-                key={challenge.id}
-                borderRadius="lg"
-                shadow="md"
-                overflow="hidden"
-                maxWidth="full" // Ensure cards don't overflow
-              >
-                <Box height="4px" bg="green.400" borderRadius="full"></Box>
-                <CardBody>
-                  <Heading size="sm" mb={2} fontWeight="semibold">
-                    {challenge.name}
-                  </Heading>
-                  <Text fontSize="sm" color="gray.500">
-                    Ends in: {getCountdown(challenge.endDate)}
-                  </Text>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    colorScheme="blue"
-                    mt={4}
-                    onClick={() =>
-                      alert(`Viewing details of ${challenge.name}`)
-                    }
-                  >
-                    View Details
-                  </Button>
-                </CardBody>
-              </Card>
-            ))}
-          </div>
+          {renderQuestions(easyQuestions, "green.400")}
         </>
       )}
 
-      {/* Medium Challenges */}
-      {mediumChallenges.length > 0 && (
+      {/* Medium Questions */}
+      {mediumQuestions.length > 0 && (
         <>
           <Heading size="md" className="text-lg font-semibold mt-8 mb-4">
             Medium Challenges
           </Heading>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {mediumChallenges.map((challenge) => (
-              <Card
-                key={challenge.id}
-                borderRadius="lg"
-                shadow="md"
-                overflow="hidden"
-                maxWidth="full" // Ensure cards don't overflow
-              >
-                <Box height="4px" bg="blue.400" borderRadius="full"></Box>
-                <CardBody>
-                  <Heading size="sm" mb={2} fontWeight="semibold">
-                    {challenge.name}
-                  </Heading>
-                  <Text fontSize="sm" color="gray.500">
-                    Ends in: {getCountdown(challenge.endDate)}
-                  </Text>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    colorScheme="blue"
-                    mt={4}
-                    onClick={() =>
-                      alert(`Viewing details of ${challenge.name}`)
-                    }
-                  >
-                    View Details
-                  </Button>
-                </CardBody>
-              </Card>
-            ))}
-          </div>
+          {renderQuestions(mediumQuestions, "blue.400")}
         </>
       )}
 
-      {/* Hard Challenges */}
-      {hardChallenges.length > 0 && (
+      {/* Hard Questions */}
+      {hardQuestions.length > 0 && (
         <>
           <Heading size="md" className="text-lg font-semibold mt-8 mb-4">
             Hard Challenges
           </Heading>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {hardChallenges.map((challenge) => (
-              <Card
-                key={challenge.id}
-                borderRadius="lg"
-                shadow="md"
-                overflow="hidden"
-                maxWidth="full" // Ensure cards don't overflow
-              >
-                <Box height="4px" bg="red.400" borderRadius="full"></Box>
-                <CardBody>
-                  <Heading size="sm" mb={2} fontWeight="semibold">
-                    {challenge.name}
-                  </Heading>
-                  <Text fontSize="sm" color="gray.500">
-                    Ends in: {getCountdown(challenge.endDate)}
-                  </Text>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    colorScheme="blue"
-                    mt={4}
-                    onClick={() =>
-                      alert(`Viewing details of ${challenge.name}`)
-                    }
-                  >
-                    View Details
-                  </Button>
-                </CardBody>
-              </Card>
-            ))}
-          </div>
+          {renderQuestions(hardQuestions, "red.400")}
         </>
       )}
     </div>

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
+import confetti from "canvas-confetti";
 import {
   Box,
   Button,
@@ -12,13 +14,26 @@ import {
   ModalFooter,
   ModalCloseButton,
   useDisclosure,
+  VStack,
+  HStack,
+  Icon,
 } from "@chakra-ui/react";
+import { FaExclamationTriangle, FaRedo, FaUsers } from "react-icons/fa";
 import { executeCode } from "./api";
 import { evaluateTestCases } from "./testCase";
 
 const Output = ({ editorRef, language }) => {
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isErrorOpen,
+    onOpen: onErrorOpen,
+    onClose: onErrorClose,
+  } = useDisclosure();
+  const {
+    isOpen: isSuccessOpen,
+    onOpen: onSuccessOpen,
+    onClose: onSuccessClose,
+  } = useDisclosure();
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -29,48 +44,67 @@ const Output = ({ editorRef, language }) => {
     const userSourceCode = editorRef.current.getValue();
     const code = userSourceCode;
     if (!userSourceCode) return;
-
     try {
       setIsLoading(true);
       const { run: result } = await executeCode(language, userSourceCode);
       const outputLines = result.output.split("\n");
       setOutput(outputLines);
-
       // Evaluate the test cases using the evaluateTestCases function
       const passedAllTestCases = await evaluateTestCases(question, code);
-
       if (result.stderr) {
         setIsError(true);
-        onOpen(); // Open the modal when an error occurs
+        onErrorOpen();
       } else if (!passedAllTestCases) {
         setIsError(true);
-        onOpen();
-        toast({
-          title: "Something is Wrong!",
-          description: "Your code failed some test cases!",
-          status: "error",
-          duration: 6000,
-        });
+        onErrorOpen();
+        showToast(
+          "Test Case Failed",
+          "Your code didn't pass all test cases. Please review and try again.",
+          "error"
+        );
       } else {
-        toast({
-          title: "Well Done!",
-          description: "Your code passed all test cases!",
-          status: "success",
-          duration: 6000,
-        });
         setIsError(false);
+        onSuccessOpen();
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+        });
+        showToast(
+          "Success!",
+          "Great job! Your code passed all test cases.",
+          "success"
+        );
       }
     } catch (error) {
       console.log(error);
-      toast({
-        title: "An error occurred.",
-        description: error.message || "Unable to run code",
-        status: "error",
-        duration: 6000,
-      });
+      showToast(
+        "Error",
+        error.message || "An error occurred while running your code.",
+        "error"
+      );
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const showToast = (title, description, status) => {
+    toast({
+      title,
+      description,
+      status,
+      duration: 5000,
+      isClosable: true,
+      position: "bottom",
+      variant: "solid",
+      containerStyle: {
+        border: "1px solid",
+        borderColor: status === "error" ? "red.500" : "green.500",
+        borderRadius: "md",
+        maxWidth: "400px",
+        margin: "0 auto",
+      },
+    });
   };
 
   return (
@@ -99,32 +133,83 @@ const Output = ({ editorRef, language }) => {
           ? output.map((line, i) => <Text key={i}>{line}</Text>)
           : 'Click "Run Code" to see the output here'}
       </Box>
-
-      {/* Modal for error */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      {/* Error Modal */}
+      <Modal isOpen={isErrorOpen} onClose={onErrorClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Wrong Answer!</ModalHeader>
+        <ModalContent bg="#1e1e1e" color="white">
+          <ModalHeader bg="#252525" borderTopRadius="md">
+            <HStack>
+              <Icon as={FaExclamationTriangle} color="red.500" />
+              <Text>Oops! Wrong Answer</Text>
+            </HStack>
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <Text>
-              You have answered wrong to this question. Do you need to retry or
-              get assistance from peers?
-            </Text>
+          <ModalBody py={6}>
+            <VStack spacing={4} align="stretch">
+              <Text>
+                Your code didn't pass all the test cases. Don't worry, it's all
+                part of the learning process!
+              </Text>
+              <Text fontWeight="bold">What would you like to do next?</Text>
+            </VStack>
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Retry
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => {
-                // Logic to get help from peers can be added here
-                onClose();
-              }}
-            >
-              Get Help from Peers
-            </Button>
+          <ModalFooter bg="#252525" borderBottomRadius="md">
+            <HStack spacing={4}>
+              <Button
+                leftIcon={<FaRedo />}
+                colorScheme="blue"
+                onClick={onErrorClose}
+              >
+                Try Again
+              </Button>
+              <Button
+                leftIcon={<FaUsers />}
+                variant="outline"
+                onClick={() => {
+                  // Logic to get help from peers can be added here
+                  onErrorClose();
+                }}
+              >
+                Get Help from Peers
+              </Button>
+            </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      {/* Success Modal */}
+      <Modal isOpen={isSuccessOpen} onClose={onSuccessClose}>
+        <ModalOverlay />
+        <ModalContent bg="#1e1e1e" color="white">
+          <ModalHeader bg="#252525" borderTopRadius="md">
+            <HStack>
+              <Icon as={FaUsers} color="green.500" />
+              <Text>Congratulations!</Text>
+            </HStack>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody py={6}>
+            <VStack spacing={4} align="stretch">
+              <Text>
+                You've successfully completed this challenge. Great job!
+              </Text>
+              <Text fontWeight="bold">What would you like to do next?</Text>
+            </VStack>
+          </ModalBody>
+          <ModalFooter bg="#252525" borderBottomRadius="md">
+            <HStack spacing={4}>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  colorScheme="green"
+                  onClick={() => {
+                    // Logic to navigate to challenges page
+                    console.log("Navigating to challenges page");
+                    onSuccessClose();
+                  }}
+                >
+                  Try a Different Challenge
+                </Button>
+              </motion.div>
+            </HStack>
           </ModalFooter>
         </ModalContent>
       </Modal>
