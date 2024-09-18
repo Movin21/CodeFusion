@@ -12,6 +12,7 @@ import HelpForm from "./pages/Blog/HelpForm.jsx";
 import BlogPage from "./pages/Blog/Blog.jsx";
 import ChallengesForm from "./pages/ChallengesListing/ChallengeForm.jsx";
 import { ChallengesListing } from "./pages/ChallengesListing/ChallengesListing.jsx";
+import ListedQueston from "./pages/Blog/ListedQuestion.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -24,6 +25,8 @@ const router = createBrowserRouter([
       { path: "/blogsupport", element: <BlogPage /> },
       { path: "/ChallengesListing", element: <ChallengesListing /> },
       { path: "/addChallenge", element: <ChallengesForm /> },
+      { path: "/ListedQuestions", element: <ListedQueston /> },
+
     ],
   },
 ]);
