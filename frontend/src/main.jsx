@@ -10,7 +10,6 @@ import Profile from "./pages/Profile/profile.jsx";
 import HelpForm from "./pages/Blog/HelpForm.jsx";
 import BlogPage from "./pages/Blog/Blog.jsx";
 import { ChallengesListing } from "./pages/ChallengesListing/ChallengesListing.jsx";
-import ListedQueston from "./pages/Blog/ListedQuestion.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -22,7 +21,6 @@ const router = createBrowserRouter([
       { path: "/helpform", element: <HelpForm /> },
       { path: "/blogsupport", element: <BlogPage /> },
       { path: "/ChallengesListing", element: <ChallengesListing /> },
-      { path: "/ListedQuestions", element: <ListedQueston /> },
     ],
   },
 ]);
