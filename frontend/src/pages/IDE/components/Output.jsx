@@ -158,14 +158,31 @@ const Output = ({ editorRef, language }) => {
             <HStack spacing={4}>
               <Button
                 leftIcon={<FaRedo />}
-                colorScheme="blue"
+                color="white" // Set text and icon color to white
+                borderColor="white" // Set border color to white
+                variant="outline" // Change to outline variant
+                _hover={{
+                  color: "white", // Keep text and icon white on hover
+                  borderColor: "gray.300", // Change border color on hover
+                  bg: "gray.800", // Change background color on hover
+                  boxShadow: "md", // Optional shadow effect on hover
+                }}
                 onClick={onErrorClose}
               >
                 Try Again
               </Button>
+
               <Button
                 leftIcon={<FaUsers />}
                 variant="outline"
+                color="white" // Set text and icon color to white
+                borderColor="white" // Set border color to white
+                _hover={{
+                  color: "white", // Keep text and icon white on hover
+                  borderColor: "gray.300", // Change border color on hover
+                  bg: "gray.800", // Change background color on hover
+                  boxShadow: "md", // Optional shadow effect on hover
+                }}
                 onClick={() => {
                   navigate("/helpform", {
                     state: { codeSnippet: editorRef.current.getValue() },
