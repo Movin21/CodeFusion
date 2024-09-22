@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       { path: "/blogsupport", element: <BlogPage /> },
       { path:"/studentprofile",element:<ProfileDashboard/>},
       { path:"/signup",element:<SignupForm/>},
-      { path:"/login",element:<LoginScreen/>}
+      { path:"/login",element:<LoginScreen/>},
       { path: "/ChallengesListing", element: <ChallengesListing /> },
       { path: "/addChallenge", element: <ChallengesForm /> },
 

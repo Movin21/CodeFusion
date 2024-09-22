@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.55.4",
+    "canvas-confetti": "^1.9.3",
     "codefusion": "file:"
   },
   "main": "index.js",

@@ -2,7 +2,11 @@ const mongoose = require("mongoose");
 
 // Define the User schema
 const userSchema = new mongoose.Schema({
-  name: {
+  firstname: {
+    type: String,
+    required: true,
+  },
+  lastname: {
     type: String,
     required: true,
   },
@@ -11,34 +15,27 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  phone:{
+    type: String,
+    required: true,
+
+  },
   password: {
     type: String,
     required: true,
   },
-  expertise: {
-    type: [String], // Array of expertise fields (e.g., ['Software Development', 'AI', 'DevOps'])
-    required: true,
+  role:{
+    type:String,
+    required:true,
   },
-  yearsOfExperience: {
-    type: Number, // Total years of professional experience
-    required: false,
-    default: 0,
-  },
-  qualifications: {
-    type: [String], // List of educational or professional qualifications (e.g., ['BSc in Computer Science', 'AWS Certified'])
-    required: false,
-  },
-  currentCompany: {
-    type: String, // Name of the current company (optional)
-    required: false,
-  },
-  score: {
-    type: Number,
-    default: 0,
-  },
+  score:{
+    type:Number,
+    default:0
+  }
+  
 });
 
 // Create the User model
-const User = mongoose.model("Uer", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
