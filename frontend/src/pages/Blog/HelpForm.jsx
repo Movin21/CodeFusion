@@ -1,5 +1,7 @@
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 const HelpForm = () => {
   const location = useLocation();
@@ -10,40 +12,53 @@ const HelpForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Navigate to the BlogPage with the code snippet and question as state
-    navigate("/blogsupport", {
-      state: {
-        codeSnippet,
-        question,
-      },
-    });
+    console.log("Code Snippet:", codeSnippet);
+    console.log("Question:", question);
   };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md w-96">
-        <h1 className="text-xl font-semibold mb-4">Get Help from Peers</h1>
-        <div className="bg-gray-100 p-4 mb-4 rounded border border-gray-300">
-          <pre className="whitespace-pre-wrap">{codeSnippet}</pre>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white ">
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-3xl border border-white">
+        <h1 className="text-3xl font-bold mb-6 text-center text-white">
+          Request Mentor Support
+        </h1>
+
+        <div className="mb-6">
+          <label htmlFor="codeSnippet" className="block mb-2 font-medium">
+            Answer that you have provided:
+          </label>
+          <div className="border border-white rounded overflow-hidden">
+            <SyntaxHighlighter
+              language="javascript"
+              style={vscDarkPlus}
+              customStyle={{
+                margin: 0,
+                padding: "1rem",
+                backgroundColor: "#1E1E1E",
+              }}
+            >
+              {codeSnippet}
+            </SyntaxHighlighter>
+          </div>
         </div>
+
         <form onSubmit={handleSubmit}>
           <label htmlFor="question" className="block mb-2 font-medium">
-            Your Question:
+            Explain the problem you are facing clearly:
           </label>
           <textarea
             id="question"
-            rows="4"
+            rows="6"
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            className="w-full p-2 mb-4 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Ask your question here..."
+            className="w-full p-2 mb-4 bg-gray-700 border border-white rounded focus:outline-none focus:ring-2 focus:ring-white text-white"
+            placeholder="Describe your problem here..."
             required
           ></textarea>
           <button
             type="submit"
-            className="w-full bg-blue-400 text-white py-2 rounded hover:bg-light"
+            className="w-full bg-blue-200 text-black py-2 rounded hover:bg-blue-400 transition duration-300"
           >
-            Post
+            Submit Request
           </button>
         </form>
       </div>
