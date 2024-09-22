@@ -1,5 +1,7 @@
 const router = require("express").Router();
 let User = require("../../models/User");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 router.route("/add").post((req, res) => {
   const firstname = req.body.firstname;
@@ -9,12 +11,19 @@ router.route("/add").post((req, res) => {
   const password = req.body.password;
   const role = req.body.role;
 
+  // Hash the password before saving
+  bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Error hashing password" });
+    }
+ 
   const newUser = new User({
     firstname,
     lastname,
     email,
     phone,
-    password,
+    password: hashedPassword,
     role,
   });
 
@@ -26,6 +35,7 @@ router.route("/add").post((req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
 });
 
 router.route("/get").get((req, res) => {
