@@ -10,8 +10,12 @@ import Home from "./pages/Home/Home.jsx";
 import Profile from "./pages/Profile/profile.jsx";
 import HelpForm from "./pages/Blog/HelpForm.jsx";
 import BlogPage from "./pages/Blog/Blog.jsx";
+import ProfileDashboard from "./pages/Student_Profile/Student_Profile.tsx";
+import SignupForm from "./pages/Signup/Signup.tsx";
+import LoginScreen from "./pages/Login/Login.tsx";
 import ChallengesForm from "./pages/ChallengesListing/ChallengeForm.jsx";
 import { ChallengesListing } from "./pages/ChallengesListing/ChallengesListing.jsx";
+
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -22,8 +26,12 @@ const router = createBrowserRouter([
       { path: "/profile", element: <Profile /> },
       { path: "/helpform", element: <HelpForm /> },
       { path: "/blogsupport", element: <BlogPage /> },
+      { path:"/studentprofile",element:<ProfileDashboard/>},
+      { path:"/signup",element:<SignupForm/>},
+      { path:"/login",element:<LoginScreen/>}
       { path: "/ChallengesListing", element: <ChallengesListing /> },
       { path: "/addChallenge", element: <ChallengesForm /> },
+
     ],
   },
 ]);

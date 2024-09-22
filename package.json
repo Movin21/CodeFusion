@@ -8,12 +8,13 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "concurrently": "^9.0.0"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.55.4",
     "codefusion": "file:"
-  }
+  },
+  "main": "index.js",
+  "description": ""
 }

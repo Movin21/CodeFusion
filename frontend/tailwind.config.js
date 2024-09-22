@@ -14,7 +14,7 @@ module.exports = {
         dimWhite: "rgba(255, 255, 255, 0.7)",
         dimBlue: "rgba(9, 151, 124, 0.7)",
         page_background: "#0B1518",
-        page_background2: "#0B1518",
+        page_background2: "#0B1518",                            
         homebackground: "#0B1518",
         bg1: "#121418",
         bg2: "#0e141e",
