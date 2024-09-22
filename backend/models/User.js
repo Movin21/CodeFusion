@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-// Define the Mentor schema
-const mentorSchema = new mongoose.Schema({
+// Define the User schema
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -9,7 +9,7 @@ const mentorSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true, 
+    unique: true,
   },
   password: {
     type: String,
@@ -32,13 +32,13 @@ const mentorSchema = new mongoose.Schema({
     type: String, // Name of the current company (optional)
     required: false,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  score: {
+    type: Number,
+    default: 0,
   },
 });
 
-// Create the Mentor model
-const Mentor = mongoose.model("Mentor", mentorSchema);
+// Create the User model
+const User = mongoose.model("Uer", userSchema);
 
-module.exports = Mentor;
+module.exports = User;
