@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import CodeEditor from "./components/CodeEditor"; // Assuming you already have a CodeEditor component
 
-const HackerRankChallenge = () => {
+const IDE = () => {
   const { id } = useParams(); // Get the id from the URL
   const [challengeData, setChallengeData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -102,8 +102,8 @@ const HackerRankChallenge = () => {
                   challengeData.difficulty === "easy"
                     ? "green"
                     : challengeData.difficulty === "medium"
-                    ? "yellow"
-                    : "red"
+                      ? "yellow"
+                      : "red"
                 }
               >
                 {challengeData.difficulty.charAt(0).toUpperCase() +
@@ -135,7 +135,7 @@ const HackerRankChallenge = () => {
             </Text>
           </Box>
           <Divider />
-          {/* Code Editor */}
+
           <Box>
             <Heading as="h3" size="lg" mb={4}>
               Solution
@@ -148,4 +148,4 @@ const HackerRankChallenge = () => {
   );
 };
 
-export default HackerRankChallenge;
+export default IDE;

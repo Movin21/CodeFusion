@@ -21,9 +21,10 @@ import {
 import { FaExclamationTriangle, FaRedo, FaUsers } from "react-icons/fa";
 import { executeCode } from "./api";
 import { evaluateTestCases } from "./testCase";
-
+import { redirect, useNavigate } from "react-router-dom";
 const Output = ({ editorRef, language }) => {
   const toast = useToast();
+  const navigate = useNavigate();
   const {
     isOpen: isErrorOpen,
     onOpen: onErrorOpen,
@@ -166,11 +167,12 @@ const Output = ({ editorRef, language }) => {
                 leftIcon={<FaUsers />}
                 variant="outline"
                 onClick={() => {
-                  // Logic to get help from peers can be added here
-                  onErrorClose();
+                  navigate("/helpform", {
+                    state: { codeSnippet: editorRef.current.getValue() },
+                  });
                 }}
               >
-                Get Help from Peers
+                Get Help from Mentors
               </Button>
             </HStack>
           </ModalFooter>
@@ -197,12 +199,14 @@ const Output = ({ editorRef, language }) => {
           </ModalBody>
           <ModalFooter bg="#252525" borderBottomRadius="md">
             <HStack spacing={4}>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button
                   colorScheme="green"
                   onClick={() => {
-                    // Logic to navigate to challenges page
-                    console.log("Navigating to challenges page");
+                    redirect("/ChallengesListing");
                     onSuccessClose();
                   }}
                 >
