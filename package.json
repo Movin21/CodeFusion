@@ -14,7 +14,8 @@
   "dependencies": {
     "@tanstack/react-query": "^5.55.4",
     "canvas-confetti": "^1.9.3",
-    "codefusion": "file:"
+    "codefusion": "file:",
+    "express-async-handler": "^1.2.0"
   },
   "main": "index.js",
   "description": ""

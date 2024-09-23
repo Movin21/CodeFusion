@@ -1,103 +1,134 @@
-const router = require("express").Router();
-let User = require("../../models/User");
+const express = require("express");
+const router = express.Router();
+const User = require("../../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
+
 const saltRounds = 10;
+// Middleware for token validation
+const validateToken = asyncHandler(async (req, res, next) => {
+  let token;
+  let authHeader = req.headers.Authorization || req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    token = authHeader.split(" ")[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        res.status(401);
+        throw new Error("User is not authorized");
+      }
+      req.user = decoded.user;
+      next();
+    });
+  }
+  if (!token) {
+    res.status(401);
+    throw new Error("Token Missing");
+  }
+});
 
-router.route("/add").post((req, res) => {
-  const firstname = req.body.firstname;
-  const lastname = req.body.lastname;
-  const email = req.body.email;
-  const phone = req.body.phone;
-  const password = req.body.password;
-  const role = req.body.role;
-
-  // Hash the password before saving
-  bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ error: "Error hashing password" });
+router.post(
+  "/login",
+  asyncHandler(async (req, res) => {
+    // console.log('Received login request:', req.body);
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.log("User not found with email:", email);
+      res.status(400);
+      throw new Error("User not found");
     }
- 
-  const newUser = new User({
-    firstname,
-    lastname,
-    email,
-    phone,
-    password: hashedPassword,
-    role,
-  });
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      console.log("Password mismatch for user:", email);
+      res.status(400);
+      throw new Error("Invalid password");
+    }
 
-  newUser
-    .save()
-    .then(() => {
-      res.json("User Added");
-    })
-    .catch((err) => {
-      console.log(err);
+    // Ensure token secret is set
+    if (!process.env.ACCESS_TOKEN_SECRET) {
+      console.log("ACCESS_TOKEN_SECRET is not set");
+      throw new Error("Token secret is missing");
+    }
+
+    const token = jwt.sign(
+      { userId: user._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.json({ token });
+  })
+);
+
+router.post(
+  "/add",
+  asyncHandler(async (req, res) => {
+    const { firstname, lastname, email, phone, password, role } = req.body;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const newUser = new User({
+      firstname,
+      lastname,
+      email,
+      phone,
+      password: hashedPassword,
+      role,
     });
-});
-});
+    await newUser.save();
+    res.status(201).json("User Added");
+  })
+);
 
-router.route("/get").get((req, res) => {
-  User.find()
-    .then((Users) => {
-      res.json(Users);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+router.get(
+  "/get",
+  validateToken,
+  asyncHandler(async (req, res) => {
+    const users = await User.find().select("-password");
+    res.json(users);
+  })
+);
 
-router.route("/update/:id").put(async (req, res) => {
-  let userId = req.params.id;
-  const { firstname, lastname, email, phone } = req.body;
+router.put(
+  "/update/:id",
+  validateToken,
+  asyncHandler(async (req, res) => {
+    const { firstname, lastname, email, phone } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { firstname, lastname, email, phone },
+      { new: true }
+    );
+    if (!updatedUser) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    res.status(200).json({ status: "User updated", user: updatedUser });
+  })
+);
 
-  const updateUser = {
-    firstname,
-    lastname,
-    email,
-    phone,
-  };
+router.delete(
+  "/delete/:id",
+  validateToken,
+  asyncHandler(async (req, res) => {
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    res.status(200).json({ status: "User deleted" });
+  })
+);
 
-  const update = await User.findByIdAndUpdate(userId, updateUser)
-    .then(() => {
-      res.status(200).send({ status: "User updated" });
-    })
-    .catch((err) => {
-      console.log(err);
-      res
-        .status(500)
-        .send({ status: "Error with updating data", error: err.message });
-    });
-});
-
-router.route("/delete/:id").delete(async (req, res) => {
-  let userId = req.params.id;
-
-  await User.findByIdAndDelete(userId)
-    .then(() => {
-      res.status(200).send({ status: "User deleted" });
-    })
-    .catch((errr) => {
-      console.log(err.message);
-      res
-        .status(500)
-        .send({ status: "Error with delete user", error: err.message });
-    });
-});
-
-router.route("/getuser/:id").get(async (req, res) => {
-  let userId = req.params.id;
-  const user = await User.findById(userId)
-    .then((User) => {
-      res.status(200).send({ status: "User fetched", User });
-    })
-    .catch((err) => {
-      console.log(err.message);
-      res
-        .status(500)
-        .send({ status: "Error with get user", error: err.message });
-    });
-});
+router.get(
+  "/getuser/:id",
+  validateToken,
+  asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id).select("-password");
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+    res.status(200).json({ status: "User fetched", user });
+  })
+);
 
 module.exports = router;

@@ -17,13 +17,15 @@ import {
   InputRightElement,
   Image,
   FormErrorMessage,
+  useToast,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
 
 // Define the login schema using Zod
 const loginSchema = z.object({
-  emailOrPhone: z.string().min(1, { message: "Email or phone number is required" })
+  email: z.string().min(1, { message: "Email  is required" })
     .refine((value) => {
       // Simple email regex
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -40,6 +42,7 @@ const LoginScreen = () => {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
   const navigate = useNavigate();
+  const toast = useToast();
 
   const {
     register,
@@ -49,9 +52,37 @@ const LoginScreen = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormData) => {
+    console.log('Login data:', data);
     // Handle login logic here
+    try {
+      const response = await axios.post('http://localhost:5000/user/login', data);
+      
+      if (response.data.token) {
+        // Store the token in localStorage
+        localStorage.setItem('token', response.data.token);
+        
+        // Show success message
+        toast({
+          title: "Login successful",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+
+        // Redirect to dashboard or home page
+        navigate('/');
+      }
+    } catch (error) {
+      // Show error message
+      toast({
+        title: "Login failed",
+        description: error.response?.data?.error || "An error occurred during login",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -81,16 +112,16 @@ const LoginScreen = () => {
           <VStack spacing={3} align="stretch" as="form" onSubmit={handleSubmit(onSubmit)}>
             <Text fontSize="sm" fontWeight="bold" className='font-poppins' mb={3}>Sign In to Continue</Text>
             
-            <FormControl isInvalid={!!errors.emailOrPhone}>
+            <FormControl isInvalid={!!errors.email}>
               <FormLabel fontSize="xs" className='font-poppins'>Email or mobile phone number</FormLabel>
               <Input
-                {...register("emailOrPhone")}
+                {...register("email")}
                 placeholder="Enter your email or phone"
                 fontSize="xs"
                 className='font-poppins'
                 borderRadius={5}
               />
-              <FormErrorMessage>{errors.emailOrPhone?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.password}>
