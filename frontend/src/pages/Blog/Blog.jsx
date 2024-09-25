@@ -251,55 +251,59 @@ const BlogPage = () => {
                 </button>
               </div>
 
-              {/* Comments Section */}
+              {/* AI Response */}
               <div className="border-t border-gray-200 pt-4">
                 {aiResponses[index] && (
                   <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4 rounded-md">
                     <div className="flex items-center mb-2">
-                      <span className="text-green-600 font-semibold">
-                        AI Response:
+                      <span className="text-green-600 text-sm font-semibold">
+                        AI-Generated Response
                       </span>
-                      <span className="ml-2 text-green-500">
-                        <FaRobot />
-                      </span>
+                      <FaRobot className="ml-2 text-green-600" />
                     </div>
-                    <div className="bg-white p-4 rounded-md shadow-sm border border-gray-300">
-                      <div className="font-medium text-gray-800">
-                        <strong>System:</strong> You are an AI that evaluates
-                        code for specific questions.
-                      </div>
-                      <div className="font-medium text-gray-800 mt-2">
-                        <strong>User:</strong> {post.questionTitle}
-                      </div>
-                      <div className="mt-2 text-gray-700">
-                        <strong>AI:</strong>{" "}
-                        {showMore[index]
-                          ? aiResponses[index]
-                          : `${aiResponses[index].slice(0, 100)}...`}
-                      </div>
-                      <button
-                        onClick={() => handleShowMore(index)}
-                        className="mt-2 text-blue-600 underline"
-                      >
-                        {showMore[index] ? "Show less" : "See more"}
-                      </button>
-                    </div>
+                    <h3 className="font-medium text-gray-800">
+                      Response from AI:
+                    </h3>
+                    <p className="text-gray-700">
+                      {showMore[index]
+                        ? aiResponses[index]
+                        : `${aiResponses[index].substring(0, 150)}...`}
+                    </p>
+                    <button
+                      onClick={() => handleShowMore(index)}
+                      className="text-blue-600 hover:underline mt-2"
+                    >
+                      {showMore[index] ? "Show less" : "See more"}
+                    </button>
+                    <hr className="my-4" />
                   </div>
                 )}
-
-                {post.mentorComments.map((comment, i) => (
-                  <div key={i} className="mt-2">
-                    <p className="font-semibold text-gray-800">
-                      {comment.mentorName}
-                    </p>
-                    <p className="text-gray-600">{comment.comment}</p>
-                  </div>
-                ))}
               </div>
+
+              {/* Mentor Comments */}
+              {post.mentorComments.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="font-semibold text-gray-800 mb-2">
+                    Mentor Comments:
+                  </h4>
+                  {post.mentorComments.map((comment, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-gray-50 border border-gray-200 p-2 rounded-md mb-2"
+                    >
+                      <p className="text-gray-800">{comment.comment}</p>
+                      <small className="text-gray-500">
+                        - {comment.mentorName},{" "}
+                        {new Date(comment.createdAt).toLocaleDateString()}
+                      </small>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))
         ) : (
-          <p className="text-gray-700">No posts available.</p>
+          <p className="text-gray-600">No posts found.</p>
         )}
       </div>
     </div>
