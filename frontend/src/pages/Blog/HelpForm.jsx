@@ -32,7 +32,7 @@ const HelpForm = () => {
 
       // Show a success toast
       toast({
-        title: "Request Submitted",
+        title: "Question Submitted",
         description:
           "Your request for mentor support has been submitted successfully!",
         status: "success",
