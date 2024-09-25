@@ -83,10 +83,32 @@ const getAllQuestionPools = async (req, res, next) => {
   }
 };
 
+// Update an existing question pool
+const updateQuestionPool = async (req, res, next) => {
+  try {
+    const { questionTitle, mentorComments, aiComment, codeSnippet } = req.body;
+
+    const updatedQuestionPool = await QuestionPool.findByIdAndUpdate(
+      req.params.id,
+      { questionTitle, mentorComments, aiComment, codeSnippet },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedQuestionPool) {
+      return res.status(404).json({ message: "Question pool not found" });
+    }
+
+    res.status(200).json(updatedQuestionPool);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllQuestions,
   getQuestion,
   createQuestion,
   createQuestionPool,
   getAllQuestionPools,
+  updateQuestionPool,
 };
