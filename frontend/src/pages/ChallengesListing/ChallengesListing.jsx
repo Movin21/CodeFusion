@@ -16,7 +16,7 @@ import {
 
 // Countdown function remains the same
 const getCountdown = (endDate) => {
-  // ... (previous implementation)
+  // Implement your countdown logic here
 };
 
 export const ChallengesListing = () => {
@@ -47,8 +47,8 @@ export const ChallengesListing = () => {
           filter === "active"
             ? !question.isArchived
             : filter === "archived"
-            ? question.isArchived
-            : true // For "upcoming", show all non-archived questions
+              ? question.isArchived
+              : true // For "upcoming", show all non-archived questions
       )
     );
   }, [filter, questions]);
@@ -77,21 +77,23 @@ export const ChallengesListing = () => {
           shadow="md"
           overflow="hidden"
           maxWidth="full"
+          bg="#1a1a2e" // Set background color for the card
         >
           <Box height="4px" bg={difficultyColor} borderRadius="full"></Box>
           <CardBody>
-            <Heading size="sm" mb={2} fontWeight="semibold">
+            <Heading size="sm" mb={2} fontWeight="semibold" color="white">
               {question.name}
             </Heading>
-            <Text fontSize="sm" color="gray.500">
+            <Text fontSize="sm" color="gray.300">
               Ends in: {getCountdown(question.endDate)}
             </Text>
             <Button
               size="sm"
               variant="outline"
-              colorScheme="blue"
+              colorScheme="whiteAlpha"
               mt={4}
               onClick={() => handleViewDetails(question._id)}
+              isDisabled={filter === "archived"} // Disable button if in archived category
             >
               View Details
             </Button>
@@ -102,81 +104,93 @@ export const ChallengesListing = () => {
   );
 
   return (
-    <div className="container mx-auto p-4">
-      {/* Title */}
-      <Heading
-        as="h1"
-        size="lg"
-        mb={4}
-        className="text-left text-2xl font-bold"
-      >
-        Contests
-      </Heading>
-
-      {/* Breadcrumb */}
-      <Breadcrumb fontWeight="medium" fontSize="sm" mb={4}>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="#">Contests</BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
-
-      {/* Filter Buttons */}
-      <Stack direction="row" spacing={4} mb={6} className="justify-start">
-        <Button
-          colorScheme={filter === "active" ? "blue" : "gray"}
-          size="sm"
-          onClick={() => setFilter("active")}
+    <div className="bg-[#0f0a19] min-h-screen">
+      <div className="container mx-auto p-4">
+        {/* Title */}
+        <Heading
+          as="h1"
+          size="lg"
+          mb={4}
+          className="text-left text-2xl font-bold text-white"
         >
-          Active Contests
-        </Button>
-        {/*<Button
-          colorScheme={filter === "upcoming" ? "blue" : "gray"}
-          size="sm"
-          onClick={() => setFilter("upcoming")}
-        >
-          Upcoming Contests
-        </Button>*/}
-        <Button
-          colorScheme={filter === "archived" ? "blue" : "gray"}
-          size="sm"
-          onClick={() => setFilter("archived")}
-        >
-          Archived Contests
-        </Button>
-      </Stack>
+          Contests
+        </Heading>
 
-      {/* Easy Questions */}
-      {easyQuestions.length > 0 && (
-        <>
-          <Heading size="md" className="text-lg font-semibold mb-4">
-            Easy Challenges
-          </Heading>
-          {renderQuestions(easyQuestions, "green.400")}
-        </>
-      )}
+        {/* Breadcrumb */}
+        <Breadcrumb fontWeight="medium" fontSize="sm" mb={4}>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/" color="white">
+              Home
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbItem isCurrentPage>
+            <BreadcrumbLink href="#" color="white">
+              Contests
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+        </Breadcrumb>
 
-      {/* Medium Questions */}
-      {mediumQuestions.length > 0 && (
-        <>
-          <Heading size="md" className="text-lg font-semibold mt-8 mb-4">
-            Medium Challenges
-          </Heading>
-          {renderQuestions(mediumQuestions, "blue.400")}
-        </>
-      )}
+        {/* Filter Buttons */}
+        <Stack direction="row" spacing={4} mb={6} className="justify-start">
+          <Button
+            colorScheme={filter === "active" ? "gray" : "#0B1518"}
+            size="sm"
+            outline="wh"
+            onClick={() => setFilter("active")}
+          >
+            Active Contests
+          </Button>
+          <Button
+            colorScheme={filter === "archived" ? "gray" : "#0B1518"}
+            size="sm"
+            onClick={() => setFilter("archived")}
+          >
+            Archived Contests
+          </Button>
+        </Stack>
 
-      {/* Hard Questions */}
-      {hardQuestions.length > 0 && (
-        <>
-          <Heading size="md" className="text-lg font-semibold mt-8 mb-4">
-            Hard Challenges
-          </Heading>
-          {renderQuestions(hardQuestions, "red.400")}
-        </>
-      )}
+        {/* Easy Questions */}
+        {easyQuestions.length > 0 && (
+          <>
+            <Heading
+              size="md"
+              className="text-lg font-semibold mb-4"
+              color="white"
+            >
+              Easy Challenges
+            </Heading>
+            {renderQuestions(easyQuestions, "green.400")}
+          </>
+        )}
+
+        {/* Medium Questions */}
+        {mediumQuestions.length > 0 && (
+          <>
+            <Heading
+              size="md"
+              className="text-lg font-semibold mt-8 mb-4"
+              color="white"
+            >
+              Medium Challenges
+            </Heading>
+            {renderQuestions(mediumQuestions, "blue.400")}
+          </>
+        )}
+
+        {/* Hard Questions */}
+        {hardQuestions.length > 0 && (
+          <>
+            <Heading
+              size="md"
+              className="text-lg font-semibold mt-8 mb-4"
+              color="white"
+            >
+              Hard Challenges
+            </Heading>
+            {renderQuestions(hardQuestions, "red.400")}
+          </>
+        )}
+      </div>
     </div>
   );
 };

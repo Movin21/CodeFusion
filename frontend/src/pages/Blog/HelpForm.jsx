@@ -16,7 +16,10 @@ const HelpForm = () => {
     console.log("Question:", question);
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white ">
+    <div
+      className="flex flex-col items-center justify-center min-h-screen text-white"
+      style={{ backgroundColor: "#0f0a19" }}
+    >
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-3xl border border-white">
         <h1 className="text-3xl font-bold mb-6 text-center text-white">
           Request Mentor Support
