@@ -18,6 +18,6 @@ app.use("/questions", questionRouter);
 
 //error handler
 app.use(errorHandler);
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server running on Port ${process.env.PORT || 3000}`);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`Server running on Port ${process.env.PORT || 5000}`);
 });

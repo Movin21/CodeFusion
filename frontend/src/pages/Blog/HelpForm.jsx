@@ -2,19 +2,63 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import axios from "axios"; // Import Axios
+import { useToast } from "@chakra-ui/react"; // Import useToast from Chakra UI
 
 const HelpForm = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const toast = useToast(); // Initialize the toast
   const { codeSnippet } = location.state || {};
   const [question, setQuestion] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Code Snippet:", codeSnippet);
-    console.log("Question:", question);
+    try {
+      // Make a POST request to your backend API
+      const response = await axios.post(
+        "http://localhost:5000/questions/createQuestionPool",
+        {
+          questionTitle: question,
+          mentorComments: [], // Assuming you want to start with an empty array
+          aiComment: "AI response goes here", // You can modify this based on your requirements
+          codeSnippet,
+        }
+      );
+
+      // Handle the response as needed
+      console.log("Response from the server:", response.data);
+
+      // Show a success toast
+      toast({
+        title: "Request Submitted",
+        description:
+          "Your request for mentor support has been submitted successfully!",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+        variant: "solid",
+      });
+
+      // Navigate to the blog support page
+      navigate("/blogsupport");
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error",
+        description:
+          error.message || "An error occurred while submitting your request.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+        variant: "solid",
+      });
+    }
   };
+
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen text-white"

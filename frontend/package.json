@@ -13,6 +13,7 @@
     "@azure-rest/ai-inference": "latest",
     "@azure/core-auth": "latest",
     "@azure/core-sse": "latest",
+    "@chakra-ui/alert": "^2.2.2",
     "@chakra-ui/button": "^2.1.0",
     "@chakra-ui/card": "^2.2.0",
     "@chakra-ui/icons": "^2.1.1",

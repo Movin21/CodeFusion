@@ -1,4 +1,5 @@
 const Questions = require("../../../models/question");
+const QuestionPool = require("../../../models/questionPool");
 
 // Get all questions
 const getAllQuestions = async (req, res, next) => {
@@ -49,8 +50,43 @@ const createQuestion = async (req, res, next) => {
   }
 };
 
+// Create a new question pool
+const createQuestionPool = async (req, res, next) => {
+  try {
+    const { questionTitle, mentorComments, aiComment, codeSnippet } = req.body;
+
+    // Create a new question instance with provided data
+    const newQuestion = new QuestionPool({
+      questionTitle,
+      mentorComments: mentorComments || [], // Default to an empty array if not provided
+      aiComment,
+      codeSnippet,
+    });
+
+    // Save the new question to the database
+    const savedQuestion = await newQuestion.save();
+
+    // Return the created question with a success status
+    res.status(201).json(savedQuestion);
+  } catch (error) {
+    next(error); // Pass errors to the error handler
+  }
+};
+
+// Get all question pools
+const getAllQuestionPools = async (req, res, next) => {
+  try {
+    const allQuestionPools = await QuestionPool.find(); // Retrieve all question pools from the database
+    res.status(200).json(allQuestionPools); // Return the retrieved question pools
+  } catch (error) {
+    next(error); // Pass errors to the error handler
+  }
+};
+
 module.exports = {
   getAllQuestions,
   getQuestion,
   createQuestion,
+  createQuestionPool,
+  getAllQuestionPools,
 };
