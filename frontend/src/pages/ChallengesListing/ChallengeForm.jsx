@@ -226,7 +226,7 @@ const ChallengeSubmissionForm = () => {
           <ModalOverlay />
           <ModalContent>
             <ModalHeader color="green.400">Success</ModalHeader>
-            <ModalBody color="white">
+            <ModalBody color="black">
               Challenge added successfully! You will be redirected to the
               challenge listing page in 10 seconds.
             </ModalBody>
