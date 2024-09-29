@@ -1,5 +1,5 @@
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import ProgressBar from "./Unique_Badge/ProgressBar";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { Gauge } from "lucide-react";
@@ -7,9 +7,9 @@ import Student_Resume from "./Student_Resume";
 import Student_certificate from "./Student_certificate";
 import Student_Education from "./Student_Education";
 import Student_Skills from "./Student_Skills";
-import { useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Tag,
   Box,
@@ -22,19 +22,17 @@ import {
   Grid,
   Flex,
   Spinner,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 
 // ProfileDashboard Component
 const ProfileDashboard = () => {
-
   type User = {
     firstname: string;
     lastname: string;
     email: string;
     phone: string;
     role?: string;
-
   };
 
   const [user, setUser] = useState<User | null>(null);
@@ -44,31 +42,33 @@ const ProfileDashboard = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         if (!token) {
           // Handle the case where there's no token (e.g., redirect to login)
-          throw new Error('No token found');
+          throw new Error("No token found");
           return;
         }
 
-        const response = await axios.get<{ user: User }>('http://localhost:5000/user/getuser', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        
+        const response = await axios.get<{ user: User }>(
+          "http://localhost:5000/user/getuser",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
         setUser(response.data.user);
         setLoading(false);
-   
       } catch (error) {
         console.error("Error fetching user data:", error);
         setLoading(false);
         // navigate('/login');
 
-         // Check if the error is due to an expired token
-         if (axios.isAxiosError(error) && error.response?.status === 401) {
+        // Check if the error is due to an expired token
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
           // Clear the token from localStorage
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
 
           // Show toast message
           toast({
@@ -80,7 +80,7 @@ const ProfileDashboard = () => {
           });
 
           // Navigate to login page
-          navigate('/login');
+          navigate("/login");
         } else {
           // Handle other types of errors
           toast({
@@ -92,13 +92,10 @@ const ProfileDashboard = () => {
           });
         }
       }
-    }
-    
+    };
 
     fetchUserData();
   }, [navigate, toast]);
-
-
 
   // Mock data for charts
   const salesData = [
@@ -136,10 +133,14 @@ const ProfileDashboard = () => {
 
   const [error, setError] = useState(null);
 
-
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
         <Spinner size="xl" />
       </Box>
     );
@@ -167,7 +168,7 @@ const ProfileDashboard = () => {
                 className="rounded-full mx-auto mb-2 h-20"
               />
               <Text className="text-center text-lg font-bold text-white font-poppins">
-              {user?.firstname} {user?.lastname}
+                {user?.firstname} {user?.lastname}
               </Text>
               <Text className="text-center text-xs text-gray-400 mb-2 font-poppins">
                 Design Student
@@ -175,7 +176,7 @@ const ProfileDashboard = () => {
 
               <VStack align="start" spacing={1} fontSize="xs" color="gray.400">
                 <Text className="font-poppins">
-                  <strong>EMAIL:</strong>  {user?.email || "Not available"}
+                  <strong>EMAIL:</strong> {user?.email || "Not available"}
                 </Text>
                 <Text className="font-poppins">
                   <strong>PHONE:</strong> {user?.phone || "Not available"}
@@ -347,7 +348,7 @@ const ProfileDashboard = () => {
             </CardBody>
           </Card>
 
-          <Box  className="col-span-1" >
+          <Box className="col-span-1">
             <Student_Resume />
           </Box>
 
@@ -362,7 +363,7 @@ const ProfileDashboard = () => {
           <Box gridColumn="span 1">
             <Student_Skills />
           </Box>
-          <Box gridColumn="span 1" >
+          <Box gridColumn="span 1">
             <Card bg="#1f202a" className="font-poppins" height="200px">
               <CardHeader className="text-white text-sm">
                 Work Experience
