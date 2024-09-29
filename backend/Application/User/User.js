@@ -50,13 +50,14 @@ router.post(
       console.log("ACCESS_TOKEN_SECRET is not set");
       throw new Error("Token secret is missing");
     }
-
+       
+    
     const token = jwt.sign(
-      { userId: user._id },
+      { user: { id: user._id, email: user.email } }, // Include necessary user data
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "5s" }
     );
-    res.json({ token });
+    res.json({ token });//sending token
   })
 );
 
@@ -119,10 +120,10 @@ router.delete(
 );
 
 router.get(
-  "/getuser/:id",
+  "/getuser",
   validateToken,
   asyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.user.id).select("-password");
     if (!user) {
       res.status(404);
       throw new Error("User not found");
@@ -130,5 +131,7 @@ router.get(
     res.status(200).json({ status: "User fetched", user });
   })
 );
+
+
 
 module.exports = router;

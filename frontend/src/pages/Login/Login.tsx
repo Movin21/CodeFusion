@@ -53,7 +53,7 @@ const LoginScreen = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    console.log('Login data:', data);
+    
     // Handle login logic here
     try {
       const response = await axios.post('http://localhost:5000/user/login', data);
@@ -71,7 +71,7 @@ const LoginScreen = () => {
         });
 
         // Redirect to dashboard or home page
-        navigate('/');
+        navigate('/studentprofile');
       }
     } catch (error) {
       // Show error message

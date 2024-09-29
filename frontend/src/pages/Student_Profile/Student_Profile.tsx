@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import ProgressBar from "./Unique_Badge/ProgressBar";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { Gauge } from "lucide-react";
@@ -7,6 +7,9 @@ import Student_Resume from "./Student_Resume";
 import Student_certificate from "./Student_certificate";
 import Student_Education from "./Student_Education";
 import Student_Skills from "./Student_Skills";
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   Tag,
   Box,
@@ -18,10 +21,56 @@ import {
   VStack,
   Grid,
   Flex,
+  Spinner
 } from "@chakra-ui/react";
 
 // ProfileDashboard Component
 const ProfileDashboard = () => {
+
+  type User = {
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    role?: string;
+
+  };
+
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          // Handle the case where there's no token (e.g., redirect to login)
+          return;
+        }
+
+        const response = await axios.get<{ user: User }>('http://localhost:5000/user/getuser', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        setUser(response.data.user);
+        setLoading(false);
+   
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+        // navigate('/login');
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
+
+
+
+
   // Mock data for charts
   const salesData = [
     { day: "Mon", earnings: 800, payments: 1200 },
@@ -58,6 +107,15 @@ const ProfileDashboard = () => {
 
   const [error, setError] = useState(null);
 
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
+
   return (
     <>
       <Box className="bg-black p-4 min-h-screen">
@@ -66,7 +124,7 @@ const ProfileDashboard = () => {
             Student Profile
           </Text>
           <Text className="text-xs text-gray-400 font-poppins">
-            12:15 PM at 19th November 2020
+            {new Date().toLocaleString()}
           </Text>
         </header>
 
@@ -80,7 +138,7 @@ const ProfileDashboard = () => {
                 className="rounded-full mx-auto mb-2 h-20"
               />
               <Text className="text-center text-lg font-bold text-white font-poppins">
-                Julien Magnifice
+              {user?.firstname} {user?.lastname}
               </Text>
               <Text className="text-center text-xs text-gray-400 mb-2 font-poppins">
                 Design Student
@@ -88,14 +146,10 @@ const ProfileDashboard = () => {
 
               <VStack align="start" spacing={1} fontSize="xs" color="gray.400">
                 <Text className="font-poppins">
-                  <strong>EMAIL:</strong> customer@email.com
+                  <strong>EMAIL:</strong>  {user?.email || "Not available"}
                 </Text>
                 <Text className="font-poppins">
-                  <strong>PHONE:</strong> +01 923 456 78
-                </Text>
-                <Text className="font-poppins">
-                  <strong>LOCATION:</strong> 7839 Williams Dr. Columbus, GA
-                  31904
+                  <strong>PHONE:</strong> {user?.phone || "Not available"}
                 </Text>
               </VStack>
 
