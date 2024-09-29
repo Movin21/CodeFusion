@@ -21,7 +21,8 @@ import {
   VStack,
   Grid,
   Flex,
-  Spinner
+  Spinner,
+  useToast
 } from "@chakra-ui/react";
 
 // ProfileDashboard Component
@@ -39,13 +40,14 @@ const ProfileDashboard = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const toast = useToast();
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
           // Handle the case where there's no token (e.g., redirect to login)
+          throw new Error('No token found');
           return;
         }
 
@@ -62,12 +64,39 @@ const ProfileDashboard = () => {
         console.error("Error fetching user data:", error);
         setLoading(false);
         // navigate('/login');
+
+         // Check if the error is due to an expired token
+         if (axios.isAxiosError(error) && error.response?.status === 401) {
+          // Clear the token from localStorage
+          localStorage.removeItem('token');
+
+          // Show toast message
+          toast({
+            title: "Session Expired",
+            description: "Your session has expired. Please log in again.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+
+          // Navigate to login page
+          navigate('/login');
+        } else {
+          // Handle other types of errors
+          toast({
+            title: "Error",
+            description: "An error occurred while fetching user data.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
       }
-    };
+    }
+    
 
     fetchUserData();
-  }, [navigate]);
-
+  }, [navigate, toast]);
 
 
 
