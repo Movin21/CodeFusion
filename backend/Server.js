@@ -7,6 +7,7 @@ const errorHandler = require("./middleware/errorHandler.js");
 //import Routes
 const questionRouter = require("./Application/IDE/routes/IDERouter.js");
 const userRouter=require("./Application/User/User.js");
+const educationRouter=require("./Application/Education/Education.js")
 
 const app = express();
 
@@ -17,6 +18,7 @@ connectDB();
 //RouteMIddlewares
 app.use("/questions", questionRouter);
 app.use("/user",userRouter);
+app.use("/Education",educationRouter);
 
 //error handler
 app.use(errorHandler);

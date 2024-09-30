@@ -1,19 +1,22 @@
-const Education = require('../../models/Education'); // Make sure to import your Education model
+const express = require('express');
+const router = express.Router();
+const asyncHandler = require('express-async-handler');
+const Education = require('../../models/Education');
+const { validateToken } = require("../../middleware/tokenHandler");
 
-// Route to add education
+
 router.post(
-  "/add-education",
-  validateToken, // Ensure the user is authenticated
+  "/addEducation",
+  validateToken,
   asyncHandler(async (req, res) => {
-    const { schoolOrCollege, degree, department, startMonth, startYear, endMonth, endYear, description } = req.body;
+    const { schoolOrCollege, degree, department, startMonth, startYear, endMonth, endYear, description, currentlyStudying } = req.body;
 
-    // Validate that the required fields are provided
-    if (!schoolOrCollege || !degree || !department || !startMonth || !startYear || !endMonth || !endYear) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!schoolOrCollege || !degree || !department || !startMonth || !startYear) {
+      return res.status(400).json({ message: "All required fields must be provided" });
     }
 
     const newEducation = new Education({
-      UserId: req.user.id, // Assuming you have the user ID from the validated token
+      UserId: req.user.id,
       schoolOrCollege,
       degree,
       department,
@@ -22,6 +25,7 @@ router.post(
       endMonth,
       endYear,
       description,
+      currentlyStudying,
     });
 
     await newEducation.save();
@@ -30,16 +34,34 @@ router.post(
 );
 
 router.get(
-    "/geteducation",
-    validateToken,
-    asyncHandler(async (req, res) => {
-      // Use the user ID from the validated token to fetch education records
-      const educationRecords = await Education.find({ UserIdId: req.user.id });
-      
-      if (!educationRecords || educationRecords.length === 0) {
-        return res.status(404).json({ message: "No education records found" });
-      }
-      
-      res.status(200).json({ status: "Education records fetched", educationRecords });
-    })
-  );
+  "/geteducation",
+  validateToken,
+  asyncHandler(async (req, res) => {
+    const educationRecords = await Education.find({ UserId: req.user.id });
+    
+    if (!educationRecords || educationRecords.length === 0) {
+      return res.status(404).json({ message: "No education records found" });
+    }
+    
+    res.status(200).json({ status: "Education records fetched", educationRecords });
+  })
+);
+
+router.delete('/deleteEducation/:id', validateToken, async (req, res) => {
+  try {
+    const education = await Education.findOne({ _id: req.params.id, user: req.user.id });
+
+    if (!education) {
+      return res.status(404).json({ msg: 'Education record not found' });
+    }
+
+    await education.remove();
+
+    res.json({ msg: 'Education record deleted' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+module.exports = router;

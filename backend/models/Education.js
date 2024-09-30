@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const educationSchema = new mongoose.Schema({
-  studentId: {
+  UserId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference to the student
+    ref: 'User',
     required: true,
   },
   schoolOrCollege: {
@@ -13,34 +13,32 @@ const educationSchema = new mongoose.Schema({
   degree: {
     type: String,
     required: true,
-   
   },
   department: {
     type: String,
     required: true,
-    
   },
   startMonth: {
     type: String,
     required: true,
-  
   },
   startYear: {
-    type: Number,
+    type: String,
     required: true,
   },
   endMonth: {
     type: String,
-    required: true,
-    
   },
   endYear: {
-    type: Number,
-    required: true,
+    type: String,
   },
   description: {
     type: String,
     default: '',
+  },
+  currentlyStudying: {
+    type: Boolean,
+    default: false,
   },
 });
 

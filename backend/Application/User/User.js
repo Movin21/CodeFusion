@@ -37,7 +37,7 @@ router.post(
     const token = jwt.sign(
       { user: { id: user._id, email: user.email } }, // Include necessary user data
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "5s" }
+      { expiresIn: "1h" }
     );
     res.json({ token });//sending token
   })
