@@ -32,37 +32,29 @@ router.post('/uploadResume',validateToken, upload.single('resume'), async (req, 
     }
 });
 
-// Endpoint to get the resume PDF by filename
-router.get('/getResume/:savedResume', validateToken, async (req, res) => {
+// Fetch resume
+router.get('/getResume', validateToken, async (req, res) => {
     try {
-        const { savedResume } = req.params; // Get the resumeId from the request parameters
-        
+        const resume = await Resume.findOne({ userId: req.user.id });
+        if (!resume) return res.status(404).json({ message: 'No resume found' });
 
-        // Optionally, if a key is passed in headers, you can access it like this:
-        const accessKey = req.headers['x-access-key']; // Example of how to retrieve a custom access key
-
-        // You can perform validation on the accessKey if needed
-        if (!accessKey || accessKey !== 'YOUR_EXPECTED_KEY') {
-            return res.status(403).send({ message: 'Forbidden: Invalid access key' });
-        }
-
-        // Find the resume for the user by resumeId
-        const resume = await Resume.findOne({ _id: savedResume, userId :req.user.id});
-
-        if (!resume) {
-            return res.status(404).send({ message: 'Resume not found' });
-        }
-
-        // Send the resume data back to the client
-        res.status(200).json({
-            resumeId: resume._id,
-            pdfUrl: resume.filePath, // Assuming you have a filePath field that stores the URL to the resume
-            resumeName: resume.originalName, // Assuming you have an originalName field for the file
-            visibility: resume.visibility,
-        });
+        res.json({ resumeId: resume._id, pdfUrl: resume.pdfUrl, resumeName: resume.resumeName });
     } catch (error) {
         console.error("Error fetching resume:", error);
-        res.status(500).send({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Error fetching resume' });
+    }
+});
+
+// Download resume by ID
+router.get('/getResume/:savedResume', validateToken, async (req, res) => {
+    try {
+        const resume = await Resume.findById(req.params.savedResume);
+        if (!resume) return res.status(404).json({ message: 'Resume not found' });
+
+        res.download(resume.pdfUrl, resume.resumeName);
+    } catch (error) {
+        console.error("Error downloading resume:", error);
+        res.status(500).json({ message: 'Error downloading resume' });
     }
 });
 

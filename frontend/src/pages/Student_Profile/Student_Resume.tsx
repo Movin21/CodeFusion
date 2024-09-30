@@ -48,11 +48,23 @@ function Student_Resume() {
                         Authorization: `Bearer ${localStorage.getItem("token")}`,
                     },
                 });
-                setSavedResume(response.data.resumeId);
-                setPdfUrl(response.data.pdfUrl);
-                setResumeName(response.data.resumeName);
+
+                if (response.data) {
+                    setSavedResume(response.data.resumeId);
+                    setPdfUrl(response.data.pdfUrl);
+                    setResumeName(response.data.resumeName);
+                } else {
+                    // Reset state if no resume is found
+                    setSavedResume(null);
+                    setPdfUrl(null);
+                    setResumeName("");
+                }
             } catch (error) {
                 console.error("Error fetching resume:", error);
+                // Optionally reset state on error
+                setSavedResume(null);
+                setPdfUrl(null);
+                setResumeName("");
             }
         };
 
@@ -85,6 +97,7 @@ function Student_Resume() {
                 alert(response.data.message);
                 setSavedResume(response.data.resumeId);
                 setPdfUrl(response.data.pdfUrl);
+                setResumeName(response.data.resumeName); // Update resume name as well
                 onResumeModalClose();
             } catch (error) {
                 console.error("Error saving resume:", error);
