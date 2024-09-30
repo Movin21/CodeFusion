@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import axios from "axios";
-import { FaSearch } from "react-icons/fa"; // Importing the search icon from react-icons
+import { FaSearch, FaRobot } from "react-icons/fa"; // Add FaRobot here
 
 const token = "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";
 const endpoint = "https://models.inference.ai.azure.com";
@@ -14,6 +14,15 @@ const API = axios.create({
   },
 });
 
+// Function to fetch questions from the backend
+const fetchQuestions = async () => {
+  const response = await axios.get(
+    "http://localhost:5000/questions/getAllQuestionPools"
+  );
+  console.log("Questions:", response.data);
+  return response.data;
+};
+
 export const AIResponse = async (question, code) => {
   try {
     const requestPayload = {
@@ -24,19 +33,11 @@ export const AIResponse = async (question, code) => {
         },
         {
           role: "user",
-          content: `You are an AI code evaluator. Given the following code snippet and the associated question, provide a detailed and beginner-friendly explanation. Your response should include the following:
-            
-            1. **Code Overview**: A summary of what the code does.
-            2. **Explanation**: A step-by-step explanation of how the code works and how it addresses the question.
-            3. **Examples**: Provide examples of input and output if relevant.
-            4. **Tips**: Include any tips or best practices for understanding or improving the code.
-            
+          content: `You are an AI code evaluator. Given the following code snippet and the associated question, provide a detailed and beginner-friendly explanation.
             **Code Snippet:**
             ${code}
-            
             **Question:**
             ${question}
-            
             Ensure your response is clear and easy to understand for someone who might be new to this topic.`,
         },
       ],
@@ -62,49 +63,7 @@ export const AIResponse = async (question, code) => {
 };
 
 const BlogPage = () => {
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      question: "How to display a code snippet with indentation?",
-      codeSnippet: `const handleAddComment = (questionId) => {
-  setQuestions((prevQuestions) =>
-    prevQuestions.map((q) =>
-      q.id === questionId
-        ? { ...q, comments: [...q.comments, commentText] }
-        : q
-    )
-  );
-  setCommentText(""); // Reset comment box after adding
-};`,
-      comments: [],
-      date: new Date("2024-09-15"),
-    },
-    {
-      id: 2,
-      question: "How to use React useState?",
-      codeSnippet: `const [state, setState] = useState(initialValue);
-      
-setState(newValue);`,
-      comments: [],
-      date: new Date("2024-09-17"),
-    },
-    {
-      id: 3,
-      question: "How to map over an array in React?",
-      codeSnippet: `const items = ['apple', 'banana', 'cherry'];
-
-return (
-  <ul>
-    {items.map(item => (
-      <li key={item}>{item}</li>
-    ))}
-  </ul>
-);`,
-      comments: [{ text: "Use unique keys for lists!", type: "mentor" }],
-      date: new Date("2024-09-16"),
-    },
-  ]);
-
+  const [posts, setPosts] = useState([]);
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [aiResponses, setAiResponses] = useState({});
@@ -112,16 +71,32 @@ return (
   const [newComment, setNewComment] = useState({});
   const [showMore, setShowMore] = useState({});
 
+  // Fetch questions on component mount
+  useEffect(() => {
+    const getQuestions = async () => {
+      try {
+        const questionPools = await fetchQuestions();
+        setPosts(questionPools);
+      } catch (error) {
+        console.error("Error fetching question pools:", error);
+      }
+    };
+
+    getQuestions();
+  }, []);
+
   const filteredPosts = useMemo(() => {
     return posts
       .filter((post) => {
-        if (filter === "unanswered") return post.comments.length === 0;
+        if (filter === "unanswered") return post.mentorComments.length === 0;
         return true;
       })
       .filter((post) =>
-        post.question.toLowerCase().includes(searchQuery.toLowerCase())
+        post.questionTitle.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      .sort((a, b) => (filter === "newest" ? b.date - a.date : 0));
+      .sort((a, b) =>
+        filter === "newest" ? new Date(b.createdAt) - new Date(a.createdAt) : 0
+      );
   }, [filter, searchQuery, posts]);
 
   const handleGetAiSupport = async (post, index) => {
@@ -132,7 +107,7 @@ return (
     }));
 
     try {
-      const response = await AIResponse(post.question, post.codeSnippet);
+      const response = await AIResponse(post.questionTitle, post.codeSnippet);
       setAiResponses((prevResponses) => ({
         ...prevResponses,
         [index]: response,
@@ -156,7 +131,10 @@ return (
           i === index
             ? {
                 ...post,
-                comments: [...post.comments, { text: comment, type: "mentor" }],
+                mentorComments: [
+                  ...post.mentorComments,
+                  { comment, mentorName: "Mentor", createdAt: new Date() },
+                ],
               }
             : post
         )
@@ -180,8 +158,6 @@ return (
         <div className="flex justify-between items-center mb-6">
           {/* Search Box */}
           <div className="relative w-full max-w-sm">
-            {" "}
-            {/* Increased width to max-w-4xl */}
             <input
               type="text"
               value={searchQuery}
@@ -236,11 +212,11 @@ return (
         {filteredPosts.length > 0 ? (
           filteredPosts.map((post, index) => (
             <div
-              key={post.id}
+              key={post._id}
               className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300"
             >
               <h2 className="text-xl font-semibold mb-2 text-gray-800">
-                {post.question}
+                {post.questionTitle}
               </h2>
               <pre className="bg-gray-50 p-4 rounded-md border border-gray-300 whitespace-pre-wrap text-sm text-gray-800 mb-4">
                 {post.codeSnippet}
@@ -275,74 +251,59 @@ return (
                 </button>
               </div>
 
-              {/* Comments Section */}
+              {/* AI Response */}
               <div className="border-t border-gray-200 pt-4">
                 {aiResponses[index] && (
-                  <div>
-                    <p className="font-semibold">
-                      <span className="text-green-700 text-xs font-semibold bg-green-100 px-2 py-1 rounded-md ">
-                        AI-Generated
+                  <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4 rounded-md">
+                    <div className="flex items-center mb-2">
+                      <span className="text-green-600 text-sm font-semibold">
+                        AI-Generated Response
                       </span>
+                      <FaRobot className="ml-2 text-green-600" />
+                    </div>
+                    <h3 className="font-medium text-gray-800">
+                      Response from AI:
+                    </h3>
+                    <p className="text-gray-700">
+                      {showMore[index]
+                        ? aiResponses[index]
+                        : `${aiResponses[index].substring(0, 150)}...`}
                     </p>
-                    {showMore[index] ? (
-                      <>
-                        <p className="whitespace-pre-wrap ml-2">
-                          {aiResponses[index]}
-                        </p>
-                        <button
-                          onClick={() => handleShowMore(index)}
-                          className="text-blue-500 text-sm mt-2"
-                        >
-                          Show less
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <p className="whitespace-pre-wrap ">
-                          {aiResponses[index].slice(0, 150)}...
-                        </p>
-                        <button
-                          onClick={() => handleShowMore(index)}
-                          className="text-blue-500 text-sm mt-2 "
-                        >
-                          See more
-                        </button>
-                      </>
-                    )}
+                    <button
+                      onClick={() => handleShowMore(index)}
+                      className="text-blue-600 hover:underline mt-2"
+                    >
+                      {showMore[index] ? "Show less" : "See more"}
+                    </button>
+                    <hr className="my-4" />
                   </div>
                 )}
+              </div>
 
-                {/* Mentor Comments */}
-                {post.comments.length > 0 ? (
-                  post.comments.map((comment, idx) => (
+              {/* Mentor Comments */}
+              {post.mentorComments.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="font-semibold text-gray-800 mb-2">
+                    Mentor Comments:
+                  </h4>
+                  {post.mentorComments.map((comment, idx) => (
                     <div
                       key={idx}
-                      className="text-sm mb-2 flex items-center mt-4 border-t"
+                      className="bg-gray-50 border border-gray-200 p-2 rounded-md mb-2"
                     >
-                      <span
-                        className={`${
-                          comment.type === "mentor"
-                            ? "text-blue-600"
-                            : "text-green-600"
-                        } font-semibold
-                        mt-2
-                        `}
-                      >
-                        Mentor:
-                      </span>
-                      <span className="ml-2 mt-2">{comment.text}</span>
+                      <p className="text-gray-800">{comment.comment}</p>
+                      <small className="text-gray-500">
+                        - {comment.mentorName},{" "}
+                        {new Date(comment.createdAt).toLocaleDateString()}
+                      </small>
                     </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-gray-500 mt-2">
-                    No Mentor comments yet.
-                  </p>
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))
         ) : (
-          <p>No blog posts found.</p>
+          <p className="text-gray-600">No posts found.</p>
         )}
       </div>
     </div>

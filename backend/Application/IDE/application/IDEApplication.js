@@ -1,4 +1,5 @@
 const Questions = require("../../../models/question");
+const QuestionPool = require("../../../models/questionPool");
 
 // Get all questions
 const getAllQuestions = async (req, res, next) => {
@@ -49,8 +50,65 @@ const createQuestion = async (req, res, next) => {
   }
 };
 
+// Create a new question pool
+const createQuestionPool = async (req, res, next) => {
+  try {
+    const { questionTitle, mentorComments, aiComment, codeSnippet } = req.body;
+
+    // Create a new question instance with provided data
+    const newQuestion = new QuestionPool({
+      questionTitle,
+      mentorComments: mentorComments || [], // Default to an empty array if not provided
+      aiComment,
+      codeSnippet,
+    });
+
+    // Save the new question to the database
+    const savedQuestion = await newQuestion.save();
+
+    // Return the created question with a success status
+    res.status(201).json(savedQuestion);
+  } catch (error) {
+    next(error); // Pass errors to the error handler
+  }
+};
+
+// Get all question pools
+const getAllQuestionPools = async (req, res, next) => {
+  try {
+    const allQuestionPools = await QuestionPool.find(); // Retrieve all question pools from the database
+    res.status(200).json(allQuestionPools); // Return the retrieved question pools
+  } catch (error) {
+    next(error); // Pass errors to the error handler
+  }
+};
+
+// Update an existing question pool
+const updateQuestionPool = async (req, res, next) => {
+  try {
+    const { questionTitle, mentorComments, aiComment, codeSnippet } = req.body;
+
+    const updatedQuestionPool = await QuestionPool.findByIdAndUpdate(
+      req.params.id,
+      { questionTitle, mentorComments, aiComment, codeSnippet },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedQuestionPool) {
+      return res.status(404).json({ message: "Question pool not found" });
+    }
+
+    res.status(200).json(updatedQuestionPool);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllQuestions,
   getQuestion,
   createQuestion,
+  createQuestionPool,
+  getAllQuestionPools,
+  updateQuestionPool,
 };
