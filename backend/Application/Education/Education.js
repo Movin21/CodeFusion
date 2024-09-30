@@ -49,19 +49,13 @@ router.get(
 
 router.delete('/deleteEducation/:id', validateToken, async (req, res) => {
   try {
-    const education = await Education.findOne({ _id: req.params.id, UserId: req.user.id });
+    await Education.findOneAndDelete({ UserId: req.user.id, _id: req.params.id });
 
-    if (!education) {
-      return res.status(404).json({ msg: 'Education record not found' });
+    res.status(200).json({ message: 'Education deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting Education:', error);
+        res.status(500).json({ message: 'Server Error' });
     }
-
-    await education.remove();
-
-    res.json({ msg: 'Education record deleted' });
-  } catch (err) {
-    console.error('Error in deleteEducation:', err); 
-    res.status(500).send('Server Error');
-  }
 });
 
 module.exports = router;
