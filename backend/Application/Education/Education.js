@@ -49,7 +49,7 @@ router.get(
 
 router.delete('/deleteEducation/:id', validateToken, async (req, res) => {
   try {
-    const education = await Education.findOne({ _id: req.params.id, user: req.user.id });
+    const education = await Education.findOne({ _id: req.params.id, UserId: req.user.id });
 
     if (!education) {
       return res.status(404).json({ msg: 'Education record not found' });
@@ -59,7 +59,7 @@ router.delete('/deleteEducation/:id', validateToken, async (req, res) => {
 
     res.json({ msg: 'Education record deleted' });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error in deleteEducation:', err); 
     res.status(500).send('Server Error');
   }
 });

@@ -8,7 +8,7 @@ const errorHandler = require("./middleware/errorHandler.js");
 const questionRouter = require("./Application/IDE/routes/IDERouter.js");
 const userRouter=require("./Application/User/User.js");
 const educationRouter=require("./Application/Education/Education.js")
-
+const skillsRoutes = require('./Application/Skills/Skills.js');
 const app = express();
 
 app.use(express.json());
@@ -19,6 +19,7 @@ connectDB();
 app.use("/questions", questionRouter);
 app.use("/user",userRouter);
 app.use("/Education",educationRouter);
+app.use("/Skills",skillsRoutes);
 
 //error handler
 app.use(errorHandler);
