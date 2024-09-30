@@ -87,7 +87,7 @@ function Student_Skills() {
   // Remove skill from the database
   const removeSkill = async (skill: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/skills/${skill}`, {
+      await axios.delete(`http://localhost:5000/skills/deleteskills/${skill}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
