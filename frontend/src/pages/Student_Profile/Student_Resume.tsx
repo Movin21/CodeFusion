@@ -2,6 +2,7 @@ import React from 'react'
 import { useState,ChangeEvent} from 'react';
 import { Download } from "react-feather";
 import { Upload } from "lucide-react";
+import axios from 'axios';
 import {
     Button,
     Modal,
@@ -54,16 +55,30 @@ function Student_Resume() {
         }
       };
     
-      const handleSaveResume = () => {
+      const handleSaveResume = async () => {
         if (file) {
-          // In a real application, you'd upload the file to a server here
-          // For this example, we'll just create a local URL
-          const fileUrl = URL.createObjectURL(file);
-          setSavedResume(fileUrl);
-          onResumeModalClose();
+          const formData = new FormData();
+          formData.append('resume', file);
+    
+          try {
+            // Send the file to the server
+            const response = await axios.post('http://localhost:5000/Resume/uploadResume', formData, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming you have token-based authentication
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+    
+            alert(response.data.message); // Success message
+            setSavedResume(response.data.resumeId); // Optionally store the resume ID or update state as needed
+            onResumeModalClose();
+          } catch (error) {
+            console.error("Error saving resume:", error);
+            alert("Error uploading resume. Please try again.");
+          }
         }
       };
-    
+
       const handleDownload = () => {
         if (savedResume) {
           const link = document.createElement("a");
