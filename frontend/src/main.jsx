@@ -7,6 +7,7 @@ import IDE from "./pages/IDE/IDE.jsx";
 import RootLayout from "./pages/layouts/RootLayout.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Profile from "./pages/Profile/profile.jsx";
+import Blogs from "./pages/Blogs/Blogs.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/IDE", element: <IDE /> },
       { path: "/profile", element: <Profile /> },
+      { path: "/blogs", element: <Blogs /> },
     ],
   },
 ]);

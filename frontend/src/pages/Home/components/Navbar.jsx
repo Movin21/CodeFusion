@@ -49,7 +49,7 @@ const Navbar = () => {
               Resources{" "}
             </a>
             <a
-              href="#"
+              href="blogs"
               className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Blogs{" "}
