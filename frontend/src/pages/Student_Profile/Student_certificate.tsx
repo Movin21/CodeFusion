@@ -60,7 +60,9 @@ function Student_Certificate() {
     fetchCertificateData();
   }, []);
 
-  const fetchCertificateData = async () => {
+
+
+   const fetchCertificateData = async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -72,16 +74,21 @@ function Student_Certificate() {
           },
         }
       );
-      console.log("Fetched certificate data:", response.data); // Add this line for debugging
-      if (response.data && Array.isArray(response.data.certificateRecords)) {
-        setCertificateList(response.data.certificateRecords);
+      console.log("Fetched certificate data:", response.data);
+      
+      let certificateData: Certificate[] = [];
+      
+      if (response.data && Array.isArray(response.data.certificates)) {
+        certificateData = response.data.certificates;
+      } else if (response.data && Array.isArray(response.data.certificateRecords)) {
+        certificateData = response.data.certificateRecords;
       } else if (response.data && Array.isArray(response.data)) {
-        // Handle case where the response might be an array directly
-        setCertificateList(response.data);
+        certificateData = response.data;
       } else {
         console.warn("Unexpected data format:", response.data);
-        setCertificateList([]);
       }
+      
+      setCertificateList(certificateData);
     } catch (error: any) {
       console.error("Error fetching certificate data:", error);
       if (error.response && error.response.status === 404) {
@@ -106,10 +113,10 @@ function Student_Certificate() {
           },
         }
       );
-      console.log("Server response:", response.data); // Add this line for debugging
-      if (response.data && (response.data.certificate || response.data._id)) {
-        const newCertificate = response.data.certificate || response.data;
-        setCertificateList((prevList) => [...prevList, newCertificate]);
+      console.log("Server response:", response.data);
+      
+      if (response.data && response.data.certificate) {
+        setCertificateList((prevList) => [...prevList, response.data.certificate]);
         onCertificateModalClose();
         reset();
         toast({
@@ -139,6 +146,7 @@ function Student_Certificate() {
       });
     }
   };
+
   const deleteCertificate = async (id: string) => {
     try {
       await axios.delete(
