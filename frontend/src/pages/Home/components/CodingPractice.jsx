@@ -27,7 +27,7 @@ const CodingPractice = () => {
             type="button"
             className="w-[13rem] border-[1px] border-white font-semibold text-white font-poppins text-[14px]  h-[50px] rounded-md hover:bg-light"
           >
-            Sign up and practice <span className="text-xl">&#8594;</span>
+            Sign up and practice <span className="text-xl"></span>
           </button>
         </div>
         <div className="flex-1  bg-slate-900 sm:pl-0 pl-4">

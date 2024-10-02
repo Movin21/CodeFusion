@@ -1,32 +1,151 @@
-import { Box } from "@chakra-ui/react";
-import CodeEditor from "./components/CodeEditor";
-import { Text } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import {
+  Box,
+  Text,
+  Heading,
+  VStack,
+  HStack,
+  Tag,
+  Divider,
+  Spinner,
+} from "@chakra-ui/react";
+import CodeEditor from "./components/CodeEditor"; // Assuming you already have a CodeEditor component
 
-function IDE() {
+const IDE = () => {
+  const { id } = useParams(); // Get the id from the URL
+  const [challengeData, setChallengeData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchChallengeData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/questions/getQuestion/${id}`
+        );
+        setChallengeData(response.data);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching challenge data:", err);
+        setError("Failed to load challenge data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChallengeData();
+  }, [id]);
+
+  // Function to convert milliseconds to a readable date string
+  const formatDate = (milliseconds) => {
+    const date = new Date(milliseconds);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  if (loading) {
+    return (
+      <Box
+        minH="100vh"
+        bg="#0f0a19"
+        color="white"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box
+        minH="100vh"
+        bg="#0f0a19"
+        color="white"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Text fontSize="xl">{error}</Text>
+      </Box>
+    );
+  }
+
+  if (!challengeData) {
+    return null;
+  }
+
   return (
-    <>
-      <Box borderWidth="1px" borderRadius="xl" m={5}>
-        <Box w="100%" p={8} color="white" bg="#0f0a19" borderRadius="xl">
-          <Text fontSize="3xl">Question:</Text>
-          <Text fontSize="md" mt={3}>
-            Write a function in Python that takes a list of numbers as input and
-            returns the sum of all the even numbers in the list.
-          </Text>
-          <Text fontSize="xl" mt={4}>
-            Example:
-          </Text>
-          <Text fontSize="md">
-            If the input list is [1, 2, 3, 4, 5, 6], the function should return
-            12 because 2 + 4 + 6 = 12.
-          </Text>
-        </Box>
-      </Box>
+    <Box minH="100vh" bg="#0f0a19" color="white">
+      <Box maxW="1200px" margin="auto" p={8}>
+        <VStack align="stretch" spacing={8}>
+          {/* Challenge Header */}
+          <Box>
+            <Heading as="h1" size="xl" mb={2}>
+              {challengeData.name}
+            </Heading>
+            <HStack spacing={4}>
+              <Tag
+                size="md"
+                variant="solid"
+                colorScheme={
+                  challengeData.difficulty === "easy"
+                    ? "green"
+                    : challengeData.difficulty === "medium"
+                      ? "yellow"
+                      : "red"
+                }
+              >
+                {challengeData.difficulty.charAt(0).toUpperCase() +
+                  challengeData.difficulty.slice(1)}
+              </Tag>
+              <Text fontSize="sm">Max Score: 100</Text>
+              <Text fontSize="sm">
+                Ends: {formatDate(challengeData.endDate)}
+              </Text>
+            </HStack>
+          </Box>
+          <Divider />
+          {/* Challenge Description */}
+          <Box>
+            <Heading as="h2" size="lg" mb={4}>
+              Problem
+            </Heading>
+            <Text fontSize="md" whiteSpace="pre-wrap">
+              {challengeData.description}
+            </Text>
+          </Box>
+          {/* Constraints */}
+          <Box>
+            <Heading as="h3" size="md" mb={2}>
+              Constraints
+            </Heading>
+            <Text fontSize="md" whiteSpace="pre-wrap">
+              {challengeData.constraints}
+            </Text>
+          </Box>
+          <Divider />
 
-      <Box minH="100vh" bg="#0f0a19" color="gray.500" px={6} py={8}>
-        <CodeEditor />
+          <Box>
+            <Heading as="h3" size="lg" mb={4}>
+              Solution
+            </Heading>
+            <CodeEditor />
+          </Box>
+        </VStack>
       </Box>
-    </>
+    </Box>
   );
-}
+};
 
 export default IDE;
