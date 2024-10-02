@@ -155,6 +155,40 @@ export default function Profile() {
       });
     }
   };
+  const handleDeleteAccount = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      await axios.delete("http://localhost:5000/user/delete", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      localStorage.removeItem("token");
+      toast({
+        title: "Account Deleted",
+        description: "Your account has been successfully deleted.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      navigate("/login");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      toast({
+        title: "Error",
+        description:
+          error.message || "An error occurred while deleting your account.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -310,6 +344,15 @@ export default function Profile() {
                 link={obj.link}
               />
             ))}
+            {/* Delete Account Button */}
+            <div className="flex justify-end">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                onClick={handleDeleteAccount}
+              >
+                Delete Account
+              </button>
+              </div>
           </div>
         </div>
       </div>

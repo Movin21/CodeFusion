@@ -93,10 +93,11 @@ router.put(
 );
 
 router.delete(
-  "/delete/:id",
-  validateToken,
+  "/delete",
+  validateToken, // Ensure this middleware sets req.user with the authenticated user
   asyncHandler(async (req, res) => {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    // Assuming req.user contains the authenticated user's information
+    const deletedUser = await User.findByIdAndDelete(req.user.id); // Use req.user.id to get the user
     if (!deletedUser) {
       res.status(404);
       throw new Error("User not found");
@@ -104,7 +105,6 @@ router.delete(
     res.status(200).json({ status: "User deleted" });
   })
 );
-
 router.get(
   "/getuser",
   validateToken,
