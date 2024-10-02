@@ -1,7 +1,18 @@
 import { Link } from "react-router-dom";
-import ProfileStatsCard from "../Profile/ProfileStatsCard";
+import ProfileStatsCard from "./ProfileStatsCard";
 import { MdOutlineModeEdit } from "react-icons/md";
-
+import React from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useToast, useDisclosure } from "@chakra-ui/react";
+interface User {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  // Add other necessary fields
+}
 export default function Profile() {
   const ProfileStats = [
     {
@@ -30,6 +41,63 @@ export default function Profile() {
     },
   ];
 
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const toast = useToast();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const response = await axios.get<{ user: User }>(
+          "http://localhost:5000/user/getuser",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setUser(response.data.user);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          localStorage.removeItem("token");
+          toast({
+            title: "Session Expired",
+            description: "Your session has expired. Please log in again.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          navigate("/login");
+        } else {
+          toast({
+            title: "Error",
+            description:
+              error.message || "An error occurred while fetching user data.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [navigate, toast]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="profile-container bg-gray-100 min-h-screen py-10">
       <div className="profile-wrapper container mx-auto px-4 lg:px-8">
@@ -51,9 +119,11 @@ export default function Profile() {
               </div>
               <div className="mt-6">
                 <h1 className="text-2xl font-semibold text-gray-800">
-                  Yasas Lakmina
+                  {user ? `${user.firstname} ${user.lastname}` : "User Name"}
                 </h1>
-                <p className="text-sm text-gray-500">yasaslakmina@gmail.com</p>
+                <p className="text-sm text-gray-500">
+                  {user?.email || "Email not available"}
+                </p>
               </div>
             </div>
 
@@ -72,23 +142,26 @@ export default function Profile() {
               <ul className="mt-6 space-y-3">
                 <li className="flex items-center">
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Name:</span> Yasas Lakmina
+                    <span className="font-semibold">
+                      Name:{" "}
+                      {user
+                        ? `${user.firstname} ${user.lastname}`
+                        : "User Name"}
+                    </span>
                   </p>
                 </li>
                 <li className="flex items-center">
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Email:</span>{" "}
-                    yasaslakmina@gmail.com
+                    <span className="font-semibold">
+                      Email:{user?.email || "Not available"}
+                    </span>{" "}
                   </p>
                 </li>
                 <li className="flex items-center">
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Mobile:</span> +94xxxxxx
-                  </p>
-                </li>
-                <li className="flex items-center">
-                  <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Country:</span> Sri Lanka
+                    <span className="font-semibold">
+                      Mobile: {user?.phone || "Not available"}
+                    </span>
                   </p>
                 </li>
               </ul>

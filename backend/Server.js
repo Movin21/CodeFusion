@@ -11,6 +11,7 @@ const educationRouter=require("./Application/Education/Education.js")
 const skillsRoutes = require('./Application/Skills/Skills.js');
 const resumeRoute = require('./Application/Resume/Resume.js');
 const certificateroute=require('./Application/Certificates/Certificates.js');
+const pic=require('./Application/ProfilePic/Profilepic.js');
 const app = express();
 
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use("/Education",educationRouter);
 app.use("/Skills",skillsRoutes);
 app.use("/Resume",resumeRoute);
 app.use("/Certi",certificateroute);
+app.use("/pic",pic);
 
 //error handler
 app.use(errorHandler);

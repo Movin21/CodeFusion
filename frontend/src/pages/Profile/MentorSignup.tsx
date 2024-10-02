@@ -30,37 +30,57 @@ import { useNavigate } from 'react-router-dom';
 
 // ... (keep the GeometricDesign and countryCodes as they were)
 const GeometricDesign = () => (
-  <Box as="svg" width="100%" height="100%" viewBox="0 0 300 300">
-    <circle cx="30" cy="30" r="20" stroke="white" strokeWidth="2" fill="none" />
-    <path
-      d="M50 50 L200 50 L150 200 L50 150 Z"
-      stroke="white"
-      strokeWidth="2"
-      fill="none"
-    />
-    <path
-      d="M100 100 L250 100 L200 250"
-      stroke="white"
-      strokeWidth="2"
-      fill="none"
-    />
-    <circle
-      cx="270"
-      cy="270"
-      r="20"
-      stroke="white"
-      strokeWidth="2"
-      fill="none"
-    />
-    <circle cx="230" cy="230" r="2" fill="white" />
-    <circle cx="250" cy="230" r="2" fill="white" />
-    <circle cx="270" cy="230" r="2" fill="white" />
-    <rect x="20" y="270" width="10" height="10" fill="white" />
-    <rect x="40" y="270" width="10" height="10" fill="white" />
-    <rect x="60" y="270" width="10" height="10" fill="white" />
-    <rect x="80" y="270" width="10" height="10" fill="white" />
-  </Box>
-);
+    <Box as="svg" width="100%" height="100%" viewBox="0 0 300 300">
+      {/* Large circle in the top-right corner */}
+      <circle cx="270" cy="30" r="25" stroke="white" strokeWidth="2" fill="none" />
+      
+      {/* Diagonal line across the design */}
+      <path
+        d="M20 20 L280 280"
+        stroke="white"
+        strokeWidth="2"
+        fill="none"
+      />
+      
+      {/* Triangle in the center */}
+      <path
+        d="M150 50 L250 200 L50 200 Z"
+        stroke="white"
+        strokeWidth="2"
+        fill="none"
+      />
+      
+      {/* Small circles in the bottom-left */}
+      <circle cx="40" cy="260" r="15" stroke="white" strokeWidth="2" fill="none" />
+      <circle cx="80" cy="260" r="10" stroke="white" strokeWidth="2" fill="none" />
+      <circle cx="110" cy="260" r="5" stroke="white" strokeWidth="2" fill="none" />
+      
+      {/* Dotted line on the left side */}
+      <path
+        d="M30 50 L30 200"
+        stroke="white"
+        strokeWidth="2"
+        strokeDasharray="5,5"
+        fill="none"
+      />
+      
+      {/* Square in the top-left corner */}
+      <rect x="20" y="20" width="30" height="30" stroke="white" strokeWidth="2" fill="none" />
+      
+      {/* Small dots in the top-right */}
+      <circle cx="240" cy="40" r="2" fill="white" />
+      <circle cx="250" cy="50" r="2" fill="white" />
+      <circle cx="260" cy="60" r="2" fill="white" />
+      
+      {/* Curved line in the bottom-right */}
+      <path
+        d="M200 250 Q 250 200 280 250"
+        stroke="white"
+        strokeWidth="2"
+        fill="none"
+      />
+    </Box>
+  );
 
 const countryCodes = [
   {
@@ -106,7 +126,7 @@ const signupSchema = z.object({
 });
 type SignupFormData = z.infer<typeof signupSchema>;
 
-const SignupForm = () => {
+const MentorSignupForm = () => {
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -126,7 +146,7 @@ const SignupForm = () => {
       // Add the role field to the data object
       const dataWithRole = {
         ...data,
-        role: "student"
+        role: "mentor"
       };
     try {
       const response = await fetch('http://localhost:5000/user/add', {
@@ -193,10 +213,10 @@ const SignupForm = () => {
         <Box flex="1" color="white" p={6} position="relative" mb={88}>
           <VStack align="flex-start" spacing={2} mb={4}>
             <Heading fontSize="2xl" className="font-poppins">
-              Elevate Your Coding Skills Together
+            Join as a Mentor and Help Shape Future Coding Leaders
             </Heading>
             <Text fontSize="xs" className="font-poppins">
-              Reach Your Coding Goals with 1,000+ Challenges
+              Empower the Next Generation of Coders
             </Text>
           </VStack>
           <Box
@@ -426,4 +446,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default MentorSignupForm;

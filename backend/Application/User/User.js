@@ -39,7 +39,7 @@ router.post(
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1h" }
     );
-    res.json({ token });//sending token
+    res.json({ token ,role: user.role});//sending token
   })
 );
 

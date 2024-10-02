@@ -9,6 +9,9 @@ import Student_Education from "./Student_Education";
 import Student_Skills from "./Student_Skills";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+
 import axios from "axios";
 import {
   Tag,
@@ -23,6 +26,17 @@ import {
   Flex,
   Spinner,
   useToast,
+  Input,
+  useDisclosure,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  IconButton,
 } from "@chakra-ui/react";
 
 // ProfileDashboard Component
@@ -34,7 +48,15 @@ const ProfileDashboard = () => {
     phone: string;
     role?: string;
   };
-
+  interface ProfileUser {
+    id: string; // Assuming you have an ID field
+    name?: string; // Adjust types and fields as necessary
+    imageUrl?: string;
+    // Add other profile fields as necessary
+  }
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [profileUser, setProfileUser] = useState<ProfileUser | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -97,6 +119,56 @@ const ProfileDashboard = () => {
     fetchUserData();
   }, [navigate, toast]);
 
+  //image
+  useEffect(() => {
+    // Fetch profile user data including image URL
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/pic/profilepic"
+        );
+        setProfileUser(response.data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setSelectedFile(file);
+  };
+  
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      console.error("No file selected for upload.");
+      return; // Early return if no file is selected
+    }
+  
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+  
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/pic/uploadprofilepic",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+  
+      // Update profileUser with the new imageUrl
+      if (profileUser) {
+        setProfileUser({ ...profileUser, imageUrl: response.data.imageUrl });
+      } else {
+        // Handle the case if profileUser is null (initial state)
+        setProfileUser({ imageUrl: response.data.imageUrl } as ProfileUser);
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
   // Mock data for charts
   const salesData = [
     { day: "Mon", earnings: 800, payments: 1200 },
@@ -163,10 +235,27 @@ const ProfileDashboard = () => {
           <Card bg="#1f202a">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src={
+                  profileUser?.imageUrl ||
+                  "https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                }
                 alt="Profile"
                 className="rounded-full mx-auto mb-2 h-20"
               />
+              <label htmlFor="upload-file">
+                <IconButton
+                  icon={<FontAwesomeIcon icon={faCamera} />}
+                  aria-label="Upload Image"
+                  size="xs"
+                />
+              </label>
+              <Input
+                type="file"
+                onChange={handleFileChange}
+                display="none"
+                id="upload-file"
+              />
+              <button onClick={handleUpload}>Upload Image</button>
               <Text className="text-center text-lg font-bold text-white font-poppins">
                 {user?.firstname} {user?.lastname}
               </Text>

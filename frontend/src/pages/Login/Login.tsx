@@ -60,17 +60,19 @@ const LoginScreen = () => {
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    // Handle login logic here
     try {
       const response = await axios.post(
         "http://localhost:5000/user/login",
         data
       );
-
+  
       if (response.data.token) {
         // Store the token in localStorage
         localStorage.setItem("token", response.data.token);
-
+  
+        // Check the user's role
+        const userRole = response.data.role;
+  
         // Show success message
         toast({
           title: "Login successful",
@@ -78,9 +80,17 @@ const LoginScreen = () => {
           duration: 3000,
           isClosable: true,
         });
-
-        // Redirect to dashboard or home page
-        navigate("/studentprofile");
+  
+        // Redirect based on user role
+        if (userRole === "student") {
+          navigate("/studentprofile");
+        } else if (userRole === "mentor") {
+          navigate("/profile");
+        } else {
+          // Handle unexpected role
+          console.error("Unexpected user role:", userRole);
+          navigate("/login"); // Fallback navigation
+        }
       }
     } catch (error) {
       // Show error message
@@ -94,7 +104,6 @@ const LoginScreen = () => {
       });
     }
   };
-
   return (
     <Flex
       minHeight="100vh"
