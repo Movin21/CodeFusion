@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
-
+import { useRef } from 'react';
 import axios from "axios";
 import {
   Tag,
@@ -28,19 +28,12 @@ import {
   useToast,
   Input,
   useDisclosure,
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   IconButton,
 } from "@chakra-ui/react";
 
 // ProfileDashboard Component
 const ProfileDashboard = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   type User = {
     firstname: string;
     lastname: string;
@@ -139,34 +132,35 @@ const ProfileDashboard = () => {
     const file = e.target.files ? e.target.files[0] : null;
     setSelectedFile(file);
   };
-  
+
   const handleUpload = async () => {
     if (!selectedFile) {
-      console.error("No file selected for upload.");
+      console.error('No file selected for upload.');
       return; // Early return if no file is selected
     }
   
     const formData = new FormData();
-    formData.append("image", selectedFile);
+    formData.append('image', selectedFile);
   
     try {
       const response = await axios.post(
-        "http://localhost:5000/pic/uploadprofilepic",
+        'http://localhost:5000/pic/uploadprofilepic',
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { 'Content-Type': 'multipart/form-data' },
         }
       );
   
-      // Update profileUser with the new imageUrl
-      if (profileUser) {
-        setProfileUser({ ...profileUser, imageUrl: response.data.imageUrl });
+      // Update profileUser  with the new imageUrl
+      if (profileUser ) {
+        setProfileUser ({ ...profileUser , imageUrl: response.data.imageUrl });
       } else {
-        // Handle the case if profileUser is null (initial state)
-        setProfileUser({ imageUrl: response.data.imageUrl } as ProfileUser);
+        // Handle the case if profileUser  is null (initial state)
+        setProfileUser ({ imageUrl: response.data.imageUrl } as ProfileUser );
       }
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error('Error uploading image:', error);
+      
     }
   };
   // Mock data for charts
@@ -217,6 +211,7 @@ const ProfileDashboard = () => {
       </Box>
     );
   }
+ 
 
   return (
     <>
@@ -247,6 +242,7 @@ const ProfileDashboard = () => {
                   icon={<FontAwesomeIcon icon={faCamera} />}
                   aria-label="Upload Image"
                   size="xs"
+                  onClick={() => fileInputRef.current?.click()}
                 />
               </label>
               <Input
@@ -254,6 +250,7 @@ const ProfileDashboard = () => {
                 onChange={handleFileChange}
                 display="none"
                 id="upload-file"
+                ref={fileInputRef}
               />
               <button onClick={handleUpload}>Upload Image</button>
               <Text className="text-center text-lg font-bold text-white font-poppins">

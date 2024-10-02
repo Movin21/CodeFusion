@@ -36,14 +36,22 @@ router.get('/profilepic', async (req, res) => {
 });
 
 // Upload profile image
-router.post("/uploadprofilepic", upload.single("image"), async (req, res) => {
-    try {
-      const imageUrl = `/uploads/${req.file.filename}`;
-      const profile = await Profile.findByIdAndUpdate(req.user.id, { imageUrl }, { new: true, upsert: true });
-      res.json({ imageUrl: profile.imageUrl });
-    } catch (error) {
-      res.status(500).json({ message: "Error uploading image" });
-    }
-  });
+router.post('/uploadprofilepic', upload.single('image'), async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming you're using authentication middleware
+    const profile = await Profile.findById(userId);
 
+    if (!profile) {
+      return res.status(404).json({ message: 'Profile not found' });
+    }
+
+    // Update the profile with the new image URL
+    profile.imageUrl = `/uploads/${req.file.filename}`; // Set the path to the uploaded image
+    await profile.save();
+
+    res.json({ imageUrl: profile.imageUrl });
+  } catch (error) {
+    res.status(500).json({ message: 'Error uploading image', error });
+  }
+});
 module.exports = router;
