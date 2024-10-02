@@ -71,19 +71,23 @@ router.get(
 );
 
 router.put(
-  "/update/:id",
+  "/update",
   validateToken,
   asyncHandler(async (req, res) => {
-    const { firstname, lastname, email, phone } = req.body;
+    const { firstname, lastname, phone } = req.body;
+
+    // Use the user ID from the token (added by the validateToken middleware)
     const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { firstname, lastname, email, phone },
-      { new: true }
+      req.user.id, // No need to pass ID explicitly, it's taken from the token
+      { firstname, lastname, phone },
+      { new: true } // This option returns the updated document
     );
+
     if (!updatedUser) {
       res.status(404);
       throw new Error("User not found");
     }
+
     res.status(200).json({ status: "User updated", user: updatedUser });
   })
 );
