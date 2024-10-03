@@ -26,9 +26,11 @@ const Navbar = () => {
       >
         <div className="sm:flex flex-row justify-around items-center h-[40px] mt-3">
           {/* image */}
-          <div className="sm:w-[220px] w-[220px] sm:p-0 p-3">
-            <img src={logo} alt="Logo" className="h-[240px]" />
-          </div>
+          <Link to="/">
+            <div className="sm:w-[230px] w-[230px] sm:p-0 p-3">
+              <img src={logo} alt="Logo" className="h-[240px]" />
+            </div>
+          </Link>
           {/* Menus */}
           <div className="sm:flex flex-row justify-between items-center mb-2 gap-5 mr-20 hidden ">
             <Link
