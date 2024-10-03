@@ -23,16 +23,13 @@ import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// Define the login schema using Zod
 const loginSchema = z.object({
   email: z
     .string()
-    .min(1, { message: "Email  is required" })
+    .min(1, { message: "Email is required" })
     .refine(
       (value) => {
-        // Simple email regex
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        // Simple phone regex (assumes a 10-digit number)
         const phoneRegex = /^\d{10}$/;
         return emailRegex.test(value) || phoneRegex.test(value);
       },
@@ -59,6 +56,7 @@ const LoginScreen = () => {
     resolver: zodResolver(loginSchema),
   });
 
+  /*Added By Movindu*/
   const onSubmit = async (data: LoginFormData) => {
     try {
       const response = await axios.post(
@@ -67,11 +65,12 @@ const LoginScreen = () => {
       );
 
       if (response.data.token) {
-        // Store the token in localStorage
+        // Store the token and user data in localStorage
         localStorage.setItem("token", response.data.token);
-
-        // Check the user's role
-        const userRole = response.data.role;
+        localStorage.setItem(
+          "userData",
+          JSON.stringify(response.data.userData)
+        );
 
         // Show success message
         toast({
@@ -82,18 +81,16 @@ const LoginScreen = () => {
         });
 
         // Redirect based on user role
-        if (userRole === "student") {
+        if (response.data.userData.role === "student") {
           navigate("/studentprofile");
-        } else if (userRole === "mentor") {
+        } else if (response.data.userData.role === "mentor") {
           navigate("/profile");
         } else {
-          // Handle unexpected role
-          console.error("Unexpected user role:", userRole);
-          navigate("/login"); // Fallback navigation
+          console.error("Unexpected user role:", response.data.userData.role);
+          navigate("/login");
         }
       }
     } catch (error) {
-      // Show error message
       toast({
         title: "Login failed",
         description:
@@ -104,6 +101,7 @@ const LoginScreen = () => {
       });
     }
   };
+
   return (
     <Flex
       minHeight="100vh"

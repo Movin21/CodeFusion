@@ -11,33 +11,47 @@ const saltRounds = 10;
 router.post(
   "/login",
   asyncHandler(async (req, res) => {
-    // console.log('Received login request:', req.body);
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     if (!user) {
-      console.log("User not found with email:", email);
       res.status(400);
       throw new Error("User not found");
     }
+
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      console.log("Password mismatch for user:", email);
       res.status(400);
       throw new Error("Invalid password");
     }
 
-    // Ensure token secret is set
     if (!process.env.ACCESS_TOKEN_SECRET) {
-      console.log("ACCESS_TOKEN_SECRET is not set");
       throw new Error("Token secret is missing");
     }
 
     const token = jwt.sign(
-      { user: { id: user._id, email: user.email } }, // Include necessary user data
+      {
+        user: {
+          id: user._id,
+          email: user.email,
+        },
+      },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1h" }
     );
-    res.json({ token, role: user.role }); //sending token
+
+    res.json({
+      token,
+      userData: {
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        phone: user.phone,
+        country: user.country,
+        role: user.role,
+      },
+    });
   })
 );
 
