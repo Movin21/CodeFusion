@@ -10,24 +10,24 @@ export const axiosClient = axios.create({
 
 // Blogs Functions
 
-export const fetchBlogsFn = async () => {
-    return await axiosClient.get("/readAllBlogs");
+export const fetchBlogsFn = () => {
+    return axiosClient.get("/readAllBlogs");
 };
 
-export const fetchBlogFn = async (blogId) => {
-    return await axiosClient.get(`/readBlog/${blogId}`);
+export const fetchBlogFn = (blogId) => {
+    return axiosClient.get(`/readBlog/${blogId}`);
 }
 
-export const createBlogFn = async (postData) => {
-    return await axiosClient.post("/createBlog", postData);
+export const createBlogFn = (postData) => {
+    return axiosClient.post("/createBlog", postData);
 };
 
-export const deleteBlogFn = async (blogId) => {
-    return await axiosClient.delete(`/deleteBlog/${blogId}`);
+export const deleteBlogFn = async (id) => {
+    return await axiosClient.delete(`/deleteBlog/${id}`);
 };
 
-export const updateBlogFn = async (blogId, postData) => {
-    return await axiosClient.put(`/updateBlog/${blogId}`, postData);
+export const updateBlogFn = (id, postData) => {
+    return axiosClient.put(`/updateBlog/${id}`, postData);
 };
 
 
