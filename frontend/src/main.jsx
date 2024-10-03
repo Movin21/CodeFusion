@@ -13,9 +13,11 @@ import BlogPage from "./pages/Blog/Blog.jsx";
 import ProfileDashboard from "./pages/Student_Profile/Student_Profile.tsx";
 import SignupForm from "./pages/Signup/Signup.tsx";
 import LoginScreen from "./pages/Login/Login.tsx";
+import MentorSignupForm from "./pages/Profile/MentorSignup.tsx";
 import ChallengesForm from "./pages/ChallengesListing/ChallengeForm.jsx";
 import { ChallengesListing } from "./pages/ChallengesListing/ChallengesListing.jsx";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -32,14 +34,16 @@ const router = createBrowserRouter([
       { path: "/login", element: <LoginScreen /> },
       { path: "/ChallengesListing", element: <ChallengesListing /> },
       { path: "/addChallenge", element: <ChallengesForm /> },
-
+      { path: "/mentorsignup", element: <MentorSignupForm /> },
     ],
   },
 ]);
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ChakraProvider>
-      <RouterProvider router={router} />
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider>
+        <RouterProvider router={router} />
+      </ChakraProvider>
+    </QueryClientProvider>
   </StrictMode>
 );
