@@ -1,6 +1,5 @@
 import styles from "../styles";
 import SignUpBTN from "./SignUpBTN";
-import Clients from "./Clients";
 
 const Hero = () => {
   return (
@@ -18,9 +17,15 @@ const Hero = () => {
       {/* Buttons */}
       <div className={`${styles.flexCenter} gap-7 my-5 mt-10`}>
         <SignUpBTN text="Sign up" />
+        <button
+          type="button"
+          className="w-[8rem] sm:w-[10rem] border-[1px] bg-white font-semibold font-poppins text-[14px] h-[40px] rounded-md hover:bg-primary hover:text-white"
+        >
+          Login
+        </button>
       </div>
-      <p className={`${styles.paragraph} mt-7 mb-7 sm:px-0 px-5`}>
-        Master code, sharpen your skills, and prepare for your next job
+      <p className={`${styles.paragraph} mt-10 mb-7 sm:px-0 px-5`}>
+        Master the art of coding, sharpen your technical skills,
       </p>
       {/* hero- images */}
     </section>

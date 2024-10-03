@@ -24,7 +24,9 @@ const getCountdown = (endDate) => {
   }
 
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const hours = Math.floor(
+    (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
@@ -109,8 +111,8 @@ export const ChallengesListing = () => {
         filter === "active"
           ? !question.isArchived
           : filter === "archived"
-          ? question.isArchived
-          : true
+            ? question.isArchived
+            : true
       )
     );
   }, [filter, questions]);
@@ -119,18 +121,18 @@ export const ChallengesListing = () => {
     easy: {
       questions: filteredQuestions.filter((q) => q.difficulty === "easy"),
       color: "green.400",
-      title: "Easy Challenges"
+      title: "Easy Challenges",
     },
     medium: {
       questions: filteredQuestions.filter((q) => q.difficulty === "medium"),
       color: "blue.400",
-      title: "Medium Challenges"
+      title: "Medium Challenges",
     },
     hard: {
       questions: filteredQuestions.filter((q) => q.difficulty === "hard"),
       color: "red.400",
-      title: "Hard Challenges"
-    }
+      title: "Hard Challenges",
+    },
   };
 
   const handleViewDetails = (questionId) => {
@@ -139,7 +141,7 @@ export const ChallengesListing = () => {
 
   const renderQuestionSection = (difficulty) => {
     const { questions, color, title } = questionsByDifficulty[difficulty];
-    
+
     if (questions.length === 0) return null;
 
     return (
@@ -178,7 +180,7 @@ export const ChallengesListing = () => {
           Contests
         </Heading>
 
-        <Breadcrumb fontWeight="medium" fontSize="sm" mb={4}>
+        <Breadcrumb fontWeight="medium" fontSize="sm" mb={4} color={"white"}>
           <BreadcrumbItem>
             <BreadcrumbLink href="/" color="white">
               Home
