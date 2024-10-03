@@ -47,7 +47,7 @@ const Navbar = () => {
               to="#"
               className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
-              Pricing
+              Mentor Support
             </Link>
             <Link
               to="#"
