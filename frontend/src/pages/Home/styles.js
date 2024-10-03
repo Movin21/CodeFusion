@@ -16,7 +16,7 @@ const styles = {
   heading5_start:
     "font-poppins sm:font-medium font-normal sm:text-[30px] text-center text-[20px] text-start xs:leading-[56.8px] leading-2 w-full",
   paragraph:
-    "font-poppins font-normal text-white text-[18px] sm:text-center text-start leading-[30.8px] sm:px-0 px-3",
+    "font-poppins font-normal text-black text-[18px] sm:text-center text-start leading-[30.8px] sm:px-0 px-3",
   paragraph_start:
     "font-poppins font-normal text-white text-[18px]  text-start leading-[30.8px]",
 
