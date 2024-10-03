@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { carouselData } from "../constants";
 import SwipeableViews from "react-swipeable-views";
-import styles from "../styles";
 
 const SwiperCard = () => {
   const [activeIndex, setActiveIndex] = useState(0);
