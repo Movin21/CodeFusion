@@ -1,8 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ProfileStatsCard from "../Profile/ProfileStatsCard";
 import { MdOutlineModeEdit } from "react-icons/md";
+import { useEffect } from "react";
 
 export default function Profile() {
+  const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    console.log("User Data:", userData);
+    console.log("Token:", token);
+
+    if (!userData || !token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const ProfileStats = [
     {
       title: "My Certification",
@@ -12,12 +26,12 @@ export default function Profile() {
     {
       title: "Work Experience",
       content:
-        "Add your work experience. Don’t forget to add those internships as well.",
+        "Add your work experience. Don't forget to add those internships as well.",
     },
     {
       title: "Education",
       content:
-        "We believe in skills over pedigree; but go ahead add your education for the recruiters who don’t.",
+        "We believe in skills over pedigree; but go ahead add your education for the recruiters who don't.",
     },
     {
       title: "Links",
@@ -30,6 +44,10 @@ export default function Profile() {
     },
   ];
 
+  if (!userData || !token) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="profile-container bg-gray-100 min-h-screen py-10">
       <div className="profile-wrapper container mx-auto px-4 lg:px-8">
@@ -40,20 +58,19 @@ export default function Profile() {
             <div className="bg-white shadow-lg rounded-xl p-6">
               <div className="flex items-center justify-between">
                 <img
-                  src="assets/defaultProfile.jpg"
+                  src="/assets/defaultProfile.jpg"
                   alt="Profile"
                   className="w-16 h-16 rounded-full"
                 />
                 <span className="text-gray-400 cursor-pointer">
-                  {/* Icon Placeholder */}
-                  {/* <ModeSharp /> */}
+                  <MdOutlineModeEdit />
                 </span>
               </div>
               <div className="mt-6">
                 <h1 className="text-2xl font-semibold text-gray-800">
-                  Yasas Lakmina
+                  {userData.firstname} {userData.lastname}
                 </h1>
-                <p className="text-sm text-gray-500">yasaslakmina@gmail.com</p>
+                <p className="text-sm text-gray-500">{userData.email}</p>
               </div>
             </div>
 
@@ -63,32 +80,33 @@ export default function Profile() {
                 <h3 className="text-xl font-semibold text-gray-800">
                   Personal Information
                 </h3>
-                {/* Edit Icon Button */}
                 <button className="absolute top-4 right-4 text-gray-500 hover:text-gray-800">
-                  {/* Icon Placeholder */}
                   <MdOutlineModeEdit />
                 </button>
               </div>
               <ul className="mt-6 space-y-3">
                 <li className="flex items-center">
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Name:</span> Yasas Lakmina
+                    <span className="font-semibold">Name:</span>{" "}
+                    {userData.firstname} {userData.lastname}
                   </p>
                 </li>
                 <li className="flex items-center">
                   <p className="text-sm text-gray-600">
                     <span className="font-semibold">Email:</span>{" "}
-                    yasaslakmina@gmail.com
+                    {userData.email}
                   </p>
                 </li>
                 <li className="flex items-center">
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Mobile:</span> +94xxxxxx
+                    <span className="font-semibold">Mobile:</span>{" "}
+                    {userData.phone || "Not provided"}
                   </p>
                 </li>
                 <li className="flex items-center">
                   <p className="text-sm text-gray-600">
-                    <span className="font-semibold">Country:</span> Sri Lanka
+                    <span className="font-semibold">Country:</span>{" "}
+                    {userData.country || "Not provided"}
                   </p>
                 </li>
               </ul>
