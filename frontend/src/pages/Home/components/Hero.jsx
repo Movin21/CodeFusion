@@ -19,10 +19,10 @@ const Hero = () => {
       <div className={`${styles.flexCenter} gap-7 my-5 mt-10`}>
         <SignUpBTN text="Sign up" />
       </div>
-      <p className={`${styles.paragraph} mt-10 mb-7 sm:px-0 px-5`}>
-        Over 40% of developers worldwide and 3,000 candidates use CodeFusion
+      <p className={`${styles.paragraph} mt-7 mb-7 sm:px-0 px-5`}>
+        Master code, sharpen your skills, and prepare for your next job
       </p>
-      {/* hero- images */}\
+      {/* hero- images */}
     </section>
   );
 };

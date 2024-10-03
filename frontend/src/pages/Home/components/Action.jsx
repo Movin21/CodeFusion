@@ -4,7 +4,7 @@ const Action = () => {
     <section className="flex flex-col gap-5 justify-center items-center mt-10">
       <div className="sm:w-[65%] w-[92%]">
         <h2 className={`${styles.heading3} sm:text-center text-start`}>
-          It’s not a pipeline problem.
+          Talent Is There, Let’s Shine a Spotlight
         </h2>
         <h2
           className={`${styles.heading3} sm:text-center text-start text-white`}
