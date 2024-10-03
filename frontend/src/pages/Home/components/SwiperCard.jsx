@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { carouselData } from "../constants";
 import SwipeableViews from "react-swipeable-views";
-import styles from "../styles";
 
 const SwiperCard = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -11,7 +10,7 @@ const SwiperCard = () => {
   };
 
   return (
-    <div className="flex justify-center items-center sm:w-[40%] w-[90%] sm:h-[70%]  bg-slate-400 relative sm:mx-10 mx-5 sm:p-8 p-5 rounded-xl">
+    <div className="flex justify-center items-center sm:w-[40%] w-[90%] sm:h-[40%] s bg-slate-400 relative sm:mx-10 mx-5 sm:p-12 p-8 rounded-xl">
       <SwipeableViews
         index={activeIndex}
         onChangeIndex={handleSwipeChange}
@@ -23,16 +22,25 @@ const SwiperCard = () => {
           return (
             <div
               key={data.id}
-              className="rounded-md flex flex-col items-center gap-5  slide w-[100%]"
+              className="rounded-md flex flex-col items-center slide w-[100%]"
             >
-              <img src={data.img} alt="Image" className="w-[70px] h-[70px]" />
-              <p className={`${styles.paragraph} mb-10`}>{data.text}</p>
+              <p
+                className={`font-poppins font-normal text-black text-[18px] sm:text-center text-start leading-[30.8px] sm:px-0 px-3  mb-10`}
+              >
+                "{data.text}"
+              </p>
+
+              <h3
+                className={`font-poppins text-lg text-black font-bold italic mb-8`}
+              >
+                {data.name}
+              </h3>
             </div>
           );
         })}
       </SwipeableViews>
 
-      <span className="indicators mt-10">
+      <span className="indicators mt-10 ">
         {carouselData.map((_, index) => {
           return (
             <button

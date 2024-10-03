@@ -24,7 +24,9 @@ const getCountdown = (endDate) => {
   }
 
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const hours = Math.floor(
+    (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  );
   const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
@@ -109,8 +111,8 @@ export const ChallengesListing = () => {
         filter === "active"
           ? !question.isArchived
           : filter === "archived"
-          ? question.isArchived
-          : true
+            ? question.isArchived
+            : true
       )
     );
   }, [filter, questions]);
@@ -119,18 +121,18 @@ export const ChallengesListing = () => {
     easy: {
       questions: filteredQuestions.filter((q) => q.difficulty === "easy"),
       color: "green.400",
-      title: "Easy Challenges"
+      title: "Easy Challenges",
     },
     medium: {
       questions: filteredQuestions.filter((q) => q.difficulty === "medium"),
       color: "blue.400",
-      title: "Medium Challenges"
+      title: "Medium Challenges",
     },
     hard: {
       questions: filteredQuestions.filter((q) => q.difficulty === "hard"),
       color: "red.400",
-      title: "Hard Challenges"
-    }
+      title: "Hard Challenges",
+    },
   };
 
   const handleViewDetails = (questionId) => {
@@ -139,7 +141,7 @@ export const ChallengesListing = () => {
 
   const renderQuestionSection = (difficulty) => {
     const { questions, color, title } = questionsByDifficulty[difficulty];
-    
+
     if (questions.length === 0) return null;
 
     return (
@@ -178,7 +180,7 @@ export const ChallengesListing = () => {
           Contests
         </Heading>
 
-        <Breadcrumb fontWeight="medium" fontSize="sm" mb={4}>
+        <Breadcrumb fontWeight="medium" fontSize="sm" mb={4} color={"white"}>
           <BreadcrumbItem>
             <BreadcrumbLink href="/" color="white">
               Home
@@ -192,22 +194,59 @@ export const ChallengesListing = () => {
         </Breadcrumb>
 
         <Stack direction="row" spacing={4} mb={6} className="justify-start">
-          <Button
-            colorScheme={filter === "active" ? "gray" : undefined}
-            variant={filter === "active" ? "solid" : "outline"}
-            size="sm"
-            onClick={() => setFilter("active")}
-          >
-            Active Contests
-          </Button>
-          <Button
-            colorScheme={filter === "archived" ? "gray" : undefined}
-            variant={filter === "archived" ? "solid" : "outline"}
-            size="sm"
-            onClick={() => setFilter("archived")}
-          >
-            Archived Contests
-          </Button>
+          <Stack direction="row" spacing={4} mb={6} className="justify-start">
+            <Button
+              backgroundColor={filter === "active" ? "#527D9F" : "transparent"} // Custom color for active button
+              variant={filter === "active" ? "solid" : "outline"} // Solid variant for active button
+              size="sm"
+              px={6}
+              py={2}
+              borderRadius="md"
+              borderColor={filter === "active" ? undefined : "gray.400"} // Gray border for inactive button
+              color={filter === "active" ? "white" : "white"} // Text color is always white
+              _hover={
+                filter === "active"
+                  ? {
+                      backgroundColor: "#527D9F", // Keep the same color on hover for active button
+                      color: "white", // Keep text color white
+                    }
+                  : {
+                      backgroundColor: "gray.100", // Light gray for inactive hover
+                      color: "black", // Change text color to black on hover
+                    }
+              } // Hover effect
+              onClick={() => setFilter("active")}
+            >
+              Active Contests
+            </Button>
+
+            <Button
+              backgroundColor={
+                filter === "archived" ? "#527D9F" : "transparent"
+              } // Custom color for active button
+              variant={filter === "archived" ? "solid" : "outline"} // Solid variant for archived button
+              size="sm"
+              px={6}
+              py={2}
+              borderRadius="md"
+              borderColor={filter === "archived" ? undefined : "gray.400"} // Gray border for inactive button
+              color={filter === "archived" ? "white" : "white"} // Text color is always white
+              _hover={
+                filter === "archived"
+                  ? {
+                      backgroundColor: "#527D9F", // Keep the same color on hover for archived button
+                      color: "white", // Keep text color white
+                    }
+                  : {
+                      backgroundColor: "gray.100", // Light gray for inactive hover
+                      color: "black", // Change text color to black on hover
+                    }
+              } // Hover effect
+              onClick={() => setFilter("archived")}
+            >
+              Archived Contests
+            </Button>
+          </Stack>
         </Stack>
 
         {Object.keys(questionsByDifficulty).map(renderQuestionSection)}

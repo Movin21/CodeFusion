@@ -1,42 +1,67 @@
+import React from "react";
 import { FooterLinks, socialMedia } from "../constants";
 import styles, { layout } from "../styles";
+import { Link } from "react-router-dom";
 
-const Footer = () => {
+export default function Footer({ pageName }) {
+  const footerLinks = [
+    {
+      link: "/",
+      name: "Blogs",
+    },
+
+    {
+      link: "/",
+      name: "Contact Us",
+    },
+    {
+      link: "/",
+      name: "Mentor Support",
+    },
+    {
+      link: "/",
+      name: "About Us",
+    },
+    {
+      link: "/",
+      name: "Challenges",
+    },
+    {
+      link: "/",
+      name: "Terms Of Service",
+    },
+    {
+      link: "/",
+      name: "Privacy Policy",
+    },
+  ];
   return (
-    <footer className="flex flex-col items-center">
-      <section
-        className={`${layout.section} justify-evenly flex-wrap border-b-[1px] border-slate-300`}
-      >
-        {FooterLinks.map((footer) => {
+    <footer
+      className={`w-full ${
+        pageName === "Profile" ? "bg-page_background2" : "bg-page_background"
+      }  px-4 pt-14 -mt-[1px]`}
+    >
+      <div className="w-fit flex items-center mx-auto p-2  flex-wrap">
+        {footerLinks.map((link, id) => {
           return (
-            <div
-              key={footer.id}
-              className="flex flex-col flex-1 gap-3 ss:my-0 my-4 min-w-[150px] sm:mx-10 mx-5"
-            >
-              <p
-                className={`font-poppins font-normal text-white text-[15px]  text-start leading-[30.8px] uppercase tracking-widest`}
+            <div className="flex items-center " key={id}>
+              <Link
+                to={link.link}
+                className="text-white hover:text-light transition duration-300 ease-in-out text-sm"
               >
-                {footer.title}
-              </p>
-              <ul className="list-none mt-2 text-start leading-[28.8px] ">
-                {footer.links.map((link, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className="text-white font-normal text-[14px] hover:text-light3"
-                    >
-                      {link}
-                    </li>
-                  );
-                })}
-              </ul>
+                {link.name}
+              </Link>
+
+              {id !== footerLinks.length - 1 && (
+                <div className="w-[1px] h-3 mx-2 bg-slate-500"></div>
+              )}
             </div>
           );
         })}
-      </section>
-      <div className="w-full flex sm:justify-end sm:mr-10 sm:pr-10 justify-center">
-        <section className="flex flex-col gap-2 items-end my-10">
-          <div className="flex flex-row md:mt-0 mt-6 justify-end items-end">
+      </div>
+      <div className="w-full flex sm:justify-center   justify-center">
+        <section className="flex flex-col gap-2 items-center my-10">
+          <div className="flex flex-row md:mt-0  justify-end items-end">
             {socialMedia.map((media, index) => {
               return (
                 <img
@@ -50,15 +75,11 @@ const Footer = () => {
               );
             })}
           </div>
-          <p className="font-poppins font-normal text-end text-[14px] leading-[27px] text-slate-900">
-            Copyright &copy; 2023 HackerRank.
-          </p>
-          <p className="font-poppins font-normal text-end text-[12px] leading-[27px] text-slate-900">
-            Privacy policy
+          <p className="font-poppins font-normal text-end text-[14px] mt-2 leading-[27px] text-white">
+            Copyright &copy; 2023 CodeFusion.
           </p>
         </section>
       </div>
     </footer>
   );
-};
-export default Footer;
+}

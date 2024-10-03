@@ -7,7 +7,6 @@ import {
   BinaryTree,
   Interview,
   Company,
-  Challenges,
   Footer,
 } from "./components";
 import styles from "./styles";
@@ -27,7 +26,6 @@ const Home = () => (
         <CodingPractice />
         <BinaryTree />
         <Company />
-        <Challenges />
         <Footer />
       </div>
     </div>

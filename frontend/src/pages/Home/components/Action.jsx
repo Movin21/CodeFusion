@@ -4,12 +4,7 @@ const Action = () => {
     <section className="flex flex-col gap-5 justify-center items-center mt-10">
       <div className="sm:w-[65%] w-[92%]">
         <h2 className={`${styles.heading3} sm:text-center text-start`}>
-          It’s not a pipeline problem.
-        </h2>
-        <h2
-          className={`${styles.heading3} sm:text-center text-start text-white`}
-        >
-          It’s a spotlight problem.
+          Talent Is There, Let’s Shine a Spotlight:
         </h2>
       </div>
       <div className="sm:w-[55%] w-[90%]">
@@ -18,17 +13,6 @@ const Action = () => {
           coding to running a world-class technical interview, give developers
           the tools they need to showcase their skills, passion, and potential.
         </p>
-      </div>
-      <div className="sm:w-[45%] w-[90%] flex flex-row justify-between items-center gap-10 font-bold my-5 sm:px-0 px-3">
-        <a href="#" className="text-white hover:text-light">
-          Prep
-        </a>
-        <a href="#" className="text-white hover:text-light">
-          Screen
-        </a>
-        <a href="#" className="text-white hover:text-light">
-          Interview
-        </a>
       </div>
     </section>
   );

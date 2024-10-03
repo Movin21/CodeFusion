@@ -1,3 +1,4 @@
+import { position } from "@chakra-ui/react";
 import {
   binarytree,
   contenders,
@@ -41,42 +42,50 @@ export const NavLinks = [
 export const bodyContents = [
   {
     id: 1,
-    heading: "Leave the binary tree behind.",
-    para: "Build coding questions using our library of dev-friendly content that challenges them to solve the problems they’d actually tackle on the job.",
-    btn: "Start free trial",
+    heading: "Move Beyond Basic Algorithms.",
+    para: "Compete in coding challenges from our extensive library of real-world, developer-focused problems that reflect the tasks you'll encounter on the job.",
+    btn: "Register Now",
     img: binarytree,
   },
   {
     id: 2,
-    heading: "Focus on what really matters: the code.",
-    para: "Build skills-based coding tests with tech problems a developer would encounter on the job — and hire the team behind your next big idea.",
-    btn: "Request a demo",
+    heading: "Get Mentor Support for Your Coding Journey.",
+    para: `"Share your code with our community of experienced mentors and receive tailored guidance and feedback. Tackle real-world challenges with confidence and enhance your coding skills through expert insights."`,
+    btn: "Register Now",
     img: code_1,
-  },
-  {
-    id: 3,
-    heading: "Identify top contenders",
-    para: "Identify top contenders and invite them to meet your team using data-driven decisions that help level the playing field for developers everywhere.",
-    btn: "Learn more",
-    img: contenders,
   },
 ];
 
 export const carouselData = [
   {
     id: 1,
-    img: ubs,
-    text: "We are discovering new ways of attracting candidates to the organization. By using the CodeFusion, we are improving the tech images of UBS ",
+    text: "CodeFusion completely transformed my coding skills. The challenges helped me build confidence and prepare for technical interviews. Thanks to CodeFusion, I landed my dream job at Tech Innovations!",
+    name: "Sarah Johnson",
   },
   {
     id: 2,
-    img: vmware,
-    text: "CodeFusion has actually allowed as to look for diamonds in the rough that our didn't give us the time or resource to look for.  ",
+    text: "CodeFusion has allowed us to discover hidden talents that we previously overlooked. The platform's resources and coding challenges have equipped our team to make better hiring decisions.",
+    name: "Michael Stevens",
   },
   {
     id: 3,
-    img: vanguard,
-    text: "CodeFusion is a critical piece of our candidates experience and hitting the right tone is just as important as identifying good candidates.  ",
+    text: "CodeFusion is a critical piece of our candidates' experience. It helps us assess their skills accurately and ensures we find the right fit for our tech team.",
+    name: "Emily Roberts",
+  },
+  {
+    id: 4,
+    text: "Thanks to CodeFusion, I was able to refine my programming abilities and land a role at a leading tech firm. The hands-on approach to learning has been invaluable!",
+    name: "David Martinez",
+  },
+  {
+    id: 5,
+    text: "The variety of coding challenges on CodeFusion helped our interns develop practical skills that they could apply in real-world situations. It has been a game-changer for our onboarding process.",
+    name: "Jessica Lee",
+  },
+  {
+    id: 6,
+    text: "As a hiring manager, I appreciate how CodeFusion allows me to evaluate candidates based on their problem-solving skills rather than just their resumes. It truly levels the playing field.",
+    name: "John Smith",
   },
 ];
 
