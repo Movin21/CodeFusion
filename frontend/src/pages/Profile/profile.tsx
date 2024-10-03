@@ -64,10 +64,14 @@ export default function Profile() {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+
+  console.log(firstname);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
+
+        console.log("Token:", token);
         if (!token) {
           throw new Error("No token found");
         }
@@ -348,12 +352,11 @@ export default function Profile() {
             <div className="flex justify-end">
               <button
                 className="bg-red-500 text-white px-5 py-1 rounded-lg hover:bg-red-600"
-              
                 onClick={handleDeleteAccount}
               >
                 Delete Account
               </button>
-              </div>
+            </div>
           </div>
         </div>
       </div>

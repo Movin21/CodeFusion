@@ -1,6 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import axios from "axios";
-import { FaSearch, FaRobot } from "react-icons/fa"; // Add FaRobot here
+import { FaSearch, FaRobot } from "react-icons/fa";
+import { useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const token = "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";
 const endpoint = "https://models.inference.ai.azure.com";
@@ -19,7 +21,7 @@ const fetchQuestions = async () => {
   const response = await axios.get(
     "http://localhost:5000/questions/getAllQuestionPools"
   );
-  console.log("Questions:", response.data);
+
   return response.data;
 };
 
@@ -70,6 +72,65 @@ const BlogPage = () => {
   const [loadingId, setLoadingId] = useState(null);
   const [newComment, setNewComment] = useState({});
   const [showMore, setShowMore] = useState({});
+  const [loading, setLoading] = useState(false); // Loading state
+  const [errorMessage, setErrorMessage] = useState(""); // Error message state
+  const [firstName, setFirstName] = useState(""); // State to store the first name of the user
+  const toast = useToast(); // Assuming you're using Chakra UI for toast notifications
+  const navigate = useNavigate(); // Hook for navigation
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const response = await axios.get("http://localhost:5000/user/getuser", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Check if response.data has the user object
+        if (response.data && response.data.user) {
+          // Set the first name in the state
+          setFirstName(response.data.user.firstname);
+        } else {
+          throw new Error("User data not found");
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+
+        // Handle specific error cases if needed
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          localStorage.removeItem("token");
+          toast({
+            title: "Session Expired",
+            description: "Your session has expired. Please log in again.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          navigate("/login");
+        } else {
+          toast({
+            title: "Error",
+            description:
+              error.message || "An error occurred while fetching user data.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [navigate, toast]); // Include navigate and toast in the dependency array
 
   // Fetch questions on component mount
   useEffect(() => {
@@ -123,32 +184,55 @@ const BlogPage = () => {
     }
   };
 
-  const handleAddComment = (index) => {
-    const comment = newComment[index] || "";
-    if (comment.trim()) {
-      setPosts((prevPosts) =>
-        prevPosts.map((post, i) =>
-          i === index
-            ? {
-                ...post,
-                mentorComments: [
-                  ...post.mentorComments,
-                  { comment, mentorName: "Mentor", createdAt: new Date() },
-                ],
-              }
-            : post
-        )
+  const handleAddComment = async (index) => {
+    const id = posts[index]._id; // Use the passed index here
+    const mentorComment = newComment[index] || ""; // Extract the input comment for the specific post
+    const mentorName = firstName; // You can dynamically set this based on the logged-in user or any other method
+
+    if (!mentorComment) {
+      setErrorMessage("Comment cannot be empty."); // Alert the user if the comment is empty
+      return;
+    }
+
+    try {
+      setLoading(true); // Set loading to true
+      setErrorMessage(""); // Clear previous error messages
+
+      const updatedPost = {
+        comment: mentorComment,
+        mentorName,
+        createdAt: new Date().toISOString(),
+      };
+
+      await axios.put(
+        `http://localhost:5000/questions/updateQuestionPool/${id}`,
+        updatedPost
       );
-      setNewComment((prev) => ({ ...prev, [index]: "" }));
+
+      console.log("Comment added successfully");
+
+      // Fetch updated questions after adding the comment
+      const questionPools = await fetchQuestions();
+      setPosts(questionPools); // Update posts with the fetched questions
+
+      setNewComment((prev) => ({ ...prev, [index]: "" })); // Clear the comment input for this post
+    } catch (error) {
+      console.error("Error adding mentor comment:", error);
+      setErrorMessage("Failed to add comment. Please try again."); // Set error message
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or error
     }
   };
 
   const handleShowMore = (index) => {
-    setShowMore((prev) => ({ ...prev, [index]: !prev[index] }));
+    setShowMore((prevShowMore) => ({
+      ...prevShowMore,
+      [index]: !prevShowMore[index], // Toggle the showMore state for this index
+    }));
   };
 
   return (
-    <div className="flex justify-center bg-gray-100 py-12">
+    <div className="flex justify-center bg-[#0f0a19] py-12">
       <div className="w-full max-w-6xl px-4">
         <h1 className="text-3xl font-semibold mb-8 text-gray-900">
           Blog Posts
@@ -221,7 +305,6 @@ const BlogPage = () => {
               <pre className="bg-gray-50 p-4 rounded-md border border-gray-300 whitespace-pre-wrap text-sm text-gray-800 mb-4">
                 {post.codeSnippet}
               </pre>
-
               <textarea
                 value={newComment[index] || ""}
                 onChange={(e) =>
@@ -233,77 +316,82 @@ const BlogPage = () => {
                 placeholder="Add your mentor comment..."
                 rows="3"
                 className="w-full p-3 border border-gray-300 rounded-md mb-4"
-              ></textarea>
-
+              />
               <div className="flex space-x-4 mb-4">
                 <button
-                  className="bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-blue-900 transition duration-200"
+                  className="bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-md"
                   onClick={() => handleAddComment(index)}
                 >
-                  Add Mentor Comment
+                  Add Comment
                 </button>
                 <button
-                  className="bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-green-900 transition duration-200"
+                  className="bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-md flex items-center space-x-2"
                   onClick={() => handleGetAiSupport(post, index)}
                   disabled={loadingId === index}
                 >
-                  {loadingId === index ? "Loading..." : "Get AI Support"}
+                  <FaRobot className="mr-2" />
+                  {loadingId === index ? "Generating..." : "Get AI Support"}
                 </button>
               </div>
-
-              {/* AI Response */}
+              {/* AI Response */}{" "}
               <div className="border-t border-gray-200 pt-4">
+                {" "}
                 {aiResponses[index] && (
                   <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4 rounded-md">
+                    {" "}
                     <div className="flex items-center mb-2">
+                      {" "}
                       <span className="text-green-600 text-sm font-semibold">
-                        AI-Generated Response
-                      </span>
-                      <FaRobot className="ml-2 text-green-600" />
-                    </div>
+                        {" "}
+                        AI-Generated Response{" "}
+                      </span>{" "}
+                      <FaRobot className="ml-2 text-green-600" />{" "}
+                    </div>{" "}
                     <h3 className="font-medium text-gray-800">
-                      Response from AI:
-                    </h3>
+                      {" "}
+                      Response from AI:{" "}
+                    </h3>{" "}
                     <p className="text-gray-700">
+                      {" "}
                       {showMore[index]
                         ? aiResponses[index]
-                        : `${aiResponses[index].substring(0, 150)}...`}
-                    </p>
+                        : `${aiResponses[index].substring(0, 150)}...`}{" "}
+                    </p>{" "}
                     <button
                       onClick={() => handleShowMore(index)}
                       className="text-blue-600 hover:underline mt-2"
                     >
-                      {showMore[index] ? "Show less" : "See more"}
-                    </button>
-                    <hr className="my-4" />
+                      {" "}
+                      {showMore[index] ? "Show less" : "Show more"}{" "}
+                    </button>{" "}
                   </div>
-                )}
+                )}{" "}
               </div>
-
-              {/* Mentor Comments */}
-              {post.mentorComments.length > 0 && (
-                <div className="mt-4">
-                  <h4 className="font-semibold text-gray-800 mb-2">
-                    Mentor Comments:
-                  </h4>
-                  {post.mentorComments.map((comment, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-gray-50 border border-gray-200 p-2 rounded-md mb-2"
-                    >
-                      <p className="text-gray-800">{comment.comment}</p>
-                      <small className="text-gray-500">
-                        - {comment.mentorName},{" "}
-                        {new Date(comment.createdAt).toLocaleDateString()}
-                      </small>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div>
+                <h3 className="font-semibold text-gray-900">
+                  Mentor Comments:
+                </h3>
+                {post.mentorComments.map((comment, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 mt-2 border-l-4 border-blue-500 bg-blue-50 rounded-md"
+                  >
+                    <p className="text-sm">
+                      <span className="font-semibold">
+                        {comment.mentorName}:{" "}
+                      </span>
+                      {comment.comment}
+                    </p>
+                    <p className="text-xs text-gray-600">
+                      {new Date(comment.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           ))
         ) : (
-          <p className="text-gray-600">No posts found.</p>
+          <p>No blog posts found.</p>
         )}
       </div>
     </div>
