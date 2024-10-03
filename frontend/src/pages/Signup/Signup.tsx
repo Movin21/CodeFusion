@@ -21,7 +21,8 @@ import {
   FormErrorMessage,
   InputGroup,
   InputRightElement,
-  IconButton
+  IconButton,
+  useToast, 
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -84,10 +85,10 @@ const countryCodes = [
   },
 ];
 const signupSchema = z.object({
-  firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().min(1, { message: "Last name is required" }),
+  firstname: z.string().min(1, { message: "First name is required" }),
+  lastname: z.string().min(1, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
-  phoneNumber: z.string().min(1, { message: "Phone number is required" }),
+  phone: z.string().min(1, { message: "Phone number is required" }),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long" })
@@ -103,13 +104,13 @@ const signupSchema = z.object({
   message: "Passwords don't match",
   path: ["confirmPassword"],
 });
-
 type SignupFormData = z.infer<typeof signupSchema>;
 
 const SignupForm = () => {
   const [selectedCountry, setSelectedCountry] = useState(countryCodes[0]);
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState("");
+  const toast = useToast(); 
   const {
     register,
     handleSubmit,
@@ -119,15 +120,56 @@ const SignupForm = () => {
     resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit = (data: SignupFormData) => {
-    console.log(data);
-    // Handle form submission here
+  const onSubmit = async (data: SignupFormData) => {
+
+    
+      // Add the role field to the data object
+      const dataWithRole = {
+        ...data,
+        role: "student"
+      };
+    try {
+      const response = await fetch('http://localhost:5000/user/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataWithRole),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(result);
+        toast({
+          title: "Account created.",
+          description: "We've created your account for you.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        // Optionally, you can redirect the user to a different page
+        // navigate('/dashboard');
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Something went wrong');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      toast({
+        title: "An error occurred.",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
+
    
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(selectedCountry.code, "").trim();
     setPhoneNumber(value);
-    setValue("phoneNumber", `${selectedCountry.code} ${value}`, { shouldValidate: true });
+    setValue("phone", `${selectedCountry.code} ${value}`, { shouldValidate: true });
   };
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
@@ -175,7 +217,7 @@ const SignupForm = () => {
               Register for Your Account 
             </Heading>
             <Flex gap={2} mt={2}>
-              <FormControl isInvalid={!!errors.firstName}>
+              <FormControl isInvalid={!!errors.firstname}>
                 <FormLabel fontSize="xs" className="font-poppins">
                   First name
                 </FormLabel>
@@ -184,11 +226,11 @@ const SignupForm = () => {
                   placeholder="John"
                   className="font-poppins"
                   borderRadius={5}
-                  {...register("firstName")}
+                  {...register("firstname")}
                 />
-                <FormErrorMessage>{errors.firstName?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.firstname?.message}</FormErrorMessage>
               </FormControl>
-              <FormControl isInvalid={!!errors.lastName}>
+              <FormControl isInvalid={!!errors.lastname}>
                 <FormLabel fontSize="xs" className="font-poppins">
                   Last name
                 </FormLabel>
@@ -197,9 +239,9 @@ const SignupForm = () => {
                   placeholder="Doe"
                   className="font-poppins"
                   borderRadius={5}
-                  {...register("lastName")}
+                  {...register("lastname")}
                 />
-                <FormErrorMessage>{errors.lastName?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.lastname?.message}</FormErrorMessage>
               </FormControl>
             </Flex>
             <FormControl isInvalid={!!errors.email}>
@@ -216,66 +258,65 @@ const SignupForm = () => {
               />
               <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
             </FormControl>
-            <FormControl isInvalid={!!errors.phoneNumber}>
-      <FormLabel fontSize="xs" className="font-poppins">
-        Phone number
-      </FormLabel>
-      <Flex>
-        <Menu>
-          <MenuButton
-            as={Button}
-            size="xs"
-            maxWidth="100px"
-            mr={2}
-            rightIcon={<ChevronDownIcon />}
-            className="font-poppins"
-            display="flex"
-            alignItems="center"
-          >
-            <img
-              src={selectedCountry.flag}
-              alt={selectedCountry.name}
-              style={{ width: 20, height: 15, marginRight: 8 }}
-            />
-          </MenuButton>
-          <MenuList
-            maxHeight="150px"
-            overflowY="auto"
-            minWidth="100px"
-            padding={1}
-            fontSize="xs"
-          >
-            {countryCodes.map((country) => (
-              <MenuItem
-                key={country.code}
-                onClick={() => {
-                  setSelectedCountry(country);
-                  setValue("phoneNumber", `${country.code} ${phoneNumber}`, { shouldValidate: true });
-                }}
-              >
-                <img
-                  src={country.flag}
-                  alt={country.name}
-                  style={{ width: 20, height: 15, marginRight: 8 }}
+            <FormControl isInvalid={!!errors.phone}>
+              <FormLabel fontSize="xs" className="font-poppins">
+                Phone number
+              </FormLabel>
+              <Flex>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    size="xs"
+                    maxWidth="100px"
+                    mr={2}
+                    rightIcon={<ChevronDownIcon />}
+                    className="font-poppins"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    <img
+                      src={selectedCountry.flag}
+                      alt={selectedCountry.name}
+                      style={{ width: 20, height: 15, marginRight: 8 }}
+                    />
+                  </MenuButton>
+                  <MenuList
+                    maxHeight="150px"
+                    overflowY="auto"
+                    minWidth="100px"
+                    padding={1}
+                    fontSize="xs"
+                  >
+                    {countryCodes.map((country) => (
+                      <MenuItem
+                        key={country.code}
+                        onClick={() => {
+                          setSelectedCountry(country);
+                          setValue("phone", `${country.code} ${phoneNumber}`, { shouldValidate: true });
+                        }}
+                      >
+                        <img
+                          src={country.flag}
+                          alt={country.name}
+                          style={{ width: 20, height: 15, marginRight: 8 }}
+                        />
+                        {country.name}
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                </Menu>
+                <Input
+                  size="xs"
+                  type="tel"
+                  value={`${selectedCountry.code} ${phoneNumber}`}
+                  onChange={handlePhoneChange}
+                  placeholder="Phone number"
+                  className="font-poppins"
+                  borderRadius={5}
                 />
-                {country.name}
-              </MenuItem>
-            ))}
-          </MenuList>
-        </Menu>
-        <Input
-          size="xs"
-          type="tel"
-          value={`${selectedCountry.code} ${phoneNumber}`}
-          onChange={handlePhoneChange}
-          placeholder="Phone number"
-          className="font-poppins"
-          borderRadius={5}
-        />
-      </Flex>
-      <FormErrorMessage>{errors.phoneNumber?.message}</FormErrorMessage>
-    </FormControl>
-
+              </Flex>
+              <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
+            </FormControl>
             <FormControl isInvalid={!!errors.password}>
               <FormLabel fontSize="xs" className="font-poppins">
                 Password
