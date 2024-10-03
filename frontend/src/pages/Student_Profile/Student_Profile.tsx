@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProgressBar from "./Unique_Badge/ProgressBar";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { Gauge } from "lucide-react";
@@ -7,6 +7,12 @@ import Student_Resume from "./Student_Resume";
 import Student_certificate from "./Student_certificate";
 import Student_Education from "./Student_Education";
 import Student_Skills from "./Student_Skills";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import { useRef } from 'react';
+import axios from "axios";
 import {
   Tag,
   Box,
@@ -18,10 +24,145 @@ import {
   VStack,
   Grid,
   Flex,
+  Spinner,
+  useToast,
+  Input,
+  useDisclosure,
+  IconButton,
 } from "@chakra-ui/react";
 
 // ProfileDashboard Component
 const ProfileDashboard = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  type User = {
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    role?: string;
+  };
+  interface ProfileUser {
+    id: string; // Assuming you have an ID field
+    name?: string; // Adjust types and fields as necessary
+    imageUrl?: string;
+    // Add other profile fields as necessary
+  }
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [profileUser, setProfileUser] = useState<ProfileUser | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const toast = useToast();
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          // Handle the case where there's no token (e.g., redirect to login)
+          throw new Error("No token found");
+          return;
+        }
+
+        const response = await axios.get<{ user: User }>(
+          "http://localhost:5000/user/getuser",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setUser(response.data.user);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setLoading(false);
+        // navigate('/login');
+
+        // Check if the error is due to an expired token
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          // Clear the token from localStorage
+          localStorage.removeItem("token");
+
+          // Show toast message
+          toast({
+            title: "Session Expired",
+            description: "Your session has expired. Please log in again.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+
+          // Navigate to login page
+          navigate("/login");
+        } else {
+          // Handle other types of errors
+          toast({
+            title: "Error",
+            description: "An error occurred while fetching user data.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [navigate, toast]);
+
+  //image
+  useEffect(() => {
+    // Fetch profile user data including image URL
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/pic/profilepic"
+        );
+        setProfileUser(response.data);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setSelectedFile(file);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile) {
+      console.error('No file selected for upload.');
+      return; // Early return if no file is selected
+    }
+  
+    const formData = new FormData();
+    formData.append('image', selectedFile);
+  
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/pic/uploadprofilepic',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
+  
+      // Update profileUser  with the new imageUrl
+      if (profileUser ) {
+        setProfileUser ({ ...profileUser , imageUrl: response.data.imageUrl });
+      } else {
+        // Handle the case if profileUser  is null (initial state)
+        setProfileUser ({ imageUrl: response.data.imageUrl } as ProfileUser );
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      
+    }
+  };
   // Mock data for charts
   const salesData = [
     { day: "Mon", earnings: 800, payments: 1200 },
@@ -58,6 +199,20 @@ const ProfileDashboard = () => {
 
   const [error, setError] = useState(null);
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
+ 
+
   return (
     <>
       <Box className="bg-black p-4 min-h-screen">
@@ -66,7 +221,7 @@ const ProfileDashboard = () => {
             Student Profile
           </Text>
           <Text className="text-xs text-gray-400 font-poppins">
-            12:15 PM at 19th November 2020
+            {new Date().toLocaleString()}
           </Text>
         </header>
 
@@ -75,12 +230,31 @@ const ProfileDashboard = () => {
           <Card bg="#1f202a">
             <CardBody>
               <Image
-                src="https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src={
+                  profileUser?.imageUrl ||
+                  "https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?q=80&w=1856&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                }
                 alt="Profile"
                 className="rounded-full mx-auto mb-2 h-20"
               />
+              <label htmlFor="upload-file">
+                <IconButton
+                  icon={<FontAwesomeIcon icon={faCamera} />}
+                  aria-label="Upload Image"
+                  size="xs"
+                  onClick={() => fileInputRef.current?.click()}
+                />
+              </label>
+              <Input
+                type="file"
+                onChange={handleFileChange}
+                display="none"
+                id="upload-file"
+                ref={fileInputRef}
+              />
+              <button onClick={handleUpload}>Upload Image</button>
               <Text className="text-center text-lg font-bold text-white font-poppins">
-                Julien Magnifice
+                {user?.firstname} {user?.lastname}
               </Text>
               <Text className="text-center text-xs text-gray-400 mb-2 font-poppins">
                 Design Student
@@ -88,14 +262,10 @@ const ProfileDashboard = () => {
 
               <VStack align="start" spacing={1} fontSize="xs" color="gray.400">
                 <Text className="font-poppins">
-                  <strong>EMAIL:</strong> customer@email.com
+                  <strong>EMAIL:</strong> {user?.email || "Not available"}
                 </Text>
                 <Text className="font-poppins">
-                  <strong>PHONE:</strong> +01 923 456 78
-                </Text>
-                <Text className="font-poppins">
-                  <strong>LOCATION:</strong> 7839 Williams Dr. Columbus, GA
-                  31904
+                  <strong>PHONE:</strong> {user?.phone || "Not available"}
                 </Text>
               </VStack>
 
@@ -264,7 +434,7 @@ const ProfileDashboard = () => {
             </CardBody>
           </Card>
 
-          <Box  className="col-span-1" >
+          <Box className="col-span-1">
             <Student_Resume />
           </Box>
 
@@ -279,7 +449,7 @@ const ProfileDashboard = () => {
           <Box gridColumn="span 1">
             <Student_Skills />
           </Box>
-          <Box gridColumn="span 1" >
+          <Box gridColumn="span 1">
             <Card bg="#1f202a" className="font-poppins" height="200px">
               <CardHeader className="text-white text-sm">
                 Work Experience
