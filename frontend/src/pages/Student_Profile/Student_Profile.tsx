@@ -11,7 +11,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
-import { useRef } from 'react';
+import { useRef } from "react";
 import { MdOutlineModeEdit } from "react-icons/md";
 import axios from "axios";
 import {
@@ -27,9 +27,19 @@ import {
   Flex,
   Spinner,
   useToast,
-  Input,
   useDisclosure,
   IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
 
 // ProfileDashboard Component
@@ -74,7 +84,7 @@ const ProfileDashboard = () => {
           }
         );
 
-        if (response.data.user.role !== 'student') {
+        if (response.data.user.role !== "student") {
           throw new Error("Unauthorized access");
         }
 
@@ -95,7 +105,10 @@ const ProfileDashboard = () => {
             isClosable: true,
           });
           navigate("/");
-        } else if (axios.isAxiosError(error) && error.response?.status === 401) {
+        } else if (
+          axios.isAxiosError(error) &&
+          error.response?.status === 401
+        ) {
           localStorage.removeItem("token");
           toast({
             title: "Session Expired",
@@ -143,32 +156,78 @@ const ProfileDashboard = () => {
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      console.error('No file selected for upload.');
+      console.error("No file selected for upload.");
       return; // Early return if no file is selected
     }
-  
+
     const formData = new FormData();
-    formData.append('image', selectedFile);
-  
+    formData.append("image", selectedFile);
+
     try {
       const response = await axios.post(
-        'http://localhost:5000/pic/uploadprofilepic',
+        "http://localhost:5000/pic/uploadprofilepic",
         formData,
         {
-          headers: { 'Content-Type': 'multipart/form-data' },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
-  
+
       // Update profileUser  with the new imageUrl
-      if (profileUser ) {
-        setProfileUser ({ ...profileUser , imageUrl: response.data.imageUrl });
+      if (profileUser) {
+        setProfileUser({ ...profileUser, imageUrl: response.data.imageUrl });
       } else {
         // Handle the case if profileUser  is null (initial state)
-        setProfileUser ({ imageUrl: response.data.imageUrl } as ProfileUser );
+        setProfileUser({ imageUrl: response.data.imageUrl } as ProfileUser);
       }
     } catch (error) {
-      console.error('Error uploading image:', error);
-      
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const handleUpdateProfile = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const response = await axios.put<{ user: User }>(
+        "http://localhost:5000/user/update",
+        {
+          firstname,
+          lastname,
+          phone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setUser(response.data.user);
+      onClose();
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been updated successfully.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast({
+        title: "Error",
+        description:
+          error.message || "An error occurred while updating profile.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
   // Mock data for charts
@@ -219,7 +278,6 @@ const ProfileDashboard = () => {
       </Box>
     );
   }
- 
 
   return (
     <>
@@ -237,12 +295,12 @@ const ProfileDashboard = () => {
           {/* Profile Info Card */}
           <Card bg="#1f202a">
             <CardBody>
-            <button
-                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-                  onClick={onOpen} // Open modal on click
-                >
-                  <MdOutlineModeEdit />
-                </button>
+              <button
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+                onClick={onOpen} // Open modal on click
+              >
+                <MdOutlineModeEdit />
+              </button>
               <Image
                 src={
                   profileUser?.imageUrl ||
@@ -506,6 +564,58 @@ const ProfileDashboard = () => {
           </Card>
         </Grid>
       </Box>
+
+      {/* Chakra UI Modal for Editing Profile */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent
+          bg="#1f202a"
+          color="white"
+          width="500px"
+          maxWidth="900px"
+          borderRadius="10px"
+        >
+          <ModalHeader>Edit Personal Information</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl>
+              <FormLabel>First Name</FormLabel>
+              <Input
+                value={firstname}
+                onChange={(e) => setFirstname(e.target.value)}
+                placeholder={user?.firstname || "Enter your first name"}
+              />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Last Name</FormLabel>
+              <Input
+                value={lastname}
+                onChange={(e) => setLastname(e.target.value)}
+                placeholder={user?.lastname || "Enter your last name"}
+              />
+            </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Phone</FormLabel>
+              <Input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder={user?.phone || "Enter your phone number"}
+              />
+            </FormControl>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={handleUpdateProfile}>
+              Save
+            </Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
