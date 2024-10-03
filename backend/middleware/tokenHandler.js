@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 
+// Middleware for token validation
 const validateToken = asyncHandler(async (req, res, next) => {
   let token;
   let authHeader = req.headers.Authorization || req.headers.authorization;
@@ -14,10 +15,11 @@ const validateToken = asyncHandler(async (req, res, next) => {
       req.user = decoded.user;
       next();
     });
-    if (!token) {
-      res.status(401);
-      throw new Error("Token Missing");
-    }
+  }
+  if (!token) {
+    res.status(401);
+    throw new Error("Token Missing");
   }
 });
-module.exports = validateToken;
+
+module.exports = { validateToken };
