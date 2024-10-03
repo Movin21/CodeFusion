@@ -16,9 +16,7 @@ import LoginScreen from "./pages/Login/Login.tsx";
 import MentorSignupForm from "./pages/Profile/MentorSignup.tsx";
 import ChallengesForm from "./pages/ChallengesListing/ChallengeForm.jsx";
 import { ChallengesListing } from "./pages/ChallengesListing/ChallengesListing.jsx";
-
-import { QueryClient, QueryClientProvider } from "react-query";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([

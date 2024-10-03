@@ -18,6 +18,12 @@ const Hero = () => {
       {/* Buttons */}
       <div className={`${styles.flexCenter} gap-7 my-5 mt-10`}>
         <SignUpBTN text="Sign up" />
+        <button
+          type="button"
+          className="w-[8rem] sm:w-[10rem] border-[1px] bg-white font-semibold font-poppins text-[14px] h-[40px] rounded-md hover:bg-primary hover:text-white"
+        >
+          Request Demo
+        </button>
       </div>
       <p className={`${styles.paragraph} mt-10 mb-7 sm:px-0 px-5`}>
         Over 40% of developers worldwide and 3,000 candidates use CodeFusion
