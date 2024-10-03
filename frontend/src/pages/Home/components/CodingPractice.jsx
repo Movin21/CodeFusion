@@ -30,8 +30,12 @@ const CodingPractice = () => {
             Sign up and practice <span className="text-xl"></span>
           </button>
         </div>
-        <div className="flex-1  bg-slate-900 sm:pl-0 pl-4">
-          <img src={candidate} alt="Candidate" className="w-[90%] h-[90%]" />
+        <div className="flex-1  bg-slate-900 sm:pl-0 pl-4 ">
+          <img
+            src={candidate}
+            alt="Candidate"
+            className="w-[90%] h-[90%] rounded-xl"
+          />
         </div>
       </div>
     </section>

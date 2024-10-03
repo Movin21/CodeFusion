@@ -11,18 +11,19 @@ const Company = () => {
           <h4
             className={`${styles.heading5_start} ${styles.paddingX} font-medium text-light text-[25px]`}
           >
-            Every company is a tech company. <br />
-            <span className="text-light">We’re here to help ‘em all.</span>
+            Voices of Success.
+            <br />
+            <span className="text-light">Hear from our learners.</span>
           </h4>
           <p
             className={`${styles.paragraph_start} ${styles.paddingX} ${styles.paddingY}`}
           >
-            More than 3,000 tech teams, representing all industries and from
-            countries around the world, trust HackerRank to connect with
-            developers and add cutting-edge skills to their teams.
+            Discover how our users are transforming their careers through
+            HackerRank, enhancing their coding skills, and securing jobs at top
+            tech companies.
             <div className="my-5" />
-            That includes 25% of the Fortune 100 — and that moonshot startup
-            that just came out of stealth.
+            Their success stories highlight the impact of our platform in
+            helping candidates excel and achieve their professional goals.
           </p>
         </div>
 
