@@ -194,22 +194,59 @@ export const ChallengesListing = () => {
         </Breadcrumb>
 
         <Stack direction="row" spacing={4} mb={6} className="justify-start">
-          <Button
-            colorScheme={filter === "active" ? "gray" : undefined}
-            variant={filter === "active" ? "solid" : "outline"}
-            size="sm"
-            onClick={() => setFilter("active")}
-          >
-            Active Contests
-          </Button>
-          <Button
-            colorScheme={filter === "archived" ? "gray" : undefined}
-            variant={filter === "archived" ? "solid" : "outline"}
-            size="sm"
-            onClick={() => setFilter("archived")}
-          >
-            Archived Contests
-          </Button>
+          <Stack direction="row" spacing={4} mb={6} className="justify-start">
+            <Button
+              backgroundColor={filter === "active" ? "#527D9F" : "transparent"} // Custom color for active button
+              variant={filter === "active" ? "solid" : "outline"} // Solid variant for active button
+              size="sm"
+              px={6}
+              py={2}
+              borderRadius="md"
+              borderColor={filter === "active" ? undefined : "gray.400"} // Gray border for inactive button
+              color={filter === "active" ? "white" : "white"} // Text color is always white
+              _hover={
+                filter === "active"
+                  ? {
+                      backgroundColor: "#527D9F", // Keep the same color on hover for active button
+                      color: "white", // Keep text color white
+                    }
+                  : {
+                      backgroundColor: "gray.100", // Light gray for inactive hover
+                      color: "black", // Change text color to black on hover
+                    }
+              } // Hover effect
+              onClick={() => setFilter("active")}
+            >
+              Active Contests
+            </Button>
+
+            <Button
+              backgroundColor={
+                filter === "archived" ? "#527D9F" : "transparent"
+              } // Custom color for active button
+              variant={filter === "archived" ? "solid" : "outline"} // Solid variant for archived button
+              size="sm"
+              px={6}
+              py={2}
+              borderRadius="md"
+              borderColor={filter === "archived" ? undefined : "gray.400"} // Gray border for inactive button
+              color={filter === "archived" ? "white" : "white"} // Text color is always white
+              _hover={
+                filter === "archived"
+                  ? {
+                      backgroundColor: "#527D9F", // Keep the same color on hover for archived button
+                      color: "white", // Keep text color white
+                    }
+                  : {
+                      backgroundColor: "gray.100", // Light gray for inactive hover
+                      color: "black", // Change text color to black on hover
+                    }
+              } // Hover effect
+              onClick={() => setFilter("archived")}
+            >
+              Archived Contests
+            </Button>
+          </Stack>
         </Stack>
 
         {Object.keys(questionsByDifficulty).map(renderQuestionSection)}
