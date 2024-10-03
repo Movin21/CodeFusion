@@ -214,11 +214,13 @@ export default function Header({ pageName, handlePageName }) {
                   className="profile-btn flex items-center space-x-1"
                   onClick={handleMenuState}
                 >
-                  <img
-                    src="assets/profile.png"
-                    className="profileImg w-7 h-7 rounded-[50%] border object-cover"
-                    alt=""
-                  />
+                  <Link to="/profile">
+                    <img
+                      src="assets/profile.png"
+                      className="profileImg w-7 h-7 rounded-[50%] border object-cover"
+                      alt=""
+                    />
+                  </Link>
                   <i
                     className={`text-gray-400 hover:text-white ${
                       !menuHidden && "text-white"
