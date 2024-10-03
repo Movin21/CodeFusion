@@ -23,8 +23,8 @@ const BinaryTree = () => {
             <span className="text-xl hover:translate-x-2">&#8594;</span>
           </button>
         </div>
-        <div className="flex-1">
-          <img src={content.img} alt="" />
+        <div className="flex-1 mr-5">
+          <img src={content.img} alt="" className="rounded-xl" />
         </div>
       </section>
     );

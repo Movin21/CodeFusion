@@ -41,9 +41,9 @@ export const NavLinks = [
 export const bodyContents = [
   {
     id: 1,
-    heading: "Leave the binary tree behind.",
-    para: "Build coding questions using our library of dev-friendly content that challenges them to solve the problems they’d actually tackle on the job.",
-    btn: "Start free trial",
+    heading: "Move Beyond Basic Algorithms.",
+    para: "Compete in coding challenges from our extensive library of real-world, developer-focused problems that reflect the tasks you'll encounter on the job.",
+    btn: "Register Now",
     img: binarytree,
   },
   {
