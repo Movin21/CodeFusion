@@ -19,7 +19,7 @@ app.use("/questions", questionRouter);
 
 app.use("/blogs", blogsRouter);
 
-app.use("/user", userRouter);
+// app.use("/user", userRouter);
 //error handler
 app.use(errorHandler);
 app.listen(process.env.PORT || 5000, () => {
