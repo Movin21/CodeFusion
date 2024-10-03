@@ -83,28 +83,33 @@ router.get(
 );
 
 router.put(
-  "/update/:id",
+  "/update",
   validateToken,
   asyncHandler(async (req, res) => {
-    const { firstname, lastname, email, phone } = req.body;
+    const { firstname, lastname, phone } = req.body;
+
+    // Use the user ID from the token (added by the validateToken middleware)
     const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { firstname, lastname, email, phone },
-      { new: true }
+      req.user.id, // No need to pass ID explicitly, it's taken from the token
+      { firstname, lastname, phone },
+      { new: true } // This option returns the updated document
     );
+
     if (!updatedUser) {
       res.status(404);
       throw new Error("User not found");
     }
+
     res.status(200).json({ status: "User updated", user: updatedUser });
   })
 );
 
 router.delete(
-  "/delete/:id",
-  validateToken,
+  "/delete",
+  validateToken, // Ensure this middleware sets req.user with the authenticated user
   asyncHandler(async (req, res) => {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    // Assuming req.user contains the authenticated user's information
+    const deletedUser = await User.findByIdAndDelete(req.user.id); // Use req.user.id to get the user
     if (!deletedUser) {
       res.status(404);
       throw new Error("User not found");
@@ -112,7 +117,6 @@ router.delete(
     res.status(200).json({ status: "User deleted" });
   })
 );
-
 router.get(
   "/getuser",
   validateToken,
@@ -125,5 +129,6 @@ router.get(
     res.status(200).json({ status: "User fetched", user });
   })
 );
+
 
 module.exports = router;
