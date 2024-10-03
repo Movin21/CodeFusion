@@ -25,6 +25,7 @@ interface User {
   lastname: string;
   email: string;
   phone: string;
+  role?: string;
   // Add other necessary fields
 }
 export default function Profile() {
@@ -80,14 +81,25 @@ export default function Profile() {
             },
           }
         );
-
+        if (response.data.user.role !== 'mentor') {
+          throw new Error("Unauthorized access");
+        }
         setUser(response.data.user);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
         setLoading(false);
 
-        if (axios.isAxiosError(error) && error.response?.status === 401) {
+        if (error.message === "Unauthorized access") {
+          toast({
+            title: "Access Denied",
+            description: "You don't have permission to view this profile.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          navigate("/");
+        } else if (axios.isAxiosError(error) && error.response?.status === 401) {
           localStorage.removeItem("token");
           toast({
             title: "Session Expired",
@@ -100,8 +112,7 @@ export default function Profile() {
         } else {
           toast({
             title: "Error",
-            description:
-              error.message || "An error occurred while fetching user data.",
+            description: "An error occurred while fetching user data.",
             status: "error",
             duration: 5000,
             isClosable: true,

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { useRef } from 'react';
+import { MdOutlineModeEdit } from "react-icons/md";
 import axios from "axios";
 import {
   Tag,
@@ -73,6 +74,10 @@ const ProfileDashboard = () => {
           }
         );
 
+        if (response.data.user.role !== 'student') {
+          throw new Error("Unauthorized access");
+        }
+
         setUser(response.data.user);
         setLoading(false);
       } catch (error) {
@@ -81,11 +86,17 @@ const ProfileDashboard = () => {
         // navigate('/login');
 
         // Check if the error is due to an expired token
-        if (axios.isAxiosError(error) && error.response?.status === 401) {
-          // Clear the token from localStorage
+        if (error.message === "Unauthorized access") {
+          toast({
+            title: "Access Denied",
+            description: "You don't have permission to view this profile.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          navigate("/");
+        } else if (axios.isAxiosError(error) && error.response?.status === 401) {
           localStorage.removeItem("token");
-
-          // Show toast message
           toast({
             title: "Session Expired",
             description: "Your session has expired. Please log in again.",
@@ -93,11 +104,8 @@ const ProfileDashboard = () => {
             duration: 5000,
             isClosable: true,
           });
-
-          // Navigate to login page
           navigate("/login");
         } else {
-          // Handle other types of errors
           toast({
             title: "Error",
             description: "An error occurred while fetching user data.",
@@ -229,6 +237,12 @@ const ProfileDashboard = () => {
           {/* Profile Info Card */}
           <Card bg="#1f202a">
             <CardBody>
+            <button
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+                  onClick={onOpen} // Open modal on click
+                >
+                  <MdOutlineModeEdit />
+                </button>
               <Image
                 src={
                   profileUser?.imageUrl ||
