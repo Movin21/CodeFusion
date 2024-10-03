@@ -25,7 +25,11 @@ const SwiperCard = () => {
               key={data.id}
               className="rounded-md flex flex-col items-center slide w-[100%]"
             >
-              <p className={`${styles.paragraph} mb-10`}>"{data.text}"</p>
+              <p
+                className={`font-poppins font-normal text-black text-[18px] sm:text-center text-start leading-[30.8px] sm:px-0 px-3  mb-10`}
+              >
+                "{data.text}"
+              </p>
 
               <h3
                 className={`font-poppins text-lg text-black font-bold italic mb-8`}
