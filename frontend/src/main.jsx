@@ -17,6 +17,7 @@ import MentorSignupForm from "./pages/Profile/MentorSignup.tsx";
 import ChallengesForm from "./pages/ChallengesListing/ChallengeForm.jsx";
 import { ChallengesListing } from "./pages/ChallengesListing/ChallengesListing.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import HomeRootLayout from "./pages/layouts/HomeRootLayout.jsx";
 
 const queryClient = new QueryClient();
 
@@ -31,11 +32,16 @@ const router = createBrowserRouter([
       { path: "/helpform", element: <HelpForm /> },
       { path: "/blogsupport", element: <MentorSupport /> },
       { path: "/studentprofile", element: <ProfileDashboard /> },
-      { path: "/signup", element: <SignupForm /> },
-      { path: "/login", element: <LoginScreen /> },
       { path: "/ChallengesListing", element: <ChallengesListing /> },
       { path: "/addChallenge", element: <ChallengesForm /> },
       { path: "/mentorsignup", element: <MentorSignupForm /> },
+    ],
+  },
+  {
+    element: <HomeRootLayout />,
+    children: [
+      { path: "/signup", element: <SignupForm /> },
+      { path: "/login", element: <LoginScreen /> },
     ],
   },
 ]);
