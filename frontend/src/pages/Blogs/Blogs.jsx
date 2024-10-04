@@ -15,6 +15,9 @@ const Blogs = () => {
     queryFn: fetchBlogsFn,
   });
 
+  const user = JSON.parse(localStorage.getItem('userData'));
+  const role = user?.role;
+
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   const handleCreateOpen = () => {
@@ -50,14 +53,15 @@ const Blogs = () => {
   return (
     <>
     <Container maxW="container.xl" py={8}>
-      <Button colorScheme="blue" onClick={handleCreateOpen}>
-        Create New Blog
-      </Button>
+      {role === 'mentor' && (
+        <Button colorScheme="blue" onClick={handleCreateOpen}>
+          Create New Blog
+        </Button>
+      )}
       <CreateForm isOpen={isCreateOpen} onClose={handleCreateClose} />
       {hasBlogs ? (
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={8}>
           {blogs.data.map((blog) => (
-            console.log('blog',blog),
             <BlogItem
               key={blog._id}
               blogId={blog._id}

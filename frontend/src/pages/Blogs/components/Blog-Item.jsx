@@ -11,6 +11,12 @@ const BlogItem = ({ blogId, title, content }) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  // Access user data from local storage
+  const user = JSON.parse(localStorage.getItem('userData'));
+  const role = user?.role;
+
+  console.log('Role:', role);
+
   const mutation = useMutation({
     mutationFn: deleteBlogFn,
     onSuccess: () => {
@@ -73,12 +79,16 @@ const BlogItem = ({ blogId, title, content }) => {
             },
           }}
         >
-          <Button flex='1' variant='ghost' onClick={handleEditOpen}>
-            Edit
-          </Button>
-          <Button flex='1' variant='ghost' onClick={handleDelete}>
-            Delete
-          </Button>
+          {role === 'mentor' && (
+            <>
+              <Button flex='1' variant='ghost' onClick={handleEditOpen}>
+                Edit
+              </Button>
+              <Button flex='1' variant='ghost' onClick={handleDelete}>
+                Delete
+              </Button>
+            </>
+          )}
         </CardFooter>
       </Card>
       <CreateForm
