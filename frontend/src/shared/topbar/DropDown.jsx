@@ -5,7 +5,7 @@ const navLinks = [
   { name: "Profile", link: "profile" },
   { name: "Blogs", link: "/blogs" },
   { name: "Mentor Support", link: "/blogSupport" },
-  { name: "Logout", link: "logout" },
+  { name: "Logout", link: "/login" },
 ];
 
 export default function DropDown({ handlePageName, handleMenuState }) {

@@ -291,7 +291,7 @@ const ProfileDashboard = () => {
           </Text>
         </header>
 
-        <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+        <Grid templateColumns="repeat(4, 1fr)" gap={4} >
           {/* Profile Info Card */}
           <Card bg="#0f0a19">
             <CardBody>
@@ -478,7 +478,7 @@ const ProfileDashboard = () => {
           </Card>
 
           {/* Challenge Report Card */}
-          <Card className="col-span-3" bg="#0f0a19">
+          <Card className="col-span-3" bg="#0f0a19" >
             <CardHeader
               className="text-white text-sm font-poppins"
               mt={5}
