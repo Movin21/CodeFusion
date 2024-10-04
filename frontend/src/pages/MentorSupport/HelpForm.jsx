@@ -103,7 +103,7 @@ const HelpForm = () => {
           ></textarea>
           <button
             type="submit"
-            className="w-full font-semibold bg-blue-200 text-black py-2 rounded hover:bg-blue-400 hover:text-white hover:font-semibold transition duration-300"
+            className="w-full font-semibold bg-blue-200 text-black py-2 rounded hover:bg-light hover:text-white hover:font-semibold transition duration-300"
           >
             Submit Request
           </button>

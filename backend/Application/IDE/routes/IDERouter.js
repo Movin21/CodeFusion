@@ -8,6 +8,7 @@ const {
   createQuestionPool,
   getAllQuestionPools,
   updateQuestionPool,
+  increaseUserScore,
 } = require("../application/IDEApplication");
 
 // POST to create a new question
@@ -25,7 +26,10 @@ questionRouter.route("/createQuestionPool").post(createQuestionPool);
 // GET all question pools
 questionRouter.route("/getAllQuestionPools").get(getAllQuestionPools);
 
-//Update a question pool
+// Update a question pool
 questionRouter.route("/updateQuestionPool/:id").put(updateQuestionPool);
+
+//increase user score
+questionRouter.route("/increaseUserScore/:userId").put(increaseUserScore);
 
 module.exports = questionRouter;

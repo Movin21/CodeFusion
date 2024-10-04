@@ -83,14 +83,22 @@ const getAllQuestionPools = async (req, res, next) => {
   }
 };
 
-// Update an existing question pool
-const updateQuestionPool = async (req, res, next) => {
+const updateQuestionPool = async (req, res) => {
   try {
-    const { questionTitle, mentorComments, aiComment, codeSnippet } = req.body;
+    const { comment, mentorName, createdAt } = req.body; // Ensure you extract the correct fields
 
     const updatedQuestionPool = await QuestionPool.findByIdAndUpdate(
       req.params.id,
-      { questionTitle, mentorComments, aiComment, codeSnippet },
+      {
+        $push: {
+          // Use $push to add to the mentorComments array
+          mentorComments: {
+            comment,
+            mentorName,
+            createdAt,
+          },
+        },
+      },
       { new: true } // Return the updated document
     );
 
@@ -100,7 +108,23 @@ const updateQuestionPool = async (req, res, next) => {
 
     res.status(200).json(updatedQuestionPool);
   } catch (error) {
-    next(error);
+    console.error("Error updating question pool:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Function to increase the user's score
+const increaseUserScore = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    user.score += 20; // Increase the score by 20
+    await user.save(); // Save the updated user
+    return user; // Return the updated user
+  } catch (error) {
+    throw error; // Propagate the error
   }
 };
 
@@ -111,4 +135,5 @@ module.exports = {
   createQuestionPool,
   getAllQuestionPools,
   updateQuestionPool,
+  increaseUserScore,
 };

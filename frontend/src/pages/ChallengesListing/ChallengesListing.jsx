@@ -177,7 +177,7 @@ export const ChallengesListing = () => {
           mb={4}
           className="text-left text-2xl font-bold text-white"
         >
-          Contests
+          Challenges
         </Heading>
 
         <Breadcrumb fontWeight="medium" fontSize="sm" mb={4} color={"white"}>

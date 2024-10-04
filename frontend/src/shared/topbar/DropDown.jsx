@@ -3,22 +3,17 @@ import { Link } from "react-router-dom";
 
 const navLinks = [
   { name: "Profile", link: "profile" },
-  { name: "LeaderBoard", link: "/" },
-  { name: "Bookmarks", link: "/" },
-  { name: "######", link: "/" },
-  { name: "######", link: "/" },
-  { name: "######", link: "/" },
-  { name: "######", link: "/" },
-  { name: "######", link: "/" },
+  { name: "Blogs", link: "/blogs" },
+  { name: "Mentor Support", link: "/blogSupport" },
   { name: "Logout", link: "logout" },
 ];
 
 export default function DropDown({ handlePageName, handleMenuState }) {
   return (
     <div className="">
-      <div className="bg-bg4 absolute top-12 w-[195px] right-0 px-4 py-3">
+      <div className="bg-bg4 absolute  top-12 w-[195px] right-0 px-4 py-3">
         <div className="">
-          <button className="w-full hover:font-semibold hover:text-primary bg-buttonBg2 font-normal p-2">
+          <button className="w-full hover:font-semibold rounded-lg hover:text-white transition-all duration-300 ease-in-out bg-light font-semibold text-md  p-2">
             Challenges : 2000
           </button>
         </div>
@@ -33,7 +28,7 @@ export default function DropDown({ handlePageName, handleMenuState }) {
                     handlePageName(obj.name);
                   }}
                   to={obj.link}
-                  className="text-gray-200  text-sm  hover:font-medium hover:text-textPrimary hover:text-[15px] "
+                  className="text-gray-200 text-sm  hover:text-textPrimary hover:text-[15px] transition-all duration-300 ease-in-out"
                 >
                   {obj.name}
                 </Link>

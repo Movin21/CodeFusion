@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import DropDown from "./topbar/DropDown";
 import { useEffect, useState } from "react";
 import SideBar from "./topbar/SideBar";
-import Inbox from "./topbar/Inbox";
+
 import Notificationsbox from "./topbar/Notificationsbox";
 
 export default function Header({ pageName, handlePageName }) {
@@ -69,7 +69,7 @@ export default function Header({ pageName, handlePageName }) {
             ></div>
           </div>
           <span className="logo">
-            <img src="assets/logo.png" className="w-[138px]" alt="Logo" />
+            <img src="assets/logo.png" className="w-[135px]" alt="Logo" />
           </span>
           <div className="topbar-icons flex items-center p-1 space-x-3 text-white">
             <span>
@@ -90,11 +90,11 @@ export default function Header({ pageName, handlePageName }) {
           style={{ height: "100%" }}
         >
           <div className="leftTopbar flex items-center ">
-            <div className="logo mt-1">
+            <div className="logo mt-1.5">
               <Link to="/">
                 <img
                   src="assets/whitelogo.png"
-                  className="w-[200px]"
+                  className="sm:w-[230px] w-[230px] "
                   alt="Logo"
                 />
               </Link>
@@ -106,7 +106,7 @@ export default function Header({ pageName, handlePageName }) {
               </li>
               <li className="relative">
                 <Link
-                  to="/"
+                  to="/ChallengesListing"
                   onClick={() => OnUpdatePageName("dashboard")}
                   className={`px-[18px] ${
                     pageName === "dashboard"
@@ -114,7 +114,7 @@ export default function Header({ pageName, handlePageName }) {
                       : "hover:text-gray-200"
                   }`}
                 >
-                  Prepare
+                  Challenges
                 </Link>
                 {pageName === "dashboard" && (
                   <div className="absolute w-full border-b -bottom-5 inset-x-0 border-2 border-buttonBg"></div>
@@ -122,7 +122,7 @@ export default function Header({ pageName, handlePageName }) {
               </li>
               <li className="relative">
                 <Link
-                  to="/Certify"
+                  to="/blogs"
                   onClick={() => OnUpdatePageName("Certify")}
                   className={`px-[18px] ${
                     pageName === "Certify"
@@ -130,7 +130,7 @@ export default function Header({ pageName, handlePageName }) {
                       : "hover:text-gray-200"
                   }`}
                 >
-                  Certify
+                  Blogs
                 </Link>
                 {pageName === "Certify" && (
                   <div className="absolute w-full border-b -bottom-5 inset-x-0 border-2 border-buttonBg"></div>
@@ -138,7 +138,7 @@ export default function Header({ pageName, handlePageName }) {
               </li>
               <li className="relative">
                 <Link
-                  to="/contests"
+                  to="/blogSupport"
                   onClick={() => OnUpdatePageName("compete")}
                   className={`px-[18px] ${
                     pageName === "compete"
@@ -146,7 +146,7 @@ export default function Header({ pageName, handlePageName }) {
                       : "hover:text-gray-200"
                   }`}
                 >
-                  Compete
+                  Mentor Support
                 </Link>
                 {pageName === "compete" && (
                   <div className="absolute w-full border-b -bottom-5 inset-x-0 border-2 border-buttonBg"></div>
@@ -154,7 +154,7 @@ export default function Header({ pageName, handlePageName }) {
               </li>
               <li className="relative">
                 <Link
-                  to="/apply"
+                  to="#"
                   onClick={() => OnUpdatePageName("apply")}
                   className={`px-[18px] ${
                     pageName === "apply"
@@ -162,7 +162,7 @@ export default function Header({ pageName, handlePageName }) {
                       : "hover:text-gray-200"
                   }`}
                 >
-                  Apply
+                  FAQ
                 </Link>
                 {pageName === "apply" && (
                   <div className="absolute w-full border-b -bottom-5 inset-x-0 border-2 border-buttonBg"></div>
@@ -184,25 +184,6 @@ export default function Header({ pageName, handlePageName }) {
             </div>
 
             <ul className="flex items-center space-x-6">
-              <li className="relative cursor-pointer">
-                <span
-                  className="text-textSecondary p-1 hover:text-white"
-                  onClick={() => setMessageHidden(false)}
-                >
-                  <ChatIcon />
-                </span>
-                {!messageHidden && (
-                  <>
-                    <div className="absolute top-10 right-0">
-                      <Inbox />
-                    </div>
-                    <span
-                      className="fixed bg-black w-full h-full right-0 top-0 opacity-0"
-                      onClick={() => setMessageHidden(true)}
-                    ></span>
-                  </>
-                )}
-              </li>
               <li className="relative cursor-pointer">
                 <span
                   className="text-textSecondary p-1 hover:text-white"
@@ -233,11 +214,13 @@ export default function Header({ pageName, handlePageName }) {
                   className="profile-btn flex items-center space-x-1"
                   onClick={handleMenuState}
                 >
-                  <img
-                    src="assets/profile.png"
-                    className="profileImg w-7 h-7 rounded-[50%] border object-cover"
-                    alt=""
-                  />
+                  <Link to="/profile">
+                    <img
+                      src="assets/profile.png"
+                      className="profileImg w-7 h-7 rounded-[50%] border object-cover"
+                      alt=""
+                    />
+                  </Link>
                   <i
                     className={`text-gray-400 hover:text-white ${
                       !menuHidden && "text-white"
