@@ -28,6 +28,8 @@ interface User {
   lastname: string;
   email: string;
   phone: string;
+  role?: string;
+  // Add other necessary fields
 }
 
 interface ProfileStatsCardProps {
@@ -119,14 +121,25 @@ export default function Profile() {
             },
           }
         );
-
+        if (response.data.user.role !== 'mentor') {
+          throw new Error("Unauthorized access");
+        }
         setUser(response.data.user);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
         setLoading(false);
 
-        if (axios.isAxiosError(error) && error.response?.status === 401) {
+        if (error.message === "Unauthorized access") {
+          toast({
+            title: "Access Denied",
+            description: "You don't have permission to view this profile.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+          navigate("/");
+        } else if (axios.isAxiosError(error) && error.response?.status === 401) {
           localStorage.removeItem("token");
           toast({
             title: "Session Expired",
@@ -139,8 +152,7 @@ export default function Profile() {
         } else {
           toast({
             title: "Error",
-            description:
-              error.message || "An error occurred while fetching user data.",
+            description: "An error occurred while fetching user data.",
             status: "error",
             duration: 5000,
             isClosable: true,
@@ -244,7 +256,7 @@ export default function Profile() {
             <div className="bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700">
               <div className="flex items-center justify-between">
                 <img
-                  src="../assets/profile.jpg"
+                  src="../assets/profile.png"
                   alt="Profile"
                   className="w-16 h-16 rounded-full bg-gray-700"
                 />
@@ -263,7 +275,7 @@ export default function Profile() {
 
               {/* HackerRank-style Challenge Button */}
               <a href="/addChallenge" className="mt-4 w-full">
-                <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
+                <button className="bg-green-500 hover:bg-green-600 text-white py-0 px-3 rounded-lg transition-colors flex items-center justify-center space-x-2 mt-3">
                   <Trophy size={20} />
                   <span>Start Challenge</span>
                 </button>

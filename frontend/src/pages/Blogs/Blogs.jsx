@@ -5,6 +5,8 @@ import CreateForm from "./components/Create-Form";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBlogsFn } from "./axios";
 
+
+
 const Blogs = () => {
   const {
     data: blogs,
@@ -27,6 +29,7 @@ const Blogs = () => {
   const handleCreateClose = () => {
     setIsCreateOpen(false);
   };
+
 
   if (isLoading) {
     return (
@@ -53,11 +56,16 @@ const Blogs = () => {
   return (
     <>
     <Container maxW="container.xl" py={8}>
+
       {role === 'mentor' && (
         <Button colorScheme="blue" onClick={handleCreateOpen}>
           Create New Blog
         </Button>
       )}
+
+    
+     
+
       <CreateForm isOpen={isCreateOpen} onClose={handleCreateClose} />
       {hasBlogs ? (
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={8}>
