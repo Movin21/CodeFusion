@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Set environment variables (you should use actual environment variables for secure storage)
-const token = "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"; // Replace with process.env.TOKEN in real app
+const token = "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"; // Replace with process.env.TOKEN in real app
 const endpoint = "https://models.inference.ai.azure.com";
 const modelName = "meta-llama-3-70b-instruct";
 
