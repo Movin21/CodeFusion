@@ -308,7 +308,7 @@ const BlogPage = () => {
               <h2 className="text-xl font-semibold mb-2 text-white">
                 {post.questionTitle}
               </h2>
-              <pre className="bg-gray-800 p-4 rounded-md border border-gray-600 whitespace-pre-wrap text-sm text-gray-200 mb-4">
+              <pre className="bg-[#252d3e] p-4 rounded-md border border-gray-600 whitespace-pre-wrap text-sm text-gray-200 mb-4">
                 {post.codeSnippet}
               </pre>
               <textarea
@@ -343,7 +343,7 @@ const BlogPage = () => {
               {/* AI Response */}
               <div className="border-t border-gray-600 pt-4">
                 {aiResponses[index] && (
-                  <div className="bg-[#29354b] border-l-4 border-green-700 p-4 mb-4 rounded-md">
+                  <div className="bg-[#252d3e] border-l-4 border-green-700 p-4 mb-4 rounded-md">
                     <div className="flex items-center mb-2">
                       <span className="text-green-600 text-sm font-semibold">
                         AI-Generated Response
@@ -382,7 +382,7 @@ const BlogPage = () => {
                   .map((comment, idx) => (
                     <div
                       key={idx}
-                      className="p-3 mt-2 border-l-4 border-blue-700 bg-[#29354b] rounded-md"
+                      className="p-3 mt-2 border-l-4 border-blue-700 bg-[#252d3e] rounded-md"
                     >
                       <p className="text-sm">
                         <span className="font-semibold">
