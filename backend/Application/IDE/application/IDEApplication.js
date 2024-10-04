@@ -113,6 +113,21 @@ const updateQuestionPool = async (req, res) => {
   }
 };
 
+// Function to increase the user's score
+const increaseUserScore = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    user.score += 20; // Increase the score by 20
+    await user.save(); // Save the updated user
+    return user; // Return the updated user
+  } catch (error) {
+    throw error; // Propagate the error
+  }
+};
+
 module.exports = {
   getAllQuestions,
   getQuestion,
@@ -120,4 +135,5 @@ module.exports = {
   createQuestionPool,
   getAllQuestionPools,
   updateQuestionPool,
+  increaseUserScore,
 };
