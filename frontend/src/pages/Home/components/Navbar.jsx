@@ -11,11 +11,11 @@ const Navbar = () => {
     <section className="flex flex-col w-full z-[99]">
       {/* contact and login */}
       <div className="sm:flex flex-row justify-end items-center gap-5 bg-black text-dimWhite w-full h-[43px] hidden">
-        <Link to="#" className="hover:text-light">
-          Contact Us
+        <Link to="/mentorsignup" className="hover:text-light">
+          Mentor SignUp
         </Link>
         <div className="border-l-dimWhite border-l-2 h-[20px]" />
-        <Link to="#" className="mr-10 hover:text-light">
+        <Link to="/login" className="mr-10 hover:text-light">
           Login
         </Link>
       </div>
@@ -34,7 +34,7 @@ const Navbar = () => {
           {/* Menus */}
           <div className="sm:flex flex-row justify-between items-center mb-2 gap-5 mr-20 hidden ">
             <Link
-              to="#"
+              to="/login"
               className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Challenges
@@ -46,13 +46,13 @@ const Navbar = () => {
               Blogs
             </Link>
             <Link
-              to="#"
+              to="/login"
               className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Mentor Support
             </Link>
             <Link
-              to="#"
+              to="/login"
               className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Testamonials
@@ -67,13 +67,15 @@ const Navbar = () => {
           {/* Sign up */}
           <div className="sm:flex flex-row justify-between items-center mb-2 gap-5 hidden">
             <Link
-              to="#"
+              to="/login"
               className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Log In
             </Link>
             <div>
-              <SignUpBTN width={"80px"} text={"Sign up"} />
+              <Link to="/signup">
+                <SignUpBTN width={"80px"} text={"Sign up"} />
+              </Link>
             </div>
           </div>
         </div>
