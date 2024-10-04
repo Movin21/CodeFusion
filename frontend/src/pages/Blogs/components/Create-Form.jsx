@@ -1,100 +1,99 @@
-import React, { useState } from 'react';
-import { Box, FormControl, FormLabel, Input, Textarea, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { Box, FormControl, FormLabel, Input, Textarea, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useToast } from '@chakra-ui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createBlogFn, updateBlogFn } from '../axios';
 
-const CreateForm = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => {
-    setTitle('');  
-    setContent('');
-    setIsOpen(false)};
+const CreateForm = ({ isOpen, onClose, blogId, initialTitle = '', initialContent = '' }) => {
+  const [title, setTitle] = useState(initialTitle);
+  const [content, setContent] = useState(initialContent);
+  const toast = useToast();
+  const queryClient = useQueryClient();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    setTitle(initialTitle);
+    setContent(initialContent);
+  }, [initialTitle, initialContent]);
 
-    // Prepare the data to send
-    const postData = { title, content };
+  const mutationFn = blogId ? updateBlogFn : createBlogFn;
 
-    try {
-      // Make the API request
-      const response = await fetch('https://localhost:7003/api/blogs/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData),
+  const mutation = useMutation({
+    mutationFn: blogId ? (data) => mutationFn(blogId, data) : createBlogFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] });
+      toast({
+        title: blogId ? 'Blog post updated.' : 'Blog post created.',
+        description: blogId ? "We've updated your blog post for you." : "We've created your blog post for you.",
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
       });
+      handleClose();
+    },
+    onError: (error) => {
+      toast({
+        title: 'An error occurred.',
+        description: error.message || 'Unable to save blog post.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    },
+  });
 
-      if (response.ok) {
-        // Handle successful response
-        console.log('Blog post created successfully:', await response.json());
-        // Close the modal after submission
-        handleClose();
-      } else {
-        // Handle errors
-        console.error('Error creating blog post:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Network error:', error);
-    }
+  const handleClose = () => {
+    setTitle('');
+    setContent('');
+    onClose();
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutation.mutate({ title, content });
   };
 
   return (
-    <>
-      <Button
-        onClick={handleOpen} 
-        variant="outline"
-        margin={4}
-      >
-        Create Blog Post    
-      </Button>
+    <Modal isOpen={isOpen} onClose={handleClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{blogId ? 'Edit Blog Post' : 'Create Blog Post'}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Box as="form" onSubmit={handleSubmit} maxW="md" mx="auto" p={6}>
+            <FormControl id="title" mb={4} isRequired>
+              <FormLabel>Title</FormLabel>
+              <Input
+                type="text"
+                placeholder="Enter blog title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </FormControl>
 
-      <Modal isOpen={isOpen} onClose={handleClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create Blog Post</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Box
-              maxW="md"
-              mx="auto"
-              p={6}
-            >
-              <form onSubmit={handleSubmit}>
-                <FormControl id="title" mb={4} isRequired>
-                  <FormLabel>Title</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="Enter blog title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </FormControl>
+            <FormControl id="content" mb={4} isRequired>
+              <FormLabel>Content</FormLabel>
+              <Textarea
+                placeholder="Write your blog content here"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                rows={6}
+              />
+            </FormControl>
+          </Box>
+        </ModalBody>
 
-                <FormControl id="content" mb={4} isRequired>
-                  <FormLabel>Content</FormLabel>
-                  <Textarea
-                    placeholder="Write your blog content here"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    rows={6}
-                  />
-                </FormControl>
-              </form>
-            </Box>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
-              Create Post
-            </Button>
-            <Button variant="ghost" onClick={handleClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+        <ModalFooter>
+          <Button 
+            colorScheme="blue" 
+            mr={3} 
+            onClick={handleSubmit}
+            isLoading={mutation.isPending}
+          >
+            {blogId ? 'Update Post' : 'Create Post'}
+          </Button>
+          <Button variant="ghost" onClick={handleClose}>Cancel</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 };
 
