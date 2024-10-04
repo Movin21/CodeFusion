@@ -25,7 +25,7 @@ questionRouter.route("/createQuestionPool").post(createQuestionPool);
 // GET all question pools
 questionRouter.route("/getAllQuestionPools").get(getAllQuestionPools);
 
-//Update a question pool
+// Update a question pool
 questionRouter.route("/updateQuestionPool/:id").put(updateQuestionPool);
 
 module.exports = questionRouter;
