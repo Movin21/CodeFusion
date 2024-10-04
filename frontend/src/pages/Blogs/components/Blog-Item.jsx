@@ -5,6 +5,7 @@ import { deleteBlogFn } from "../axios";
 import CreateForm from './Create-Form';
 import DOMPurify from 'dompurify';
 import FullBlogPost from '../FullBlogPost';
+import { Container } from 'lucide-react';
 
 const BlogItem = ({ blogId, title, content }) => {
   const queryClient = useQueryClient();
@@ -56,19 +57,23 @@ const BlogItem = ({ blogId, title, content }) => {
 
   return (
     <>
-      <Card maxW='md' sx={{ m: 4 }}>
+      <Card borderRadius="lg"
+      shadow="md"
+      overflow="hidden"
+      maxWidth="full"
+      bg="#1a1a2e">
         <CardHeader>
           <Flex spacing='4'>
             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
               <Box>
-                <Heading size='sm'>{title}</Heading>
+                <Heading size='sm' color='white'>{title}</Heading>
               </Box>
             </Flex>
           </Flex>
         </CardHeader>
         <CardBody>
-          <Text>{truncatedContent}</Text>
-          <Button onClick={onOpen}>Read More</Button>
+          <Text color='white'>{truncatedContent}</Text>
+          <Button onClick={onOpen} size='xs' sx={{ mt: 2 }} variant="outline" colorScheme="whiteAlpha" >Read More</Button>
         </CardBody>
         <CardFooter
           justify='space-between'
@@ -81,10 +86,10 @@ const BlogItem = ({ blogId, title, content }) => {
         >
           {role === 'mentor' && (
             <>
-              <Button flex='1' variant='ghost' onClick={handleEditOpen}>
+              <Button flex='1' variant="outline" colorScheme="whiteAlpha" onClick={handleEditOpen} sx={{ mr: 2}}>
                 Edit
               </Button>
-              <Button flex='1' variant='ghost' onClick={handleDelete}>
+              <Button flex='1' variant="outline" colorScheme="red" onClick={handleDelete}>
                 Delete
               </Button>
             </>
@@ -98,15 +103,15 @@ const BlogItem = ({ blogId, title, content }) => {
         initialTitle={title}
         initialContent={content}
       />
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="xl" colorScheme='red'>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg='#0F0A19'>
           <ModalCloseButton />
           <ModalBody>
             <FullBlogPost title={title} content={content} />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
+            <Button onClick={onClose} variant='outline' colorScheme="whiteAlpha">Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

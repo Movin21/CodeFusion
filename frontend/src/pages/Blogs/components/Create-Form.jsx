@@ -100,23 +100,24 @@ const CreateForm = ({ isOpen, onClose, blogId, initialTitle = '', initialContent
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="full">
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>{blogId ? 'Edit Blog Post' : 'Create Blog Post'}</ModalHeader>
-        <ModalCloseButton />
+      <ModalContent bg='#0F0A19'>
+        <ModalHeader color='white'>{blogId ? 'Edit Blog Post' : 'Create Blog Post'}</ModalHeader>
+        <ModalCloseButton color='white'/>
         <ModalBody>
           <Box as="form" onSubmit={handleSubmit(onSubmit)} maxW="4xl" mx="auto" p={6}>
             <FormControl id="title" mb={4} isInvalid={errors.title}>
-              <FormLabel>Title</FormLabel>
+              <FormLabel color='white'>Title</FormLabel>
               <Input
                 type="text"
                 placeholder="Enter blog title"
+                style={{ color: 'white' }}
                 {...register('title')}
               />
               <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl id="content" mb={4} isInvalid={errors.content}>
-              <FormLabel>Content</FormLabel>
+              <FormLabel color='white'>Content</FormLabel>
               <Controller
                 name="content"
                 control={control}
@@ -127,7 +128,7 @@ const CreateForm = ({ isOpen, onClose, blogId, initialTitle = '', initialContent
                     modules={modules}
                     formats={formats}
                     placeholder="Write your blog content here (minimum 100 words)"
-                    style={{ height: '400px', marginBottom: '50px' }}
+                    style={{ height: '400px', marginBottom: '50px', color: 'white' }}
                   />
                 )}
               />
@@ -138,14 +139,16 @@ const CreateForm = ({ isOpen, onClose, blogId, initialTitle = '', initialContent
 
         <ModalFooter>
           <Button 
-            colorScheme="blue" 
+            backgroundColor='#527D9F' 
+            _hover={{backgroundColor: '#527D9F'}} 
+            color='white'
             mr={3} 
             onClick={handleSubmit(onSubmit)}
             isLoading={isSubmitting || mutation.isPending}
           >
             {blogId ? 'Update Post' : 'Create Post'}
           </Button>
-          <Button variant="ghost" onClick={handleClose}>Cancel</Button>
+          <Button variant="outline" colorScheme='whiteAlpha' onClick={handleClose}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
