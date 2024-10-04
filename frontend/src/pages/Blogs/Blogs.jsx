@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Spinner, Alert, AlertIcon, SimpleGrid, Button } from "@chakra-ui/react";
+import { Container, Spinner, Alert, AlertIcon, SimpleGrid, Button, Box } from "@chakra-ui/react";
 import BlogItem from "./components/Blog-Item";
 import CreateForm from "./components/Create-Form";
 import { useQuery } from "@tanstack/react-query";
@@ -55,16 +55,12 @@ const Blogs = () => {
 
   return (
     <>
-    <Container maxW="container.xl" py={8}>
-
+    <Container maxW="container.xl" py={8} bg='#0F0A19'>
       {role === 'mentor' && (
-        <Button colorScheme="blue" onClick={handleCreateOpen}>
+        <Button  backgroundColor='#527D9F' _hover={{backgroundColor: '#527D9F'}} color='white' onClick={handleCreateOpen}>
           Create New Blog
         </Button>
       )}
-
-    
-     
 
       <CreateForm isOpen={isCreateOpen} onClose={handleCreateClose} />
       {hasBlogs ? (

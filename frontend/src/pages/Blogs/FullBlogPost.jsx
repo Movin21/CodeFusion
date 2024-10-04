@@ -9,10 +9,11 @@ const FullBlogPost = ({ title, content }) => {
   const sanitizedContent = DOMPurify.sanitize(content);
 
   return (
-    <Container maxW="4xl" py={8}>
-      <Heading as="h1" mb={4}>{title}</Heading>
+    <Container maxW="4xl" py={8} bg='#0F0A19'>
+      <Heading as="h1" mb={4} color='white'>{title}</Heading>
       <Box 
         className="blog-content"
+        color='white'
         dangerouslySetInnerHTML={{ __html: sanitizedContent }}
       />
     </Container>
