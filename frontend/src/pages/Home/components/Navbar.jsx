@@ -4,7 +4,6 @@ import { useState } from "react";
 import { NavLinks } from "../constants";
 import { navIcon, close } from "../assets";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
   return (
@@ -15,7 +14,7 @@ const Navbar = () => {
           Contact Us
         </Link>
         <div className="border-l-dimWhite border-l-2 h-[20px]" />
-        <Link to="#" className="mr-10 hover:text-light">
+        <Link to="/login" className="mr-10 hover:text-light">
           Login
         </Link>
       </div>
@@ -67,7 +66,7 @@ const Navbar = () => {
           {/* Sign up */}
           <div className="sm:flex flex-row justify-between items-center mb-2 gap-5 hidden">
             <Link
-              to="#"
+              to="/login"
               className="font-poppins font-semibold px-3 text-[14px] hover:text-light"
             >
               Log In

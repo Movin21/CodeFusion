@@ -34,6 +34,7 @@
     "dayjs": "^1.11.13",
     "forntend": "file:",
     "framer-motion": "^11.5.4",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.441.0",
     "material-icons": "^1.13.12",
     "monaco-editor": "^0.51.0",

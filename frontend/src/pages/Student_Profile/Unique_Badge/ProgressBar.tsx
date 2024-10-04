@@ -1,4 +1,5 @@
 import React from "react";
+import  { useEffect} from "react";
 import {
     Button,
     Box,
@@ -6,140 +7,111 @@ import {
   } from "@chakra-ui/react";
   import { generateImage } from './apiService';
   import { useState } from "react";
-    
+  interface ProgressBarProps {
+    setImageUrlBronze: React.Dispatch<React.SetStateAction<string>>;
+    setImageUrlSilver: React.Dispatch<React.SetStateAction<string>>;
+    setImageUrlGold: React.Dispatch<React.SetStateAction<string>>;
+    setImageUrlCrystal: React.Dispatch<React.SetStateAction<string>>;
+    setImageUrlChampion: React.Dispatch<React.SetStateAction<string>>;
+    setImageUrlTitan: React.Dispatch<React.SetStateAction<string>>;
+  }
 function ProgressBar({ setImageUrlBronze, setImageUrlSilver, setImageUrlGold,setImageUrlCrystal, setImageUrlChampion, setImageUrlTitan }: { setImageUrlBronze: React.Dispatch<React.SetStateAction<string>>, setImageUrlSilver: React.Dispatch<React.SetStateAction<string>>, setImageUrlGold: React.Dispatch<React.SetStateAction<string>>,setImageUrlCrystal: React.Dispatch<React.SetStateAction<string>>, setImageUrlChampion: React.Dispatch<React.SetStateAction<string>>, setImageUrlTitan: React.Dispatch<React.SetStateAction<string>> }){
   const [progress, setProgress] = useState(0);
   const [target, setTarget] = useState(100);
+  
+  const [bronzeGenerated, setBronzeGenerated] = useState(false);
+  const [silverGenerated, setSilverGenerated] = useState(false);
+  const [goldGenerated, setGoldGenerated] = useState(false);
+  const [crystalGenerated, setCrystalGenerated] = useState(false);
+  const [championGenerated, setChampionGenerated] = useState(false);
+  const [titanGenerated, setTitanGenerated] = useState(false);
 
-  const handleButtonClick = () => {
-    if (progress + 20 >= target) {
-      if (target === 100) {
-        generateImage('Bronze Medal').then((response) => {
-          const blob = new Blob([response], { type: 'image/WebP' });
-          const url = URL.createObjectURL(blob);
-          setImageUrlBronze(url);
+    useEffect(() => {
+      // Fetch user data and score when component mounts
+      fetchUserData();
+    }, []);
+
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/user/getuser', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming you store the JWT in localStorage
+          }
         });
-        setTarget(200); // set the new target to 200
-        setProgress(0); // reset the progress to 0
-      } else if (target === 200) {
-        const newProgress = Math.min(progress + 20, 200); // ensure progress doesn't exceed 200
-        setProgress(newProgress);
-        if (newProgress === 200) {
-          generateImage('Silver Medal').then((response) => {
-            const blob = new Blob([response], { type: 'image/WebP' });
-            const url = URL.createObjectURL(blob);
-            setImageUrlSilver(url);
-          });
-          setTarget(300); // set the new target to 300
-          setProgress(0); // reset the progress to 0
+        const data = await response.json();
+        if (data.user && data.user.score !== undefined) {
+          setProgress(data.user.score);
+          updateProgressAndGenerateImages(data.user.score);
         }
-      } else if (target === 300) {
-        const newProgress = Math.min(progress + 20, 300); // ensure progress doesn't exceed 300
-        setProgress(newProgress);
-        if (newProgress === 300) {
-          generateImage('Gold Medal').then((response) => {
-            const blob = new Blob([response], { type: 'image/WebP' });
-            const url = URL.createObjectURL(blob);
-            setImageUrlGold(url);
-          });
-          setTarget(400); 
-          setProgress(0);
-        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
       }
-      else if (target === 400) {
-        const newProgress = Math.min(progress + 20, 400); // ensure progress doesn't exceed 300
-        setProgress(newProgress);
-        if (newProgress === 400) {
-          generateImage('Crystal Medal').then((response) => {
-            const blob = new Blob([response], { type: 'image/WebP' });
-            const url = URL.createObjectURL(blob);
-            setImageUrlCrystal(url);
-          });
-          setTarget(500); 
-          setProgress(0);
-        }
+    };
+  
+    const updateProgressAndGenerateImages = (score: number) => {
+      if (score >= 600 && !titanGenerated) {
+        setTarget(600);
+        generateAndSetImage('Titan Medal', setImageUrlTitan);
+        setTitanGenerated(true);
       }
-      else if (target === 500) {
-        const newProgress = Math.min(progress + 20, 500); // ensure progress doesn't exceed 300
-        setProgress(newProgress);
-        if (newProgress === 500) {
-          generateImage('Champion Medal').then((response) => {
-            const blob = new Blob([response], { type: 'image/WebP' });
-            const url = URL.createObjectURL(blob);
-            setImageUrlChampion(url);
-          });
-          setTarget(600); 
-          setProgress(0);
-        }
+      if (score >= 500 && !championGenerated) {
+        setTarget(600);
+        generateAndSetImage('Champion Medal', setImageUrlChampion);
+        setChampionGenerated(true);
       }
-      else if (target === 600) {
-        const newProgress = Math.min(progress + 20, 600); // ensure progress doesn't exceed 300
-        setProgress(newProgress);
-        if (newProgress === 600) {
-          generateImage('Titan Medal').then((response) => {
-            const blob = new Blob([response], { type: 'image/WebP' });
-            const url = URL.createObjectURL(blob);
-            setImageUrlTitan(url);
-          });
-        }
+      if (score >= 400 && !crystalGenerated) {
+        setTarget(500);
+        generateAndSetImage('Crystal Medal', setImageUrlCrystal);
+        setCrystalGenerated(true);
       }
-    } else {
-      setProgress(progress + 20);
-    }
-  };
-
-  const handleButtonReset = () => {
-    setProgress(0);
-    setTarget(100); // reset the target to 100
-  };
+      if (score >= 300 && !goldGenerated) {
+        setTarget(400);
+        generateAndSetImage('Gold Medal', setImageUrlGold);
+        setGoldGenerated(true);
+      }
+      if (score >= 200 && !silverGenerated) {
+        setTarget(300);
+        generateAndSetImage('Silver Medal', setImageUrlSilver);
+        setSilverGenerated(true);
+      }
+      if (score >= 100 && !bronzeGenerated) {
+        setTarget(200);
+        generateAndSetImage('Bronze Medal', setImageUrlBronze);
+        setBronzeGenerated(true);
+      }
+    };
+    const generateAndSetImage = async (medalType: string, setImageUrl: React.Dispatch<React.SetStateAction<string>>) => {
+      try {
+        const response = await generateImage(medalType);
+        const blob = new Blob([response], { type: 'image/WebP' });
+        const url = URL.createObjectURL(blob);
+        setImageUrl(url);
+      } catch (error) {
+        console.error(`Error generating ${medalType} image:`, error);
+      }
+    };
+  
     const getColor = () => {
-      if (progress < 40) {
-        return "#ff0000";
-      } else if (progress < 70) {
-        return "#ffa500";
-      } else if(progress < 100){
-        return "#a5ff33 ";
-      }
-      else if(progress <120){
-         return"#5fff33"
-      }
-      else if(progress <140){
-        return"#1dd62b"
-     }
-     else if(progress <150){
-        return"#00af0e"
-     }
-     else if(progress <190){
-        return"#04a210"
-     }
-     else if(progress <250){
-        return"#017a0b"
-     }
-     else if(progress >=250){
-        return"#026209"
-     }
+      if (progress < 40) return "#ff0000";
+      if (progress < 70) return "#ffa500";
+      if (progress < 100) return "#a5ff33";
+      if (progress < 120) return "#5fff33";
+      if (progress < 140) return "#1dd62b";
+      if (progress < 150) return "#00af0e";
+      if (progress < 190) return "#04a210";
+      if (progress < 250) return "#017a0b";
+      return "#026209";
     };
   
     return (
-      // <div className="all">
-      //   <div className="container">
-
-      //     <div className="progress-bar">
-      //       <div className="progress-bar-fill" style={{ width: `${(progress / target) * 100}%`, backgroundColor: getColor() }}></div>
-      //     </div>
-          
-      //     <div className="progress-label">{`${progress}/${target}`}</div>
-      //     <button onClick={handleButtonClick}>progress</button>
-      //     <button onClick={handleButtonReset}>reset</button>
-      //   </div>
-      // </div>
+     
       <Box className="all" bg="#0f0a19" color="#eef6f8" p={5} borderRadius="md" boxShadow="md" textAlign="center">
       <Box className="container" mt={10}>
         <Box 
           position="relative" 
           borderRadius="md" 
-          height="10px" 
-          bg="#e2e8f0" // Light gray for the background of the progress bar
+          height="6px" 
+          bg="#e2e8f0"
           mb={3}
         >
           <Box
@@ -152,9 +124,8 @@ function ProgressBar({ setImageUrlBronze, setImageUrlSilver, setImageUrlGold,set
             borderRadius="md"
           />
         </Box>
-        <Text fontSize="lg" fontWeight="bold" mb={3}>{`${progress}/${target}`}</Text>
-        <Button onClick={handleButtonClick} size="sm" bgColor="#00af0e" mr={3}>Progress</Button>
-        <Button onClick={handleButtonReset} size="sm" colorScheme="red">Reset</Button>
+        <Text fontSize="sm" fontWeight="bold" mb={3}>{`${progress}/${target}`}</Text>
+        <Button onClick={fetchUserData} size="xs" colorScheme="blue">Refresh Score</Button>
       </Box>
     </Box>
     );
