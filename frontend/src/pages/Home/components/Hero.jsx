@@ -1,7 +1,13 @@
 import styles from "../styles";
 import SignUpBTN from "./SignUpBTN";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate(); // Hook to handle navigation
+
+  const handleClick = () => {
+    navigate("/login"); // Replace with your desired path
+  };
   return (
     <section className="flex flex-col items-center justify-center mt-20 relative">
       {/* Heading and paragraph */}
@@ -18,6 +24,7 @@ const Hero = () => {
       <div className={`${styles.flexCenter} gap-7 my-5 mt-10`}>
         <SignUpBTN text="Sign up" />
         <button
+        onClick={handleClick}
           type="button"
           className="w-[8rem] sm:w-[10rem] border-[1px] bg-white font-semibold font-poppins text-[14px] h-[40px] rounded-md hover:bg-primary hover:text-white"
         >
