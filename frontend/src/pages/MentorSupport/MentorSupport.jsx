@@ -224,6 +224,12 @@ const BlogPage = () => {
     }
   };
 
+  const [visibleComments, setVisibleComments] = useState(3); // Set the initial number of visible comments
+
+  const handleSeeMore = () => {
+    setVisibleComments((prev) => prev + 3); // Increase the number of visible comments by 3
+  };
+
   const handleShowMore = (index) => {
     setShowMore((prevShowMore) => ({
       ...prevShowMore,
@@ -333,60 +339,71 @@ const BlogPage = () => {
                   {loadingId === index ? "Generating..." : "Get AI Support"}
                 </button>
               </div>
-              {/* AI Response */}{" "}
               <div className="border-t border-gray-200 pt-4">
-                {" "}
                 {aiResponses[index] && (
                   <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4 rounded-md">
-                    {" "}
                     <div className="flex items-center mb-2">
-                      {" "}
                       <span className="text-green-600 text-sm font-semibold">
-                        {" "}
-                        AI-Generated Response{" "}
-                      </span>{" "}
-                      <FaRobot className="ml-2 text-green-600" />{" "}
-                    </div>{" "}
+                        AI-Generated Response
+                      </span>
+                      <FaRobot className="ml-2 text-green-600" />
+                    </div>
                     <h3 className="font-medium text-gray-800">
-                      {" "}
-                      Response from AI:{" "}
-                    </h3>{" "}
-                    <p className="text-gray-700">
-                      {" "}
-                      {showMore[index]
-                        ? aiResponses[index]
-                        : `${aiResponses[index].substring(0, 150)}...`}{" "}
-                    </p>{" "}
+                      Response from AI:
+                    </h3>
+
+                    {/* Display the AI response with formatting */}
+                    <p
+                      className="text-gray-700"
+                      dangerouslySetInnerHTML={{
+                        __html: showMore[index]
+                          ? aiResponses[index].replace(/\n/g, "<br/>") // Replace line breaks with <br>
+                          : `${aiResponses[index].substring(0, 150).replace(/\n/g, "<br/>")}...`,
+                      }}
+                    />
+
                     <button
                       onClick={() => handleShowMore(index)}
                       className="text-blue-600 hover:underline mt-2"
                     >
-                      {" "}
-                      {showMore[index] ? "Show less" : "Show more"}{" "}
-                    </button>{" "}
+                      {showMore[index] ? "Show less" : "Show more"}
+                    </button>
                   </div>
-                )}{" "}
+                )}
               </div>
+
               <div>
                 <h3 className="font-semibold text-gray-900">
                   Mentor Comments:
                 </h3>
-                {post.mentorComments.map((comment, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 mt-2 border-l-4 border-blue-500 bg-blue-50 rounded-md"
+                {post.mentorComments
+                  .slice(0, visibleComments)
+                  .map((comment, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 mt-2 border-l-4 border-blue-500 bg-blue-50 rounded-md"
+                    >
+                      <p className="text-sm">
+                        <span className="font-semibold">
+                          {comment.mentorName}:{" "}
+                        </span>
+                        {comment.comment}
+                      </p>
+                      <p className="text-xs text-gray-600">
+                        {new Date(comment.createdAt).toLocaleString()}
+                      </p>
+                    </div>
+                  ))}
+
+                {/* Show the "See More" button only if there are more comments to show */}
+                {visibleComments < post.mentorComments.length && (
+                  <button
+                    onClick={handleSeeMore}
+                    className="text-blue-600 hover:underline mt-2"
                   >
-                    <p className="text-sm">
-                      <span className="font-semibold">
-                        {comment.mentorName}:{" "}
-                      </span>
-                      {comment.comment}
-                    </p>
-                    <p className="text-xs text-gray-600">
-                      {new Date(comment.createdAt).toLocaleString()}
-                    </p>
-                  </div>
-                ))}
+                    See More
+                  </button>
+                )}
               </div>
             </div>
           ))
