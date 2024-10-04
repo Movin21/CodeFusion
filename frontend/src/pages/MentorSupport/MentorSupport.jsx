@@ -240,8 +240,8 @@ const BlogPage = () => {
   return (
     <div className="flex justify-center bg-[#0f0a19] py-12">
       <div className="w-full max-w-6xl px-4">
-        <h1 className="text-3xl font-semibold mb-8 text-gray-900">
-          Blog Posts
+        <h1 className="text-3xl font-semibold mb-8 text-white">
+          Mentor Support Blog
         </h1>
 
         {/* Search and Filter Options */}
@@ -253,11 +253,11 @@ const BlogPage = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by question..."
-              className="w-full p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
+              className="w-full p-2 pl-4 border border-gray-600 bg-[#1c1a29] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300"
             />
             <button
               onClick={() => setSearchQuery(searchQuery)}
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 py-2 px-3 rounded-md flex items-center justify-center hover:text-gray-700 transition-colors duration-300"
+              className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 py-2 px-3 rounded-md flex items-center justify-center hover:text-gray-300 transition-colors duration-300"
             >
               <FaSearch />
             </button>
@@ -270,7 +270,7 @@ const BlogPage = () => {
               className={`py-2 px-4 rounded-md ${
                 filter === "all"
                   ? "bg-light text-white"
-                  : "bg-gray-300 text-gray-700"
+                  : "bg-gray-700 text-gray-300"
               }`}
             >
               All
@@ -280,7 +280,7 @@ const BlogPage = () => {
               className={`py-2 px-4 rounded-md ${
                 filter === "unanswered"
                   ? "bg-light text-white"
-                  : "bg-gray-300 text-gray-700"
+                  : "bg-gray-700 text-gray-300"
               }`}
             >
               Unanswered
@@ -290,7 +290,7 @@ const BlogPage = () => {
               className={`py-2 px-4 rounded-md ${
                 filter === "newest"
                   ? "bg-light text-white"
-                  : "bg-gray-300 text-gray-700"
+                  : "bg-gray-700 text-gray-300"
               }`}
             >
               Newest
@@ -303,12 +303,12 @@ const BlogPage = () => {
           filteredPosts.map((post, index) => (
             <div
               key={post._id}
-              className="bg-white p-6 rounded-lg shadow-md mb-8 border border-gray-300"
+              className="bg-[#1c1a29] p-6 rounded-lg shadow-md mb-8 border border-gray-700 text-white"
             >
-              <h2 className="text-xl font-semibold mb-2 text-gray-800">
+              <h2 className="text-xl font-semibold mb-2 text-white">
                 {post.questionTitle}
               </h2>
-              <pre className="bg-gray-50 p-4 rounded-md border border-gray-300 whitespace-pre-wrap text-sm text-gray-800 mb-4">
+              <pre className="bg-gray-800 p-4 rounded-md border border-gray-600 whitespace-pre-wrap text-sm text-gray-200 mb-4">
                 {post.codeSnippet}
               </pre>
               <textarea
@@ -321,17 +321,17 @@ const BlogPage = () => {
                 }
                 placeholder="Add your mentor comment..."
                 rows="3"
-                className="w-full p-3 border border-gray-300 rounded-md mb-4"
+                className="w-full p-3 border border-gray-600 bg-[#2b2738] text-white rounded-md mb-4"
               />
               <div className="flex space-x-4 mb-4">
                 <button
-                  className="bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded-md"
+                  className="bg-blue-900 text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-blue-800"
                   onClick={() => handleAddComment(index)}
                 >
                   Add Comment
                 </button>
                 <button
-                  className="bg-green-700 text-white text-sm font-semibold py-2 px-4 rounded-md flex items-center space-x-2"
+                  className="bg-green-900 text-white text-sm font-semibold py-2 px-4 rounded-md flex items-center space-x-2 hover:bg-green-800"
                   onClick={() => handleGetAiSupport(post, index)}
                   disabled={loadingId === index}
                 >
@@ -339,32 +339,33 @@ const BlogPage = () => {
                   {loadingId === index ? "Generating..." : "Get AI Support"}
                 </button>
               </div>
-              <div className="border-t border-gray-200 pt-4">
+
+              {/* AI Response */}
+              <div className="border-t border-gray-600 pt-4">
                 {aiResponses[index] && (
-                  <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4 rounded-md">
+                  <div className="bg-[#29354b] border-l-4 border-green-700 p-4 mb-4 rounded-md">
                     <div className="flex items-center mb-2">
                       <span className="text-green-600 text-sm font-semibold">
                         AI-Generated Response
                       </span>
                       <FaRobot className="ml-2 text-green-600" />
                     </div>
-                    <h3 className="font-medium text-gray-800">
+                    <h3 className="font-medium text-gray-200">
                       Response from AI:
                     </h3>
-
-                    {/* Display the AI response with formatting */}
                     <p
-                      className="text-gray-700"
+                      className="text-gray-200"
                       dangerouslySetInnerHTML={{
                         __html: showMore[index]
-                          ? aiResponses[index].replace(/\n/g, "<br/>") // Replace line breaks with <br>
-                          : `${aiResponses[index].substring(0, 150).replace(/\n/g, "<br/>")}...`,
+                          ? aiResponses[index].replace(/\n/g, "<br/>")
+                          : `${aiResponses[index]
+                              .substring(0, 150)
+                              .replace(/\n/g, "<br/>")}...`,
                       }}
                     />
-
                     <button
                       onClick={() => handleShowMore(index)}
-                      className="text-blue-600 hover:underline mt-2"
+                      className="text-blue-400 hover:underline mt-2"
                     >
                       {showMore[index] ? "Show less" : "Show more"}
                     </button>
@@ -373,7 +374,7 @@ const BlogPage = () => {
               </div>
 
               <div>
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-gray-100">
                   Mentor Comments:
                 </h3>
                 {post.mentorComments
@@ -381,7 +382,7 @@ const BlogPage = () => {
                   .map((comment, idx) => (
                     <div
                       key={idx}
-                      className="p-3 mt-2 border-l-4 border-blue-500 bg-blue-50 rounded-md"
+                      className="p-3 mt-2 border-l-4 border-blue-700 bg-[#29354b] rounded-md"
                     >
                       <p className="text-sm">
                         <span className="font-semibold">
@@ -389,17 +390,15 @@ const BlogPage = () => {
                         </span>
                         {comment.comment}
                       </p>
-                      <p className="text-xs text-gray-600">
+                      <p className="text-xs text-gray-400">
                         {new Date(comment.createdAt).toLocaleString()}
                       </p>
                     </div>
                   ))}
-
-                {/* Show the "See More" button only if there are more comments to show */}
                 {visibleComments < post.mentorComments.length && (
                   <button
                     onClick={handleSeeMore}
-                    className="text-blue-600 hover:underline mt-2"
+                    className="text-blue-400 hover:underline mt-2"
                   >
                     See More
                   </button>
@@ -408,7 +407,7 @@ const BlogPage = () => {
             </div>
           ))
         ) : (
-          <p>No blog posts found.</p>
+          <p className="text-white">No blog posts found.</p>
         )}
       </div>
     </div>
