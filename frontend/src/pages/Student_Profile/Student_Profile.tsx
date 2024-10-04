@@ -293,7 +293,7 @@ const ProfileDashboard = () => {
 
         <Grid templateColumns="repeat(4, 1fr)" gap={4}>
           {/* Profile Info Card */}
-          <Card bg="#1f202a">
+          <Card bg="#0f0a19">
             <CardBody>
               <button
                 className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
@@ -324,7 +324,7 @@ const ProfileDashboard = () => {
                 id="upload-file"
                 ref={fileInputRef}
               />
-              <button onClick={handleUpload}>Upload Image</button>
+              <button onClick={handleUpload}></button>
               <Text className="text-center text-lg font-bold text-white font-poppins">
                 {user?.firstname} {user?.lastname}
               </Text>
@@ -478,7 +478,7 @@ const ProfileDashboard = () => {
           </Card>
 
           {/* Challenge Report Card */}
-          <Card className="col-span-3" bg="#1f202a">
+          <Card className="col-span-3" bg="#0f0a19">
             <CardHeader
               className="text-white text-sm font-poppins"
               mt={5}
@@ -522,7 +522,7 @@ const ProfileDashboard = () => {
             <Student_Skills />
           </Box>
           <Box gridColumn="span 1">
-            <Card bg="#1f202a" className="font-poppins" height="200px">
+            <Card bg="#0f0a19" className="font-poppins" height="200px">
               <CardHeader className="text-white text-sm">
                 Work Experience
               </CardHeader>
@@ -541,7 +541,7 @@ const ProfileDashboard = () => {
           </Box>
 
           {/* Student Analytics Card */}
-          <Card className="col-span-4 font-poppins" bg="#1f202a ">
+          <Card className="col-span-4 font-poppins" bg="#0f0a19 ">
             <CardHeader className="text-white text-sm">
               Student Analytics
             </CardHeader>

@@ -133,7 +133,7 @@ function Student_Resume() {
 
     return (
         <div>
-            <Card bg="#1f202a" minHeight="200px" className='h-auto'>
+            <Card bg="#0f0a19" minHeight="200px" className='h-auto'>
                 <CardHeader className="text-white text-sm font-poppins">My Resume</CardHeader>
                 <CardBody>
                     {savedResume ? (

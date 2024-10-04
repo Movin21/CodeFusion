@@ -107,7 +107,7 @@ function Student_Skills() {
   return (
     <div>
       {/* Card to display skills */}
-      <Card bg="#1f202a" className="h-auto" minHeight="200px">
+      <Card bg="#0f0a19" className="h-auto" minHeight="200px">
         <CardHeader className="text-white text-sm font-poppins">
           My Skills
         </CardHeader>

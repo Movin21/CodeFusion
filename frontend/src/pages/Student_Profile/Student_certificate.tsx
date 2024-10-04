@@ -223,7 +223,7 @@ function Student_Certificate() {
 
   return (
     <div>
-      <Card bg="#1f202a" className="h-auto" minHeight="200px">
+      <Card bg="#0f0a19" className="h-auto" minHeight="200px">
         <CardHeader className="text-white text-sm font-poppins">
           My Certificates
         </CardHeader>
