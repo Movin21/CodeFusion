@@ -4,7 +4,6 @@ import { useState } from "react";
 import { NavLinks } from "../constants";
 import { navIcon, close } from "../assets";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
   return (

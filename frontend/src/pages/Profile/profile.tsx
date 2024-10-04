@@ -256,7 +256,7 @@ export default function Profile() {
             <div className="bg-gray-800 shadow-xl rounded-xl p-6 border border-gray-700">
               <div className="flex items-center justify-between">
                 <img
-                  src="../assets/profile.jpg"
+                  src="../assets/profile.png"
                   alt="Profile"
                   className="w-16 h-16 rounded-full bg-gray-700"
                 />
@@ -275,7 +275,7 @@ export default function Profile() {
 
               {/* HackerRank-style Challenge Button */}
               <a href="/addChallenge" className="mt-4 w-full">
-                <button className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2">
+                <button className="bg-green-500 hover:bg-green-600 text-white py-0 px-3 rounded-lg transition-colors flex items-center justify-center space-x-2 mt-3">
                   <Trophy size={20} />
                   <span>Start Challenge</span>
                 </button>
