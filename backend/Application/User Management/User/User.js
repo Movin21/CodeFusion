@@ -126,7 +126,7 @@ router.get(
       res.status(404);
       throw new Error("User not found");
     }
-    res.status(200).json({ status: "User fetched", user });
+    res.status(200).json({ status: "User fetched", user: { ...user.toObject(), role: user.role }  });
   })
 );
 

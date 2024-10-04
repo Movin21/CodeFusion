@@ -133,7 +133,7 @@ function ProgressBar({ setImageUrlBronze, setImageUrlSilver, setImageUrlGold,set
       //     <button onClick={handleButtonReset}>reset</button>
       //   </div>
       // </div>
-      <Box className="all" bg="#1f202a" color="#eef6f8" p={5} borderRadius="md" boxShadow="md" textAlign="center">
+      <Box className="all" bg="#0f0a19" color="#eef6f8" p={5} borderRadius="md" boxShadow="md" textAlign="center">
       <Box className="container" mt={10}>
         <Box 
           position="relative" 
