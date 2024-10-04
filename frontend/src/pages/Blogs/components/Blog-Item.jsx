@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteBlogFn } from "../axios";
 import CreateForm from './Create-Form';
+import DOMPurify from 'dompurify';
+import FullBlogPost from '../FullBlogPost';
 
 const BlogItem = ({ blogId, title, content }) => {
   const queryClient = useQueryClient();
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const mutation = useMutation({
     mutationFn: deleteBlogFn,
@@ -30,6 +33,21 @@ const BlogItem = ({ blogId, title, content }) => {
     setIsEditOpen(false);
   };
 
+  // Sanitize the HTML content
+  const sanitizedContent = DOMPurify.sanitize(content);
+
+  // Function to truncate content to 25 words
+  const truncateContent = (content, wordLimit) => {
+    const strippedContent = content.replace(/<[^>]+>/g, '');
+    const words = strippedContent.split(/\s+/);
+    if (words.length > wordLimit) {
+      return words.slice(0, wordLimit).join(' ') + '...';
+    }
+    return strippedContent;
+  };
+
+  const truncatedContent = truncateContent(sanitizedContent, 25);
+
   return (
     <>
       <Card maxW='md' sx={{ m: 4 }}>
@@ -38,21 +56,14 @@ const BlogItem = ({ blogId, title, content }) => {
             <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
               <Box>
                 <Heading size='sm'>{title}</Heading>
-                <Text>Creator, Chakra UI</Text>
               </Box>
             </Flex>
           </Flex>
         </CardHeader>
         <CardBody>
-          <Text>
-            {content}
-          </Text>
+          <Text>{truncatedContent}</Text>
+          <Button onClick={onOpen}>Read More</Button>
         </CardBody>
-        <Image
-          objectFit='cover'
-          src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
-          alt='Chakra UI'
-        />
         <CardFooter
           justify='space-between'
           flexWrap='wrap'
@@ -77,6 +88,18 @@ const BlogItem = ({ blogId, title, content }) => {
         initialTitle={title}
         initialContent={content}
       />
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            <FullBlogPost title={title} content={content} />
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
